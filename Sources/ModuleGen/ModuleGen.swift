@@ -6,6 +6,8 @@ import Foundation
 import ArgumentParser
 import Stencil
 import Yams
+import xcodeproj
+import PathKit
 
 struct File: Decodable {
 
@@ -53,6 +55,13 @@ final class ModuleGen: ParsableCommand {
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             print(rendered)
+
+            let path = Path("/Users/artemnovichkov/Library/Developer/Xcode/DerivedData/ModuleGen-erkdnzflxbigfxbnxzsjrihxxpxj/Build/Products/Debug/Module/Module.xcodeproj")
+            let xcodeproj = try XcodeProj(path: path)
+            let project = xcodeproj.pbxproj.projects.first!
+            let mainGroup = project.mainGroup
+            try mainGroup?.addGroup(named: "MyGroup")
+            try xcodeproj.write(path: path)
         }
     }
 }

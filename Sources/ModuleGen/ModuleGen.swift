@@ -37,6 +37,7 @@ final class ModuleGen: ParsableCommand {
 
     func run() throws {
         let templatesURL = URL(fileURLWithPath: "/Users/artemnovichkov/.templates")
+        let commonTemplatesURL = templatesURL.appendingPathComponent("common")
         let templateURL = templatesURL.appendingPathComponent(template)
         let specURL = templateURL.appendingPathComponent("spec.yml")
         let specString = try String(contentsOf: specURL)
@@ -45,7 +46,8 @@ final class ModuleGen: ParsableCommand {
         let outputURL = URL(fileURLWithPath: output)
         for file in spec.files {
             let codeURL = templateURL.appendingPathComponent("Code")
-            let environment = Environment(loader: FileSystemLoader(paths: [.init(codeURL.path)]))
+            let environment = Environment(loader: FileSystemLoader(paths: [.init(codeURL.path),
+                                                                           .init(commonTemplatesURL.path)]))
             let rendered = try environment.renderTemplate(name: file.template, context: context)
             let fileName = file.name ?? file.template.removingStencilExtension
             let fileURL = outputURL.appendingPathComponent(fileName)

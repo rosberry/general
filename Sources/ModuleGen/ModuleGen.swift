@@ -5,6 +5,18 @@
 import Foundation
 import ArgumentParser
 import Stencil
+import Yams
+
+struct File: Decodable {
+
+    let template: String
+    let name: String?
+}
+
+struct Spec: Decodable {
+
+    let files: [File]
+}
 
 final class ModuleGen: ParsableCommand {
 
@@ -13,15 +25,39 @@ final class ModuleGen: ParsableCommand {
     @Option(name: [.short, .long], help: "The name of the module.")
     var name: String
 
+    @Option(name: [.short, .long], help: "The name of the template.")
+    var template: String
+
+    @Option(name: [.short, .long], default: FileManager.default.currentDirectoryPath, help: "The name of the template.")
+    var output: String
+
     private var context: [String: Any] {
         ["name": name]
     }
 
     func run() throws {
-        let url = URL(fileURLWithPath: "/Users/artemnovichkov/Documents/Projects/ModuleGen/templates/Controller.swift")
-        let environment = Environment(loader: FileSystemLoader(paths: ["/Users/artemnovichkov/Documents/Projects/ModuleGen/templates/"]))
-        let rendered = try environment.renderTemplate(name: "template.stencil", context: context)
-        try rendered.write(to: url, atomically: true, encoding: .utf8)
-        print(rendered)
+        let templatesURL = URL(fileURLWithPath: "/Users/artemnovichkov/.templates")
+        let templateURL = templatesURL.appendingPathComponent(template)
+        let specURL = templateURL.appendingPathComponent("spec.yml")
+        let specString = try String(contentsOf: specURL)
+        let decoder = YAMLDecoder()
+        let spec = try decoder.decode(Spec.self, from: specString)
+        let outputURL = URL(fileURLWithPath: output)
+        for file in spec.files {
+            let codeURL = templateURL.appendingPathComponent("Code")
+            let environment = Environment(loader: FileSystemLoader(paths: [.init(codeURL.path)]))
+            let rendered = try environment.renderTemplate(name: file.template, context: context)
+            let fileName = file.name ?? file.template.removingStencilExtension
+            let fileURL = outputURL.appendingPathComponent(fileName)
+            try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
+            print(rendered)
+        }
+    }
+}
+
+extension String {
+
+    var removingStencilExtension: String {
+        replacingOccurrences(of: ".stencil", with: "")
     }
 }

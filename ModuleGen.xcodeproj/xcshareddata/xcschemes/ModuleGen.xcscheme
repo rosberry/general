@@ -27,12 +27,6 @@
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "--name main"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
       <Testables>
          <TestableReference
             skipped = "NO">
@@ -68,7 +62,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--name main"
+            argument = "-t module"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-n main"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

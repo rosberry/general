@@ -62,15 +62,27 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
+            argument = "gen"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
             argument = "-p /Users/artemnovichkov/Library/Developer/Xcode/DerivedData/ModuleGen-erkdnzflxbigfxbnxzsjrihxxpxj/Build/Products/Debug/Module"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-t module"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-n main"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "create"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-t library"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

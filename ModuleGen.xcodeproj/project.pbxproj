@@ -22,6 +22,9 @@
 
 /* Begin PBXBuildFile section */
 		060EB88F248A2A9600B939B1 /* SpecFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB88C248A2A8600B939B1 /* SpecFactory.swift */; };
+		060EB892248A38F100B939B1 /* ModuleGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB890248A38A800B939B1 /* ModuleGen.swift */; };
+		060EB895248A3EF300B939B1 /* Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB893248A390500B939B1 /* Create.swift */; };
+		060EB898248A408C00B939B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB896248A408700B939B1 /* Constants.swift */; };
 		OBJ_238 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_122 /* Document.swift */; };
 		OBJ_239 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_123 /* Element.swift */; };
 		OBJ_240 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_124 /* Error.swift */; };
@@ -66,7 +69,7 @@
 		OBJ_296 /* writer.c in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_136 /* writer.c */; };
 		OBJ_298 /* CYaml.h in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_138 /* CYaml.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		OBJ_299 /* yaml.h in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_139 /* yaml.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		OBJ_306 /* ModuleGen.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* ModuleGen.swift */; };
+		OBJ_306 /* Generate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* Generate.swift */; };
 		OBJ_307 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
 		OBJ_309 /* xcodeproj.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "xcodeproj::xcodeproj::Product" /* xcodeproj.framework */; };
 		OBJ_310 /* AEXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AEXML::AEXML::Product" /* AEXML.framework */; };
@@ -365,6 +368,9 @@
 
 /* Begin PBXFileReference section */
 		060EB88C248A2A8600B939B1 /* SpecFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecFactory.swift; sourceTree = "<group>"; };
+		060EB890248A38A800B939B1 /* ModuleGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleGen.swift; sourceTree = "<group>"; };
+		060EB893248A390500B939B1 /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
+		060EB896248A408700B939B1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"ModuleGen::ModuleGen::Product" /* ModuleGen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = ModuleGen; sourceTree = BUILT_PRODUCTS_DIR; };
 		"ModuleGen::ModuleGenTests::Product" /* ModuleGenTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = ModuleGenTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -537,7 +543,7 @@
 		OBJ_87 /* XCScheme+AnalyzeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+AnalyzeAction.swift"; sourceTree = "<group>"; };
 		OBJ_88 /* XCScheme+ArchiveAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+ArchiveAction.swift"; sourceTree = "<group>"; };
 		OBJ_89 /* XCScheme+BuildAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+BuildAction.swift"; sourceTree = "<group>"; };
-		OBJ_9 /* ModuleGen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModuleGen.swift; sourceTree = "<group>"; };
+		OBJ_9 /* Generate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Generate.swift; sourceTree = "<group>"; };
 		OBJ_90 /* XCScheme+BuildableProductRunnable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+BuildableProductRunnable.swift"; sourceTree = "<group>"; };
 		OBJ_91 /* XCScheme+BuildableReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+BuildableReference.swift"; sourceTree = "<group>"; };
 		OBJ_92 /* XCScheme+CommandLineArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+CommandLineArguments.swift"; sourceTree = "<group>"; };
@@ -1111,9 +1117,12 @@
 		OBJ_8 /* ModuleGen */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_9 /* ModuleGen.swift */,
+				060EB890248A38A800B939B1 /* ModuleGen.swift */,
+				OBJ_9 /* Generate.swift */,
+				060EB893248A390500B939B1 /* Create.swift */,
 				OBJ_10 /* main.swift */,
 				060EB88C248A2A8600B939B1 /* SpecFactory.swift */,
+				060EB896248A408700B939B1 /* Constants.swift */,
 			);
 			name = ModuleGen;
 			path = Sources/ModuleGen;
@@ -1545,9 +1554,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_306 /* ModuleGen.swift in Sources */,
+				OBJ_306 /* Generate.swift in Sources */,
 				060EB88F248A2A9600B939B1 /* SpecFactory.swift in Sources */,
+				060EB892248A38F100B939B1 /* ModuleGen.swift in Sources */,
 				OBJ_307 /* main.swift in Sources */,
+				060EB895248A3EF300B939B1 /* Create.swift in Sources */,
+				060EB898248A408C00B939B1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

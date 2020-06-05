@@ -57,7 +57,7 @@ final class ModuleGen: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(abstract: "Generates modules from templates.")
 
-    @Option(name: [.short, .long], default: FileManager.default.currentDirectoryPath, help: "The name of the module.")
+    @Option(name: [.short, .long], default: FileManager.default.currentDirectoryPath, help: "The path for the project.")
     var path: String
 
     @Option(name: [.short, .long], help: "The name of the module.")
@@ -78,7 +78,7 @@ final class ModuleGen: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
-        let templatesURL = URL(fileURLWithPath: "/Users/artemnovichkov/.templates")
+        let templatesURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(".templates")
         let commonTemplatesURL = templatesURL.appendingPathComponent("common")
         let templateURL = templatesURL.appendingPathComponent(template)
         let specURL = templateURL.appendingPathComponent("spec.yml")
@@ -89,9 +89,10 @@ final class ModuleGen: ParsableCommand {
             let environment = Environment(loader: FileSystemLoader(paths: [.init(codeURL.path),
                                                                            .init(commonTemplatesURL.path)]))
             let rendered = try environment.renderTemplate(name: file.template, context: context)
-            let fileName = file.name ?? file.template.removingStencilExtension
+            var fileName = file.name ?? file.template.removingStencilExtension
+            fileName = name.capitalized + fileName
 
-            let outputURL: URL
+            var outputURL: URL
             if let output = output {
                 outputURL = URL(fileURLWithPath: output)
             }
@@ -101,6 +102,7 @@ final class ModuleGen: ParsableCommand {
             else {
                 throw Error.noOutput
             }
+            outputURL.appendPathComponent(name.capitalized)
 
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)

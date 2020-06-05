@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ModuleGen::ModuleGen"
-               BuildableName = "ModuleGen"
-               BlueprintName = "ModuleGen"
-               ReferencedContainer = "container:ModuleGen.xcodeproj">
+               BlueprintIdentifier = "General::General"
+               BuildableName = "General"
+               BlueprintName = "General"
+               ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ModuleGen::ModuleGenTests"
-               BuildableName = "ModuleGenTests.xctest"
-               BlueprintName = "ModuleGenTests"
-               ReferencedContainer = "container:ModuleGen.xcodeproj">
+               BlueprintIdentifier = "General::GeneralTests"
+               BuildableName = "GeneralTests.xctest"
+               BlueprintName = "GeneralTests"
+               ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -54,10 +54,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "ModuleGen::ModuleGen"
-            BuildableName = "ModuleGen"
-            BlueprintName = "ModuleGen"
-            ReferencedContainer = "container:ModuleGen.xcodeproj">
+            BlueprintIdentifier = "General::General"
+            BuildableName = "General"
+            BlueprintName = "General"
+            ReferencedContainer = "container:General.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>

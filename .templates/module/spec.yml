@@ -1,0 +1,4 @@
+files:
+  - template: controller.stencil
+    name: Controller.swift
+  - template: Presenter.swift.stencil

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ModuleGen::ModuleGen"
-               BuildableName = "ModuleGen"
-               BlueprintName = "ModuleGen"
-               ReferencedContainer = "container:ModuleGen.xcodeproj">
+               BlueprintIdentifier = "General::General"
+               BuildableName = "General"
+               BlueprintName = "General"
+               ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ModuleGen::ModuleGenTests"
-               BuildableName = "ModuleGenTests.xctest"
-               BlueprintName = "ModuleGenTests"
-               ReferencedContainer = "container:ModuleGen.xcodeproj">
+               BlueprintIdentifier = "General::GeneralTests"
+               BuildableName = "GeneralTests.xctest"
+               BlueprintName = "GeneralTests"
+               ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -54,34 +54,12 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "ModuleGen::ModuleGen"
-            BuildableName = "ModuleGen"
-            BlueprintName = "ModuleGen"
-            ReferencedContainer = "container:ModuleGen.xcodeproj">
+            BlueprintIdentifier = "General::General"
+            BuildableName = "General"
+            BlueprintName = "General"
+            ReferencedContainer = "container:General.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "gen"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-p /Users/artemnovichkov/Documents/Projects/Sri"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-t module"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-n main"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "create -t library"
-            isEnabled = "NO">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

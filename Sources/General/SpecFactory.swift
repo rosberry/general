@@ -19,10 +19,10 @@ final class SpecFactory {
         return spec
     }
 
-    func makeModuleGenSpec(url: URL) throws -> ModuleGenSpec {
-        let specURL = url.appendingPathComponent("modulegen.yml")
+    func makeGeneralSpec(url: URL) throws -> GeneralSpec {
+        let specURL = url.appendingPathComponent("general.yml")
         let specString = try String(contentsOf: specURL)
-        let spec = try decoder.decode(ModuleGenSpec.self, from: specString)
+        let spec = try decoder.decode(GeneralSpec.self, from: specString)
         return spec
     }
 }

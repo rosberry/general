@@ -6,7 +6,6 @@ import Foundation
 import ArgumentParser
 import Stencil
 import Yams
-import xcodeproj
 import PathKit
 
 struct File: Decodable {
@@ -26,7 +25,7 @@ struct Output: Decodable {
     let path: String
 }
 
-struct ModuleGenSpec: Decodable {
+struct GeneralSpec: Decodable {
 
     let outputs: [Output]
 
@@ -48,9 +47,9 @@ final class Generate: ParsableCommand {
     private lazy var specFactory: SpecFactory = .init(decoder: .init())
     private lazy var fileManager: FileManager = .default
 
-    private lazy var moduleGenSpec: ModuleGenSpec? = {
+    private lazy var generalSpec: GeneralSpec? = {
         let url = URL(fileURLWithPath: path)
-        return try? specFactory.makeModuleGenSpec(url: url)
+        return try? specFactory.makeGeneralSpec(url: url)
     }()
 
     // MARK: - Parameters
@@ -100,7 +99,7 @@ final class Generate: ParsableCommand {
             if let output = output {
                 outputURL = URL(fileURLWithPath: output)
             }
-            else if let moduleGenSpec = moduleGenSpec, let templatePath = moduleGenSpec.path(forTemplateName: template) {
+            else if let generalSpec = generalSpec, let templatePath = generalSpec.path(forTemplateName: template) {
                 outputURL = URL(fileURLWithPath: path).appendingPathComponent(templatePath)
             }
             else {
@@ -113,13 +112,6 @@ final class Generate: ParsableCommand {
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             print(rendered)
-
-            //            let path = Path("/Users/artemnovichkov/Library/Developer/Xcode/DerivedData/ModuleGen-erkdnzflxbigfxbnxzsjrihxxpxj/Build/Products/Debug/Module/Module.xcodeproj")
-            //            let xcodeproj = try XcodeProj(path: path)
-            //            let project = xcodeproj.pbxproj.projects.first!
-            //            let mainGroup = project.mainGroup
-            //            try mainGroup?.addGroup(named: "MyGroup")
-            //            try xcodeproj.write(path: path)
         }
     }
 }

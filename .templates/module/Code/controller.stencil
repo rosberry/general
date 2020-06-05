@@ -1,6 +1,8 @@
+{% include "header.stencil" %}
+
 import UIKit
 
-final class MainViewController: UIViewController {
+final class {{ name | capitalize }}ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

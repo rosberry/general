@@ -1,0 +1,3 @@
+outputs:
+  - templateName: module
+    path: Classes/Presentation/Modules

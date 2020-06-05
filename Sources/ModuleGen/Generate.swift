@@ -78,20 +78,24 @@ final class Generate: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
+        //create urls and spec
         let templatesURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(Constants.templatesFolderName)
         let commonTemplatesURL = templatesURL.appendingPathComponent(Constants.commonTemplatesFolderName)
         let templateURL = templatesURL.appendingPathComponent(template)
         let specURL = templateURL.appendingPathComponent(Constants.spec)
         let templateSpec = try specFactory.makeTemplateSpec(url: specURL)
+        let codeURL = templateURL.appendingPathComponent(Constants.filesFolderName)
 
         for file in templateSpec.files {
-            let codeURL = templateURL.appendingPathComponent(Constants.filesFolderName)
-            let environment = Environment(loader: FileSystemLoader(paths: [.init(codeURL.path),
-                                                                           .init(commonTemplatesURL.path)]))
+            // render template for the file based on common and template files
+            let environment = Environment(loader: FileSystemLoader(paths: [.init(commonTemplatesURL.path),
+                                                                           .init(codeURL.path)]))
             let rendered = try environment.renderTemplate(name: file.template, context: context)
+
             var fileName = file.name ?? file.template.removingStencilExtension
             fileName = name.capitalized + fileName
 
+            // make output url for the file
             var outputURL: URL
             if let output = output {
                 outputURL = URL(fileURLWithPath: output)
@@ -104,6 +108,7 @@ final class Generate: ParsableCommand {
             }
             outputURL.appendPathComponent(name.capitalized)
 
+            // write rendered template to file
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)

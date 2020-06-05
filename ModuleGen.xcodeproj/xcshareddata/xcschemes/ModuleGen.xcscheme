@@ -78,11 +78,7 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "create"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-t library"
+            argument = "create -t library"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

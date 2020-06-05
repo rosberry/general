@@ -63,23 +63,23 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "gen"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-p /Users/artemnovichkov/Library/Developer/Xcode/DerivedData/ModuleGen-erkdnzflxbigfxbnxzsjrihxxpxj/Build/Products/Debug/Module"
-            isEnabled = "NO">
+            argument = "-p /Users/artemnovichkov/Documents/Projects/Sri"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-t module"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-n main"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "create -t library"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

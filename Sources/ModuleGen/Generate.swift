@@ -82,7 +82,7 @@ final class Generate: ParsableCommand {
         let templatesURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(Constants.templatesFolderName)
         let commonTemplatesURL = templatesURL.appendingPathComponent(Constants.commonTemplatesFolderName)
         let templateURL = templatesURL.appendingPathComponent(template)
-        let specURL = templateURL.appendingPathComponent(Constants.spec)
+        let specURL = templateURL.appendingPathComponent(Constants.specFilename)
         let templateSpec = try specFactory.makeTemplateSpec(url: specURL)
         let codeURL = templateURL.appendingPathComponent(Constants.filesFolderName)
 

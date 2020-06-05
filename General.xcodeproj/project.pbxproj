@@ -21,6 +21,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		060EB8CB248A605000B939B1 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB8C9248A604700B939B1 /* File.swift */; };
+		060EB8D2248A60A300B939B1 /* GeneralSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB8D0248A609000B939B1 /* GeneralSpec.swift */; };
+		060EB8D3248A60A900B939B1 /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB8CE248A607F00B939B1 /* Output.swift */; };
+		060EB8D6248A60AE00B939B1 /* TemplateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB8CC248A605B00B939B1 /* TemplateSpec.swift */; };
 		OBJ_129 /* Argument.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_53 /* Argument.swift */; };
 		OBJ_130 /* ArgumentHelp.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_54 /* ArgumentHelp.swift */; };
 		OBJ_131 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_55 /* Errors.swift */; };
@@ -225,8 +229,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		060EB8C9248A604700B939B1 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		060EB8CC248A605B00B939B1 /* TemplateSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateSpec.swift; sourceTree = "<group>"; };
+		060EB8CE248A607F00B939B1 /* Output.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
+		060EB8D0248A609000B939B1 /* GeneralSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSpec.swift; sourceTree = "<group>"; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
-		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
 		OBJ_100 /* Inheritence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inheritence.swift; sourceTree = "<group>"; };
 		OBJ_101 /* KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyPath.swift; sourceTree = "<group>"; };
@@ -390,6 +398,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		060EB8C7248A602400B939B1 /* Commands */ = {
+			isa = PBXGroup;
+			children = (
+				OBJ_10 /* Create.swift */,
+				OBJ_11 /* General.swift */,
+				OBJ_12 /* Generate.swift */,
+			);
+			path = Commands;
+			sourceTree = "<group>";
+		};
+		060EB8C8248A603D00B939B1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				060EB8C9248A604700B939B1 /* File.swift */,
+				060EB8CC248A605B00B939B1 /* TemplateSpec.swift */,
+				060EB8CE248A607F00B939B1 /* Output.swift */,
+				060EB8D0248A609000B939B1 /* GeneralSpec.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		OBJ_110 /* PathKit 0.9.2 */ = {
 			isa = PBXGroup;
 			children = (
@@ -613,10 +642,9 @@
 		OBJ_8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				060EB8C8248A603D00B939B1 /* Models */,
+				060EB8C7248A602400B939B1 /* Commands */,
 				OBJ_9 /* Constants.swift */,
-				OBJ_10 /* Create.swift */,
-				OBJ_11 /* General.swift */,
-				OBJ_12 /* Generate.swift */,
 				OBJ_13 /* SpecFactory.swift */,
 				OBJ_14 /* main.swift */,
 			);
@@ -968,8 +996,12 @@
 			files = (
 				OBJ_180 /* Constants.swift in Sources */,
 				OBJ_181 /* Create.swift in Sources */,
+				060EB8CB248A605000B939B1 /* File.swift in Sources */,
 				OBJ_182 /* General.swift in Sources */,
+				060EB8D3248A60A900B939B1 /* Output.swift in Sources */,
 				OBJ_183 /* Generate.swift in Sources */,
+				060EB8D6248A60AE00B939B1 /* TemplateSpec.swift in Sources */,
+				060EB8D2248A60A300B939B1 /* GeneralSpec.swift in Sources */,
 				OBJ_184 /* SpecFactory.swift in Sources */,
 				OBJ_185 /* main.swift in Sources */,
 			);

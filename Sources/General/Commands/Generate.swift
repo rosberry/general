@@ -8,36 +8,6 @@ import Stencil
 import Yams
 import PathKit
 
-struct File: Decodable {
-
-    let template: String
-    let name: String?
-}
-
-struct TemplateSpec: Decodable {
-
-    let files: [File]
-}
-
-struct Output: Decodable {
-
-    let templateName: String
-    let path: String
-}
-
-struct GeneralSpec: Decodable {
-
-    let outputs: [Output]
-
-    func path(forTemplateName templateName: String) -> String? {
-        var path: String?
-        for output in outputs where output.templateName == templateName {
-            path = output.path
-        }
-        return path
-    }
-}
-
 final class Generate: ParsableCommand {
 
     enum Error: Swift.Error {

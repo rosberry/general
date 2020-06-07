@@ -60,6 +60,16 @@
             ReferencedContainer = "container:General.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "gen -n main -t rsb_mvp_vm_module -p /Users/artemnovichkov/Documents/Projects/medmind-ios"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "create -t rsb_mvp_vm_module"
+            isEnabled = "NO">
+         </CommandLineArgument>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"

@@ -7,6 +7,7 @@ import ArgumentParser
 import Stencil
 import Yams
 import PathKit
+import xcodeproj
 
 final class Generate: ParsableCommand {
 
@@ -16,6 +17,7 @@ final class Generate: ParsableCommand {
 
     private lazy var specFactory: SpecFactory = .init(decoder: .init())
     private lazy var fileManager: FileManager = .default
+    private lazy var projectService: ProjectService = .init()
 
     private lazy var generalSpec: GeneralSpec? = {
         let url = URL(fileURLWithPath: path)
@@ -65,24 +67,42 @@ final class Generate: ParsableCommand {
             fileName = name.capitalized + fileName
 
             // make output url for the file
-            var outputURL: URL
+            var outputURL = URL(fileURLWithPath: path)
+            let templatePath: String
             if let output = output {
-                outputURL = URL(fileURLWithPath: output)
+                outputURL.appendPathComponent(output)
+                templatePath = ""
             }
-            else if let generalSpec = generalSpec, let templatePath = generalSpec.path(forTemplateName: template) {
-                outputURL = URL(fileURLWithPath: path).appendingPathComponent(templatePath)
+            else if let generalSpec = generalSpec, let specTemplatePath = generalSpec.path(forTemplateName: template) {
+                templatePath = specTemplatePath
             }
             else {
                 throw Error.noOutput
             }
+            outputURL.appendPathComponent(templatePath)
             outputURL.appendPathComponent(name.capitalized)
 
             // write rendered template to file
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
-            print(rendered)
+            if let projectName = generalSpec?.project {
+                try projectService.addFile(path: Path(path),
+                projectName: projectName,
+                templatePath: Path(templatePath) + Path(name.capitalized),
+                filename: fileName)
+            }
+            print("Finish")
         }
+    }
+}
+
+extension PBXGroup {
+
+    func group(withPath path: String) -> PBXGroup? {
+        children.first { element in
+            element.path == path
+        } as? PBXGroup
     }
 }
 

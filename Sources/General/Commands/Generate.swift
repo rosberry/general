@@ -79,8 +79,8 @@ final class Generate: ParsableCommand {
             else {
                 throw Error.noOutput
             }
-            outputURL.appendPathComponent(templatePath)
-            outputURL.appendPathComponent(name.capitalized)
+            let modulePath = Path(templatePath) + Path(name.capitalized)
+            outputURL.appendPathComponent(modulePath.string)
 
             // write rendered template to file
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
@@ -88,9 +88,8 @@ final class Generate: ParsableCommand {
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             if let projectName = generalSpec?.project {
                 try projectService.addFile(path: Path(path),
-                projectName: projectName,
-                templatePath: Path(templatePath) + Path(name.capitalized),
-                filename: fileName)
+                                           projectName: projectName,
+                                           filePath: modulePath + Path(fileName))
             }
             print("Finish")
         }
@@ -102,7 +101,7 @@ extension PBXGroup {
     func group(withPath path: String) -> PBXGroup? {
         children.first { element in
             element.path == path
-        } as? PBXGroup
+            } as? PBXGroup
     }
 }
 

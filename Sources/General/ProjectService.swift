@@ -19,7 +19,7 @@ final class ProjectService {
     ///   - filePath: the whole path to the file.
     ///   - targetName: The name of the target.
     /// - Throws: If the are no projects in pbxproj file of fails to create groups.
-    func addFile(path: Path, projectName: String, targetName: String, filePath: Path) throws {
+    func addFile(path: Path, projectName: String, targetName: String?, filePath: Path) throws {
         let xcodeprojPath = path + Path(projectName)
         let xcodeproj = try XcodeProj(path: xcodeprojPath)
         guard let project = xcodeproj.pbxproj.projects.first else {
@@ -36,8 +36,17 @@ final class ProjectService {
         let fullPath = path + filePath
         let file = try group.addFile(at: fullPath, sourceTree: .sourceRoot, sourceRoot: path)
         xcodeproj.pbxproj.add(object: file)
-        let target = xcodeproj.pbxproj.nativeTargets.first { target in
-            target.name == targetName
+        let targets = xcodeproj.pbxproj.nativeTargets
+        let target: PBXNativeTarget?
+        if let name = targetName {
+            target = targets.first { target in
+                target.name == name
+            }
+        }
+        else {
+            target = targets.first { target in
+                target.productType == .application
+            }
         }
         let buildPhase = target?.buildPhases.first { buildPhase in
             buildPhase.buildPhase == .sources

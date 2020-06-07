@@ -88,10 +88,10 @@ final class Generate: ParsableCommand {
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
-            if let projectName = generalSpec?.project, let targetName = generalSpec?.target {
+            if let projectName = generalSpec?.project {
                 try projectService.addFile(path: Path(path),
                                            projectName: projectName,
-                                           targetName: targetName,
+                                           targetName: generalSpec?.target,
                                            filePath: modulePath + Path(fileName))
             }
         }

@@ -23,6 +23,7 @@
 /* Begin PBXBuildFile section */
 		060EB947248CFA8500B939B1 /* ProjectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB945248CFA7F00B939B1 /* ProjectService.swift */; };
 		06135FC4248D1A580083FFBA /* URL+Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06135FC2248D1A530083FFBA /* URL+Paths.swift */; };
+		06135FC7248D1C440083FFBA /* Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06135FC5248D1C3F0083FFBA /* Spec.swift */; };
 		OBJ_248 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_132 /* Document.swift */; };
 		OBJ_249 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_133 /* Element.swift */; };
 		OBJ_250 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_134 /* Error.swift */; };
@@ -375,6 +376,7 @@
 /* Begin PBXFileReference section */
 		060EB945248CFA7F00B939B1 /* ProjectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectService.swift; sourceTree = "<group>"; };
 		06135FC2248D1A530083FFBA /* URL+Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Paths.swift"; sourceTree = "<group>"; };
+		06135FC5248D1C3F0083FFBA /* Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spec.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1157,6 +1159,7 @@
 				OBJ_10 /* Create.swift */,
 				OBJ_11 /* General.swift */,
 				OBJ_12 /* Generate.swift */,
+				06135FC5248D1C3F0083FFBA /* Spec.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -1587,6 +1590,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				06135FC7248D1C440083FFBA /* Spec.swift in Sources */,
 				OBJ_316 /* Create.swift in Sources */,
 				OBJ_317 /* General.swift in Sources */,
 				OBJ_318 /* Generate.swift in Sources */,

@@ -63,6 +63,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "gen -n main -t rsb_mvp_vm_module -p /Users/artemnovichkov/Documents/Projects/medmind-ios"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "spec"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

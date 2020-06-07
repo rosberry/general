@@ -42,8 +42,12 @@ final class Generate: ParsableCommand {
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())
-        return ["name": name,
-                "year": year]
+        var context: [String: Any] = ["name": name,
+                                      "year": year]
+        if let company = generalSpec?.company {
+            context["company"] = company
+        }
+        return context
     }
 
     // MARK: - Lifecycle

@@ -8,6 +8,7 @@ struct GeneralSpec: Decodable {
 
     let project: String?
     let target: String?
+    let company: String?
     let outputs: [Output]
 
     func path(forTemplateName templateName: String) -> String? {

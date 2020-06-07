@@ -6,6 +6,6 @@ import ArgumentParser
 
 final class General: ParsableCommand {
 
-    static let configuration: CommandConfiguration = .init(abstract: "Generates modules from templates.",
-                                                           subcommands: [Generate.self, Create.self])
+    static let configuration: CommandConfiguration = .init(abstract: "Generates code from templates.",
+                                                           subcommands: [Generate.self, Create.self, Spec.self])
 }

@@ -49,22 +49,24 @@ final class Generate: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
-        //create urls and spec
+        //create environment and spec
         let templatesURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(Constants.templatesFolderName)
-        let commonTemplatesURL = templatesURL.appendingPathComponent(Constants.commonTemplatesFolderName)
         let templateURL = templatesURL.appendingPathComponent(template)
         let specURL = templateURL.appendingPathComponent(Constants.specFilename)
         let templateSpec = try specFactory.makeTemplateSpec(url: specURL)
-        let codeURL = templateURL.appendingPathComponent(Constants.filesFolderName)
+
+        let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
 
         for file in templateSpec.files {
             // render template for the file based on common and template files
-            let environment = Environment(loader: FileSystemLoader(paths: [.init(commonTemplatesURL.path),
-                                                                           .init(codeURL.path)]))
             let rendered = try environment.renderTemplate(name: file.template, context: context)
 
-            var fileName = file.name ?? file.template.removingStencilExtension
-            fileName = name.capitalized + fileName
+            var fileName = file.name ?? file.template
+            var relativeFileURL = URL(fileURLWithPath: fileName)
+            if relativeFileURL.pathExtension == "stencil" {
+                relativeFileURL.deletePathExtension()
+            }
+            fileName = name.capitalized + relativeFileURL.lastPathComponent
 
             // make output url for the file
             var outputURL = URL(fileURLWithPath: path)
@@ -86,13 +88,33 @@ final class Generate: ParsableCommand {
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
-            if let projectName = generalSpec?.project {
+            if let projectName = generalSpec?.project, let targetName = generalSpec?.target {
                 try projectService.addFile(path: Path(path),
                                            projectName: projectName,
+                                           targetName: targetName,
                                            filePath: modulePath + Path(fileName))
             }
-            print("Finish")
         }
+        print("🎉 \(template) template with \(name) name was successfully generated.")
+    }
+
+    // MARK: - Private
+
+    private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {
+        let commonTemplatesURL = templatesURL.appendingPathComponent(Constants.commonTemplatesFolderName)
+        let contents = try fileManager.contentsOfDirectory(at: templateURL,
+                                                           includingPropertiesForKeys: [.isDirectoryKey],
+                                                           options: [])
+        let directoryPaths: [Path] = contents.compactMap { url in
+            guard url.hasDirectoryPath else {
+                return nil
+            }
+            return Path(url.path)
+        }
+        var paths = [Path(commonTemplatesURL.path), Path(templateURL.path)]
+        paths.append(contentsOf: directoryPaths)
+        let environment = Environment(loader: FileSystemLoader(paths: paths))
+        return environment
     }
 }
 
@@ -102,12 +124,5 @@ extension PBXGroup {
         children.first { element in
             element.path == path
             } as? PBXGroup
-    }
-}
-
-extension String {
-
-    var removingStencilExtension: String {
-        replacingOccurrences(of: ".stencil", with: "")
     }
 }

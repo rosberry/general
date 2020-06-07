@@ -7,6 +7,7 @@ import Foundation
 struct GeneralSpec: Decodable {
 
     let project: String?
+    let target: String?
     let outputs: [Output]
 
     func path(forTemplateName templateName: String) -> String? {

@@ -20,7 +20,7 @@ final class SpecFactory {
     }
 
     func makeGeneralSpec(url: URL) throws -> GeneralSpec {
-        let specURL = url.appendingPathComponent("general.yml")
+        let specURL = url + "general.yml"
         let specString = try String(contentsOf: specURL)
         let spec = try decoder.decode(GeneralSpec.self, from: specString)
         return spec

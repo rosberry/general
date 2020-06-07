@@ -50,9 +50,9 @@ final class Generate: ParsableCommand {
 
     func run() throws {
         //create environment and spec
-        let templatesURL = fileManager.homeDirectoryForCurrentUser.appendingPathComponent(Constants.templatesFolderName)
-        let templateURL = templatesURL.appendingPathComponent(template)
-        let specURL = templateURL.appendingPathComponent(Constants.specFilename)
+        let templatesURL = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
+        let templateURL = templatesURL + template
+        let specURL = templateURL + Constants.specFilename
         let templateSpec = try specFactory.makeTemplateSpec(url: specURL)
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
@@ -90,7 +90,7 @@ final class Generate: ParsableCommand {
 
             // write rendered template to file
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
-            let fileURL = outputURL.appendingPathComponent(fileName)
+            let fileURL = outputURL + fileName
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             try projectService.addFile(targetName: generalSpec?.target,
                                        filePath: modulePath + Path(fileName))
@@ -102,7 +102,7 @@ final class Generate: ParsableCommand {
     // MARK: - Private
 
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {
-        let commonTemplatesURL = templatesURL.appendingPathComponent(Constants.commonTemplatesFolderName)
+        let commonTemplatesURL = templatesURL + Constants.commonTemplatesFolderName
         let contents = try fileManager.contentsOfDirectory(at: templateURL,
                                                            includingPropertiesForKeys: [.isDirectoryKey],
                                                            options: [])

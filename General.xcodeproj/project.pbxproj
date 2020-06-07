@@ -22,6 +22,7 @@
 
 /* Begin PBXBuildFile section */
 		060EB947248CFA8500B939B1 /* ProjectService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 060EB945248CFA7F00B939B1 /* ProjectService.swift */; };
+		06135FC4248D1A580083FFBA /* URL+Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06135FC2248D1A530083FFBA /* URL+Paths.swift */; };
 		OBJ_248 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_132 /* Document.swift */; };
 		OBJ_249 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_133 /* Element.swift */; };
 		OBJ_250 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_134 /* Error.swift */; };
@@ -373,6 +374,7 @@
 
 /* Begin PBXFileReference section */
 		060EB945248CFA7F00B939B1 /* ProjectService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectService.swift; sourceTree = "<group>"; };
+		06135FC2248D1A530083FFBA /* URL+Paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Paths.swift"; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1131,6 +1133,7 @@
 				OBJ_19 /* SpecFactory.swift */,
 				OBJ_20 /* main.swift */,
 				060EB945248CFA7F00B939B1 /* ProjectService.swift */,
+				06135FC2248D1A530083FFBA /* URL+Paths.swift */,
 			);
 			name = General;
 			path = Sources/General;
@@ -1588,6 +1591,7 @@
 				OBJ_317 /* General.swift in Sources */,
 				OBJ_318 /* Generate.swift in Sources */,
 				OBJ_319 /* Constants.swift in Sources */,
+				06135FC4248D1A580083FFBA /* URL+Paths.swift in Sources */,
 				OBJ_320 /* File.swift in Sources */,
 				OBJ_321 /* GeneralSpec.swift in Sources */,
 				060EB947248CFA8500B939B1 /* ProjectService.swift in Sources */,

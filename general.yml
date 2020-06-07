@@ -1,3 +1,4 @@
+project: Project.xcodeproj
 outputs:
-  - templateName: module
+  - templateName: rsb_mvp_vm_module
     path: Classes/Presentation/Modules

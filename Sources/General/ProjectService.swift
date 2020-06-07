@@ -12,6 +12,21 @@ final class ProjectService {
         case noGroup
     }
 
+    var path: Path
+
+    private var xcodeprojPath: Path?
+    private var xcodeproj: XcodeProj?
+
+    init(path: Path) {
+        self.path = path
+    }
+
+    func createProject(path: Path, projectName: String) throws {
+        let xcodeprojPath = path + Path(projectName)
+        xcodeproj = try XcodeProj(path: xcodeprojPath)
+        self.xcodeprojPath = xcodeprojPath
+    }
+
     /// Adds a file to the project
     /// - Parameters:
     ///   - path: The path to the project folder.
@@ -19,10 +34,8 @@ final class ProjectService {
     ///   - filePath: the whole path to the file.
     ///   - targetName: The name of the target.
     /// - Throws: If the are no projects in pbxproj file of fails to create groups.
-    func addFile(path: Path, projectName: String, targetName: String?, filePath: Path) throws {
-        let xcodeprojPath = path + Path(projectName)
-        let xcodeproj = try XcodeProj(path: xcodeprojPath)
-        guard let project = xcodeproj.pbxproj.projects.first else {
+    func addFile(targetName: String?, filePath: Path) throws {
+        guard let project = xcodeproj?.pbxproj.projects.first else {
             throw Error.noProject
         }
 
@@ -35,16 +48,16 @@ final class ProjectService {
 
         let fullPath = path + filePath
         let file = try group.addFile(at: fullPath, sourceTree: .sourceRoot, sourceRoot: path)
-        xcodeproj.pbxproj.add(object: file)
-        let targets = xcodeproj.pbxproj.nativeTargets
+        xcodeproj?.pbxproj.add(object: file)
+        let targets = xcodeproj?.pbxproj.nativeTargets
         let target: PBXNativeTarget?
         if let name = targetName {
-            target = targets.first { target in
+            target = targets?.first { target in
                 target.name == name
             }
         }
         else {
-            target = targets.first { target in
+            target = targets?.first { target in
                 target.productType == .application
             }
         }
@@ -52,7 +65,13 @@ final class ProjectService {
             buildPhase.buildPhase == .sources
         }
         let _ = try buildPhase?.add(file: file)
-        try xcodeproj.write(path: xcodeprojPath)
+    }
+
+    func write() throws {
+        guard let xcodeprojPath = xcodeprojPath else {
+            return
+        }
+        try xcodeproj?.write(path: xcodeprojPath)
     }
 
     // MARK: - Private

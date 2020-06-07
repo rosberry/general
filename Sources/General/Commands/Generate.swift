@@ -17,7 +17,7 @@ final class Generate: ParsableCommand {
 
     private lazy var specFactory: SpecFactory = .init(decoder: .init())
     private lazy var fileManager: FileManager = .default
-    private lazy var projectService: ProjectService = .init()
+    private lazy var projectService: ProjectService = .init(path: .init(path))
 
     private lazy var generalSpec: GeneralSpec? = {
         let url = URL(fileURLWithPath: path)
@@ -57,6 +57,10 @@ final class Generate: ParsableCommand {
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
 
+        if let projectName = generalSpec?.project {
+            try projectService.createProject(path: Path(path), projectName: projectName)
+        }
+
         for file in templateSpec.files {
             // render template for the file based on common and template files
             let rendered = try environment.renderTemplate(name: file.template, context: context)
@@ -88,13 +92,10 @@ final class Generate: ParsableCommand {
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL.appendingPathComponent(fileName)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
-            if let projectName = generalSpec?.project {
-                try projectService.addFile(path: Path(path),
-                                           projectName: projectName,
-                                           targetName: generalSpec?.target,
-                                           filePath: modulePath + Path(fileName))
-            }
+            try projectService.addFile(targetName: generalSpec?.target,
+                                       filePath: modulePath + Path(fileName))
         }
+        try projectService.write()
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
 

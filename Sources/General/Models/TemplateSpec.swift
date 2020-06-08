@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct TemplateSpec: Decodable {
+struct TemplateSpec: Codable {
 
     let files: [File]
 }

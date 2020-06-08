@@ -8,6 +8,7 @@ import ArgumentParser
 final class Create: ParsableCommand {
 
     private lazy var fileManager: FileManager = .default
+    private lazy var specFactory: SpecFactory = .init()
 
     // MARK: - Parameters
 
@@ -34,7 +35,8 @@ final class Create: ParsableCommand {
         try fileManager.createDirectory(at: moduleURL, withIntermediateDirectories: true, attributes: nil)
 
         // create a spec for a new template
-        if let specData = Constants.spec.data(using: .utf8) {
+        let spec = TemplateSpec(files: [.init(template: Constants.templateFilename)])
+        if let specData = try? specFactory.makeData(spec: spec) {
             let specURL = moduleURL + Constants.specFilename
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
         }

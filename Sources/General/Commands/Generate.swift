@@ -1,5 +1,5 @@
 //
-//  Created by Artem Novichkov on 04.06.2020.
+//  Copyright © 2020 Rosberry. All rights reserved.
 //
 
 import Foundation

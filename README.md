@@ -1,5 +1,12 @@
 # General
 
+<p align="center">
+    <img src="https://img.shields.io/badge/Swift-5.2-orange.svg" />
+    <a href="https://github.com/yonaskolb/Mint">
+          <img src="https://img.shields.io/badge/mint-compatible-brightgreen.svg?style=flat" alt="Mint" />
+    </a>
+</p>
+
 ## Using
 
 1. Clone the repo and run `make install`
@@ -38,6 +45,8 @@ SUBCOMMANDS:
 
   See 'general help <subcommand>' for detailed help.
 ```
+
+To learn more about the configuration file [see the dedicated documentation](/Documentation/SpecFile.md).
 
 ## Installing
 

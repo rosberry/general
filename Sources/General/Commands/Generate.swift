@@ -15,7 +15,7 @@ final class Generate: ParsableCommand {
         case noOutput
     }
 
-    private lazy var specFactory: SpecFactory = .init(decoder: .init())
+    private lazy var specFactory: SpecFactory = .init()
     private lazy var fileManager: FileManager = .default
     private lazy var projectService: ProjectService = .init(path: .init(path))
 

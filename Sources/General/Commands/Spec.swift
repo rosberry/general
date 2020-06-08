@@ -4,11 +4,10 @@
 
 import Foundation
 import ArgumentParser
-import Yams
-import XcodeProj
 
 final class Spec: ParsableCommand {
 
+    private lazy var specFactory: SpecFactory = .init()
     private lazy var fileManager: FileManager = .default
     private lazy var projectService: ProjectService = .init(path: .init(path))
 
@@ -44,8 +43,7 @@ final class Spec: ParsableCommand {
 
         // create a new spec
         let spec = GeneralSpec(project: projectName, company: company)
-        let specString = try YAMLEncoder().encode(spec)
-        if let specData = specString.data(using: .utf8) {
+        if let specData = try? specFactory.makeData(spec: spec) {
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
             print("🎉 Spec was successfully created.")
         }

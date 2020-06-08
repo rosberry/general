@@ -48,5 +48,6 @@ final class Create: ParsableCommand {
             let templateURL = codeURL + Constants.templateFilename
             fileManager.createFile(atPath: templateURL.path, contents: templateData, attributes: nil)
         }
+        print("🎉 \(template) template was successfully created.")
     }
 }

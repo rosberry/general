@@ -41,5 +41,6 @@ final class Spec: ParsableCommand {
         if let specData = Constants.generalSpec(withProjectName: projectName).data(using: .utf8) {
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
         }
+        print("🎉 Spec was successfully created.")
     }
 }

@@ -20,8 +20,9 @@ final class Generate: ParsableCommand {
     private lazy var projectService: ProjectService = .init(path: .init(path))
 
     private lazy var generalSpec: GeneralSpec? = {
-        let url = URL(fileURLWithPath: path)
-        return try? specFactory.makeGeneralSpec(url: url)
+        let pathURL = URL(fileURLWithPath: path, isDirectory: true)
+        let specURL = URL(fileURLWithPath: "general.yml", relativeTo: pathURL)
+        return try? specFactory.makeGeneralSpec(url: specURL)
     }()
 
     // MARK: - Parameters

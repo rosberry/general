@@ -62,12 +62,12 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -n main -t rsb_mvp_vm_module -p /Users/artemnovichkov/Documents/Projects/medmind-ios"
-            isEnabled = "NO">
+            argument = "gen -n login -t rsb_service -p /Users/artemnovichkov/Documents/Projects/Sri"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "help"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "spec"

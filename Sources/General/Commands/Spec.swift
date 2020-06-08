@@ -33,10 +33,7 @@ final class Spec: ParsableCommand {
         }
         let contents = try fileManager.contentsOfDirectory(atPath: url.path)
         var projectName = Constants.projectName
-        if let name = contents.first(where: { content in content.contains(".xcworkspace") }) {
-            projectName = name
-        }
-        else if let name = contents.first(where: { content in content.contains(".xcodeproj") }) {
+        if let name = contents.first(where: { content in content.contains(".xcodeproj") }) {
             projectName = name
         }
 

@@ -1,7 +1,7 @@
 # General
 
 ```
-OVERVIEW: Generates modules from templates.
+OVERVIEW: Generates code from templates.
 
 USAGE: general <subcommand>
 
@@ -11,6 +11,7 @@ OPTIONS:
 SUBCOMMANDS:
   gen                     Generates modules from templates.
   create                  Creates a new template.
+  spec                    Creates a new spec.
 
   See 'general help <subcommand>' for detailed help.
 ```

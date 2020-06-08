@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "General",
+    platforms: [.macOS(.v10_12)],
     dependencies: [
         .package(url: "https://github.com/stencilproject/Stencil.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.0.0")),

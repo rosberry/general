@@ -66,8 +66,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "spec"
+            argument = "help"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "spec"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "create -t rsb_mvp_vm_module"

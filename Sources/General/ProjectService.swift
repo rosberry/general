@@ -21,7 +21,7 @@ final class ProjectService {
         self.path = path
     }
 
-    func createProject(path: Path, projectName: String) throws {
+    func createProject(projectName: String) throws {
         let xcodeprojPath = path + Path(projectName)
         xcodeproj = try XcodeProj(path: xcodeprojPath)
         self.xcodeprojPath = xcodeprojPath
@@ -65,6 +65,13 @@ final class ProjectService {
             buildPhase.buildPhase == .sources
         }
         let _ = try buildPhase?.add(file: file)
+    }
+
+    func readAttributes() throws -> [String : Any] {
+        guard let rootProject = try xcodeproj?.pbxproj.rootProject() else {
+            return [:]
+        }
+        return rootProject.attributes
     }
 
     func write() throws {

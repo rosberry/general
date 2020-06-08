@@ -15,12 +15,6 @@ enum Constants {
     static let templateFilename = "template.stencil"
     static let template = "{{ name }}"
 
-    static func generalSpec(withProjectName projectName: String) -> String {
-        """
-        project: \(projectName)
-        """
-    }
-
     static let projectName = "Project.xcodeproj"
     static let generalSpecName = "general.yml"
 }

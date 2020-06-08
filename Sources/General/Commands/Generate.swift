@@ -63,7 +63,7 @@ final class Generate: ParsableCommand {
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
 
         if let projectName = generalSpec?.project {
-            try projectService.createProject(path: Path(path), projectName: projectName)
+            try projectService.createProject(projectName: projectName)
         }
 
         for file in templateSpec.files {

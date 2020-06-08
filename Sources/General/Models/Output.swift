@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct Output: Decodable {
+struct Output: Codable {
 
     let templateName: String
     let path: String

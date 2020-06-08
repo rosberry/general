@@ -4,12 +4,12 @@
 
 import Foundation
 
-struct GeneralSpec: Decodable {
+struct GeneralSpec: Codable {
 
     let project: String?
-    let target: String?
+    let target: String? = nil
     let company: String?
-    let outputs: [Output]
+    let outputs: [Output] = []
 
     func path(forTemplateName templateName: String) -> String? {
         var path: String?

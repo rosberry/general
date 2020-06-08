@@ -22,7 +22,7 @@ final class Generate: ParsableCommand {
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
         let specURL = URL(fileURLWithPath: "general.yml", relativeTo: pathURL)
-        return try? specFactory.makeGeneralSpec(url: specURL)
+        return try? specFactory.makeSpec(url: specURL)
     }()
 
     // MARK: - Parameters
@@ -58,7 +58,7 @@ final class Generate: ParsableCommand {
         let templatesURL = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
         let templateURL = templatesURL + template
         let specURL = templateURL + Constants.specFilename
-        let templateSpec = try specFactory.makeTemplateSpec(url: specURL)
+        let templateSpec: TemplateSpec = try specFactory.makeSpec(url: specURL)
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
 

@@ -62,20 +62,8 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -n login -t rsb_service -p /Users/artemnovichkov/Documents/Projects/Sri"
+            argument = "gen -t rsb_service -n login -p /Users/artemnovichkov/Documents/Projects/Sri"
             isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "help"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "spec"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "create -t rsb_mvp_vm_module"
-            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

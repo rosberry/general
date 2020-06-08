@@ -1,0 +1,12 @@
+{% include "header.stencil" %}
+
+import CollectionViewTools
+
+final class {{ name | capitalize }}ViewModel {
+
+    let listSectionItems: [GeneralCollectionViewDiffSectionItem]
+
+    init(state: {{ name | capitalize }}State, listItemsFactory: {{ name | capitalize }}ListItemsFactory) {
+        listSectionItems = listItemsFactory.makeSectionItems(state: state)
+    }
+}

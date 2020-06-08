@@ -1,0 +1,3 @@
+files:
+ - template: Code/Service.swift.stencil
+ - template: Code/ServiceImp.swift.stencil

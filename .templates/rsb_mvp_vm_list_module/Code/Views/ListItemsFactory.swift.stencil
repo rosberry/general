@@ -1,0 +1,13 @@
+{% include "header.stencil" %}
+
+import CollectionViewTools
+
+final class {{ name | capitalize }}ListItemsFactory {
+
+    weak var viewController: {{ name | capitalize }}ViewController?
+    weak var output: {{ name | capitalize }}ViewOutput?
+
+    func makeSectionItems(state: {{ name | capitalize }}State) -> [GeneralCollectionViewDiffSectionItem] {
+        return []
+    }
+}

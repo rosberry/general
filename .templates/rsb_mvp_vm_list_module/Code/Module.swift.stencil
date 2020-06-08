@@ -1,0 +1,41 @@
+{% include "header.stencil" %}
+
+protocol {{ name | capitalize }}ModuleInput: class {
+
+    var state: {{ name | capitalize }}State { get }
+    func update(force: Bool, animated: Bool)
+}
+
+protocol {{ name | capitalize }}ModuleOutput: class {
+
+    func {{ name }}ModuleClosed(_ moduleInput: {{ name | capitalize }}ModuleInput)
+}
+
+final class {{ name | capitalize }}Module {
+
+    var input: {{ name | capitalize }}ModuleInput {
+        return presenter
+    }
+    var output: {{ name | capitalize }}ModuleOutput? {
+        get {
+            return presenter.output
+        }
+        set {
+            presenter.output = newValue
+        }
+    }
+    let viewController: {{ name | capitalize }}ViewController
+    private let presenter: {{ name | capitalize }}Presenter
+
+    init(state: {{ name | capitalize }}State = .init()) {
+        let listItemsFactory = {{ name | capitalize }}ListItemsFactory()
+        let presenter = {{ name | capitalize }}Presenter(state: state, dependencies: [Any](), listItemsFactory: listItemsFactory)
+        let viewModel = {{ name | capitalize }}ViewModel(state: state, listItemsFactory: listItemsFactory)
+        let viewController = {{ name | capitalize }}ViewController(viewModel: viewModel, output: presenter)
+        listItemsFactory.output = presenter
+        listItemsFactory.viewController = viewController
+        presenter.view = viewController
+        self.viewController = viewController
+        self.presenter = presenter
+    }
+}

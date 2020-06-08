@@ -1,0 +1,10 @@
+{% include "header.stencil" %}
+
+protocol Has{{ name | capitalize }}Service {
+    
+    var {{ name }}Service: {{ name | capitalize }}Service { get }
+}
+
+protocol {{ name | capitalize }}Service: class {
+
+}

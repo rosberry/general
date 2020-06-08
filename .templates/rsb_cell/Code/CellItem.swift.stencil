@@ -1,0 +1,32 @@
+{% include "header.stencil" %}
+
+import CollectionViewTools
+
+final class {{ name | capitalize }}CollectionViewCellItem: CollectionViewDiffCellItem {
+
+    private typealias Cell = {{ name | capitalize }}CollectionViewCell
+
+    let diffIdentifier: String = ""
+
+    let reuseType: ReuseType = .class(Cell.self)
+
+    func configure(_ cell: UICollectionViewCell) {
+        guard let cell = cell as? Cell else {
+            return
+        }
+
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+    }
+
+    func size(in collectionView: UICollectionView, sectionItem: CollectionViewSectionItem) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 50)
+    }
+
+    func isEqual(to item: DiffItem) -> Bool {
+        guard let rhs = item as? {{ name | capitalize }}CollectionViewCellItem else {
+            return false
+        }
+        return true
+    }
+}

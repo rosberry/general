@@ -49,7 +49,7 @@ final class Create: ParsableCommand {
         if let templateData = Constants.template.data(using: .utf8) {
             let templateURL = codeURL + Constants.templateFilename
             fileManager.createFile(atPath: templateURL.path, contents: templateData, attributes: nil)
+            print("🎉 \(template) template was successfully created.")
         }
-        print("🎉 \(template) template was successfully created.")
     }
 }

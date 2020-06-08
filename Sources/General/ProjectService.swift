@@ -64,10 +64,10 @@ final class ProjectService {
         let buildPhase = target?.buildPhases.first { buildPhase in
             buildPhase.buildPhase == .sources
         }
-        let _ = try buildPhase?.add(file: file)
+        _ = try buildPhase?.add(file: file)
     }
 
-    func readAttributes() throws -> [String : Any] {
+    func readAttributes() throws -> [String: Any] {
         guard let rootProject = try xcodeproj?.pbxproj.rootProject() else {
             return [:]
         }

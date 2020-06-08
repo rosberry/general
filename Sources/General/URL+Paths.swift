@@ -4,6 +4,6 @@
 
 import Foundation
 
-func +(url: URL, pathComponent: String) -> URL {
+func + (url: URL, pathComponent: String) -> URL {
     return url.appendingPathComponent(pathComponent)
 }

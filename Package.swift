@@ -25,6 +25,6 @@ let package = Package(
         ]),
         .testTarget(
             name: "GeneralTests",
-            dependencies: ["General"]),
+            dependencies: ["General"])
     ]
 )

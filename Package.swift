@@ -7,10 +7,10 @@ let package = Package(
     name: "General",
     platforms: [.macOS(.v10_12)],
     dependencies: [
-        .package(url: "https://github.com/stencilproject/Stencil.git", .upToNextMajor(from: "0.0.0")),
+        .package(url: "https://github.com/artemnovichkov/Stencil.git", .branch("master")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
-        .package(name: "xcodeproj", url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "6.0.0"))
+        .package(url: "https://github.com/tuist/XcodeProj.git", from: "7.0.0")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -21,7 +21,7 @@ let package = Package(
                 "Stencil",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Yams",
-                "xcodeproj"
+                "XcodeProj"
         ]),
         .testTarget(
             name: "GeneralTests",

@@ -7,7 +7,7 @@ import ArgumentParser
 import Stencil
 import Yams
 import PathKit
-import xcodeproj
+import XcodeProj
 
 final class Generate: ParsableCommand {
 

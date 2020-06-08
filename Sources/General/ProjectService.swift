@@ -3,7 +3,7 @@
 //
 
 import PathKit
-import xcodeproj
+import XcodeProj
 
 final class ProjectService {
 

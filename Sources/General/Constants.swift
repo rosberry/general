@@ -17,7 +17,7 @@ enum Constants {
 
     static func generalSpec(withProjectName projectName: String) -> String {
         """
-        projectName: \(projectName)
+        project: \(projectName)
         """
     }
 

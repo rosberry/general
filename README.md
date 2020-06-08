@@ -1,5 +1,28 @@
 # General
 
+## Using
+
+1. Clone the repo and run `make install`
+
+2. Copy `.templates` folder to the root directory.
+
+3. Run `general spec` in a project directory. This command will create a spec. The example of `general.yml` spec:
+
+   ```yml
+   project: Project.xcodeproj
+   outputs:
+     - templateName: rsb_mvp_vm_module
+       path: Classes/Presentation/Modules
+   ```
+
+4. Create a module with one of installed templates:
+
+   ```bash
+   general gen -n main -t rsb_mvp_vm_module
+   ```
+
+Run `general --help` to see available commands and options:
+
 ```
 OVERVIEW: Generates code from templates.
 
@@ -16,3 +39,11 @@ SUBCOMMANDS:
   See 'general help <subcommand>' for detailed help.
 ```
 
+## Installing
+
+- [Mint](https://github.com/yonaskolb/Mint): `mint run rosberry/general`
+- From source: `make install`
+
+## License
+
+The project is available under the MIT license. See the LICENSE file for more info.

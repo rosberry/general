@@ -1,4 +1,0 @@
-project: Project.xcodeproj
-outputs:
-  - templateName: rsb_mvp_vm_module
-    path: Classes/Presentation/Modules

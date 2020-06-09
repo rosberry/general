@@ -124,11 +124,12 @@ final class Generate: ParsableCommand {
     }
 }
 
-extension PBXGroup {
+extension Generate.Error: CustomStringConvertible {
 
-    func group(withPath path: String) -> PBXGroup? {
-        children.first { element in
-            element.path == path
-        } as? PBXGroup
+    var description: String {
+        switch self {
+            case .noOutput:
+                return "There is no output path for template. Please use --output option or add output to general.yml."
+        }
     }
 }

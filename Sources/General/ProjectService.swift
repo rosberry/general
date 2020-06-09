@@ -8,7 +8,7 @@ import XcodeProj
 final class ProjectService {
 
     enum Error: Swift.Error {
-        case noProject
+        case noProject(path: String)
         case noGroup
     }
 
@@ -36,7 +36,7 @@ final class ProjectService {
     /// - Throws: If the are no projects in pbxproj file of fails to create groups.
     func addFile(targetName: String?, filePath: Path) throws {
         guard let project = xcodeproj?.pbxproj.projects.first else {
-            throw Error.noProject
+            throw Error.noProject(path: path.string)
         }
 
         var components = filePath.components
@@ -95,5 +95,17 @@ final class ProjectService {
             }
         }
         return currentGroup
+    }
+}
+
+extension ProjectService.Error: CustomStringConvertible {
+
+    var description: String {
+        switch self {
+            case .noProject(let path):
+                return "There is no pbxproj at " + path
+            case .noGroup:
+                return "Fail to add groups to Xcode project."
+        }
     }
 }

@@ -7,10 +7,11 @@ let package = Package(
     name: "General",
     platforms: [.macOS(.v10_12)],
     dependencies: [
+        //with bumped PathKit version
         .package(url: "https://github.com/artemnovichkov/Stencil.git", .branch("master")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
-        .package(url: "https://github.com/tuist/XcodeProj.git", from: "7.0.0")
+        .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0"))
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

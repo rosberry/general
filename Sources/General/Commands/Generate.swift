@@ -29,17 +29,20 @@ final class Generate: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
-    @Option(name: [.short, .long], default: FileManager.default.currentDirectoryPath, help: "The path for the project.")
+    @Option(name: .shortAndLong, default: FileManager.default.currentDirectoryPath, help: "The path for the project.")
     var path: String
 
-    @Option(name: [.short, .long], help: "The name of the module.")
+    @Option(name: .shortAndLong, help: "The name of the module.")
     var name: String
 
-    @Option(name: [.short, .long], help: "The name of the template.")
+    @Option(name: .shortAndLong, help: "The name of the template.")
     var template: String
 
-    @Option(name: [.short, .long], help: "The output for the template.")
+    @Option(name: .shortAndLong, help: "The output for the template.")
     var output: String?
+
+    @Argument(help: "The additional parameters for templates.")
+    var parameters: [Parameter]
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())
@@ -47,6 +50,9 @@ final class Generate: ParsableCommand {
                                       "year": year]
         if let company = generalSpec?.company {
             context["company"] = company
+        }
+        for parameter in parameters {
+            context[parameter.key] = parameter.value
         }
         return context
     }

@@ -14,10 +14,10 @@ final class Create: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(abstract: "Creates a new template.")
 
-    @Option(name: [.short, .long], help: "The name of the template.")
+    @Option(name: .shortAndLong, help: "The name of the template.")
     var template: String
 
-    @Option(name: [.short, .long], help: "The path for the template.")
+    @Option(name: .shortAndLong, help: "The path for the template.")
     var path: String?
 
     func run() throws {

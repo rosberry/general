@@ -62,8 +62,16 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_service -n login -p /Users/artemnovichkov/Documents/Projects/Sri"
+            argument = "gen -t rsb_mvp_vm_list_module -n Main -p /Users/artemnovichkov/Documents/Projects/Sri year:2007"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "help"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "list"
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

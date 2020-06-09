@@ -14,7 +14,7 @@ final class Spec: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(abstract: "Creates a new spec.")
 
-    @Option(name: [.short, .long], default: FileManager.default.currentDirectoryPath, help: "The path for the template.")
+    @Option(name: .shortAndLong, default: FileManager.default.currentDirectoryPath, help: "The path for the template.")
     var path: String
 
     func run() throws {

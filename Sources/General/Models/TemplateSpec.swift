@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct TemplateSpec: Codable {
+struct TemplateSpec: Codable, CustomStringConvertible {
 
     let files: [File]
 }

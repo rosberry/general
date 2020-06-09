@@ -28,7 +28,7 @@
    general gen -n main -t rsb_mvp_vm_module
    ```
 
-Run `general --help` to see available commands and options:
+Run `general help` to see available commands and options:
 
 ```
 OVERVIEW: Generates code from templates.
@@ -42,6 +42,7 @@ SUBCOMMANDS:
   gen                     Generates modules from templates.
   create                  Creates a new template.
   spec                    Creates a new spec.
+  list                    List of available templates.
 
   See 'general help <subcommand>' for detailed help.
 ```

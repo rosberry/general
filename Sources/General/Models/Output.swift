@@ -3,7 +3,7 @@
 //
 import Foundation
 
-struct Output: Codable {
+struct Output: Codable, CustomStringConvertible {
 
     let templateName: String
     let path: String

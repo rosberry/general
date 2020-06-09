@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct GeneralSpec: Codable {
+struct GeneralSpec: Codable, CustomStringConvertible {
 
     let project: String?
     let target: String?

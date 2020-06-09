@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		06984642248FB0B200FCF6D0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984640248FB0A800FCF6D0 /* List.swift */; };
 		06EF7DDA248F35090014A31D /* PBXGroup+Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EF7DD7248F34F40014A31D /* PBXGroup+Groups.swift */; };
 		OBJ_270 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_142 /* Document.swift */; };
 		OBJ_271 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_143 /* Element.swift */; };
@@ -412,6 +413,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		06984640248FB0A800FCF6D0 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		06EF7DD7248F34F40014A31D /* PBXGroup+Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PBXGroup+Groups.swift"; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1168,7 +1170,7 @@
 			path = BuildPhase;
 			sourceTree = "<group>";
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -1180,7 +1182,6 @@
 				OBJ_263 /* Makefile */,
 				OBJ_264 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_57 /* Configuration */ = {
@@ -1286,6 +1287,7 @@
 				OBJ_11 /* General.swift */,
 				OBJ_12 /* Generate.swift */,
 				OBJ_13 /* Spec.swift */,
+				06984640248FB0A800FCF6D0 /* List.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -1647,7 +1649,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_251 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1758,6 +1760,7 @@
 				OBJ_343 /* File.swift in Sources */,
 				OBJ_344 /* GeneralSpec.swift in Sources */,
 				OBJ_345 /* Output.swift in Sources */,
+				06984642248FB0B200FCF6D0 /* List.swift in Sources */,
 				OBJ_346 /* TemplateSpec.swift in Sources */,
 				OBJ_347 /* ProjectService.swift in Sources */,
 				06EF7DDA248F35090014A31D /* PBXGroup+Groups.swift in Sources */,

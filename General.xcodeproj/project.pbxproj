@@ -23,7 +23,7 @@
 /* Begin PBXBuildFile section */
 		06984642248FB0B200FCF6D0 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984640248FB0A800FCF6D0 /* List.swift */; };
 		06984644248FBDD600FCF6D0 /* CustomStringConvertible+Mirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984643248FBDD600FCF6D0 /* CustomStringConvertible+Mirror.swift */; };
-		06984646248FC48700FCF6D0 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984645248FC48700FCF6D0 /* Parameter.swift */; };
+		06984646248FC48700FCF6D0 /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06984645248FC48700FCF6D0 /* Variable.swift */; };
 		06EF7DDA248F35090014A31D /* PBXGroup+Groups.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06EF7DD7248F34F40014A31D /* PBXGroup+Groups.swift */; };
 		OBJ_270 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_142 /* Document.swift */; };
 		OBJ_271 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_143 /* Element.swift */; };
@@ -417,7 +417,7 @@
 /* Begin PBXFileReference section */
 		06984640248FB0A800FCF6D0 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 		06984643248FBDD600FCF6D0 /* CustomStringConvertible+Mirror.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CustomStringConvertible+Mirror.swift"; sourceTree = "<group>"; };
-		06984645248FC48700FCF6D0 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
+		06984645248FC48700FCF6D0 /* Variable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
 		06EF7DD7248F34F40014A31D /* PBXGroup+Groups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PBXGroup+Groups.swift"; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -836,7 +836,7 @@
 				OBJ_17 /* GeneralSpec.swift */,
 				OBJ_18 /* Output.swift */,
 				OBJ_19 /* TemplateSpec.swift */,
-				06984645248FC48700FCF6D0 /* Parameter.swift */,
+				06984645248FC48700FCF6D0 /* Variable.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1765,7 +1765,7 @@
 				06984644248FBDD600FCF6D0 /* CustomStringConvertible+Mirror.swift in Sources */,
 				OBJ_342 /* Constants.swift in Sources */,
 				OBJ_343 /* File.swift in Sources */,
-				06984646248FC48700FCF6D0 /* Parameter.swift in Sources */,
+				06984646248FC48700FCF6D0 /* Variable.swift in Sources */,
 				OBJ_344 /* GeneralSpec.swift in Sources */,
 				OBJ_345 /* Output.swift in Sources */,
 				06984642248FB0B200FCF6D0 /* List.swift in Sources */,

@@ -32,3 +32,9 @@ Here's a list of supported variables:
 | `name`    | The name of the module  | This is useful if you want to add generated files to Xcode project. |
 | `year`    |                         | Useful for file headers. By default General uses current year. |
 | `company` | The name of the company | Useful for file headers.                                     |
+
+If you want to use custom variables or override the variables above, pass it to `gen` command in `key:value` format. For instance:
+
+```bash
+general gen -t module year:2007
+```

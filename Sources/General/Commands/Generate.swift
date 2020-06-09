@@ -41,8 +41,8 @@ final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The output for the template.")
     var output: String?
 
-    @Argument(help: "The additional parameters for templates.")
-    var parameters: [Parameter]
+    @Argument(help: "The additional variables for templates.")
+    var variables: [Variable]
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())
@@ -51,8 +51,8 @@ final class Generate: ParsableCommand {
         if let company = generalSpec?.company {
             context["company"] = company
         }
-        for parameter in parameters {
-            context[parameter.key] = parameter.value
+        for variable in variables {
+            context[variable.key] = variable.value
         }
         return context
     }

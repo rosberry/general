@@ -4,13 +4,13 @@
 
 import ArgumentParser
 
-struct Parameter {
+struct Variable {
 
     let key: String
     let value: String
 }
 
-extension Parameter: ExpressibleByArgument {
+extension Variable: ExpressibleByArgument {
 
     init?(argument: String) {
         let components = argument.components(separatedBy: ":")

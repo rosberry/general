@@ -1,4 +1,4 @@
-# General Spec File
+# General Spec
 
 Simply create a YAML file named `general.yml` at the root of your repository or use `general spec` command. It is not required by General, but adds useful context for Stencil templates, configs for Xcode projects and default outputs for templates. 
 

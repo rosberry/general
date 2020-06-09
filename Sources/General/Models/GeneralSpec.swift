@@ -7,9 +7,16 @@ import Foundation
 struct GeneralSpec: Codable {
 
     let project: String?
-    let target: String? = nil
+    let target: String?
     let company: String?
-    let outputs: [Output] = []
+    let outputs: [Output]
+
+    init(project: String?, target: String? = nil, company: String?, outputs: [Output] = []) {
+        self.project = project
+        self.target = target
+        self.company = company
+        self.outputs = outputs
+    }
 
     func path(forTemplateName templateName: String) -> String? {
         var path: String?

@@ -7,4 +7,5 @@ struct Output: Codable, CustomStringConvertible {
 
     let templateName: String
     let path: String
+    let testPath: String?
 }

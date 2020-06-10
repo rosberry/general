@@ -27,14 +27,7 @@ final class ProjectService {
         self.xcodeprojPath = xcodeprojPath
     }
 
-    /// Adds a file to the project
-    /// - Parameters:
-    ///   - path: The path to the project folder.
-    ///   - projectName: The name of the Xcode project. Must contain .xcodeproj extension.
-    ///   - filePath: the whole path to the file.
-    ///   - targetName: The name of the target.
-    /// - Throws: If the are no projects in pbxproj file of fails to create groups.
-    func addFile(targetName: String?, filePath: Path) throws {
+    func addFile(targetName: String?, isTestTarget: Bool, filePath: Path) throws {
         guard let project = xcodeproj?.pbxproj.projects.first else {
             throw Error.noProject(path: path.string)
         }
@@ -57,8 +50,9 @@ final class ProjectService {
             }
         }
         else {
+            let productType: PBXProductType = isTestTarget ? .unitTestBundle : .application
             target = targets?.first { target in
-                target.productType == .application
+                target.productType == productType
             }
         }
         let buildPhase = target?.buildPhases.first { buildPhase in

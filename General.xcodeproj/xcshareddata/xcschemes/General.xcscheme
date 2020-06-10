@@ -62,16 +62,12 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_mvp_vm_list_module -n Main -p /Users/artemnovichkov/Documents/Projects/Sri year:2007"
+            argument = "gen -t module -n Main -p /Users/artemnovichkov/Documents/Projects/Sri"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "create -t artem"
             isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "help"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "list"
-            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

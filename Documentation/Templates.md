@@ -38,3 +38,22 @@ If you want to use custom variables or override the variables above, pass it to 
 ```bash
 general gen -t module year:2007
 ```
+
+## Template Spec File Format
+
+The configuration file is a YAML file structured like this (example):
+
+```yaml
+files:
+  - template: Code/ViewController.swift.stencil
+  - template: Code/ViewModel.swift.stencil
+testFiles:
+  - template: Test/ViewModelTests.swift.stencil
+```
+
+Here's a quick description of all the possible _root_ keys.
+
+| Key         | Description                             | Intended usage                           |
+| ----------- | --------------------------------------- | ---------------------------------------- |
+| `files`     | The list of templates for module.       | Paths must be repative to module folder. |
+| `testFiles` | The list of templates for module tests. | Paths must be repative to module folder. |

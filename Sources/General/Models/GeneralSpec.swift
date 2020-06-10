@@ -8,21 +8,21 @@ struct GeneralSpec: Codable, CustomStringConvertible {
 
     let project: String?
     let target: String?
+    let testTarget: String?
     let company: String?
     let outputs: [Output]
 
-    init(project: String?, target: String? = nil, company: String?, outputs: [Output] = []) {
+    init(project: String?, target: String? = nil, testTarget: String? = nil, company: String?, outputs: [Output] = []) {
         self.project = project
         self.target = target
+        self.testTarget = testTarget
         self.company = company
         self.outputs = outputs
     }
 
-    func path(forTemplateName templateName: String) -> String? {
-        var path: String?
-        for output in outputs where output.templateName == templateName {
-            path = output.path
+    func output(forTemplateName templateName: String) -> Output? {
+        outputs.first { output in
+            output.templateName == templateName
         }
-        return path
     }
 }

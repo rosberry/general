@@ -25,7 +25,7 @@
 4. Create a module with one of installed templates:
 
    ```bash
-   general gen -n main -t rsb_mvp_vm_module
+   general -n main -t rsb_mvp_vm_module
    ```
 
 Run `general help` to see available commands and options:

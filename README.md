@@ -36,7 +36,7 @@ SUBCOMMANDS:
   See 'general help <subcommand>' for detailed help.
 ```
 
-To learn more about the configuration file [see the dedicated documentation](/Documentation/SpecFile.md).
+To learn more about the configuration file [see the dedicated documentation](/Documentation/GeneralSpec.md).
 
 ## Installing
 - [Homebrew](https://brew.sh): `brew install rosberry/tap/general`

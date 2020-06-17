@@ -9,20 +9,9 @@
 
 ## Using
 
-1. Clone the repo and run `make install`
-
-2. Copy `.templates` folder to the root directory.
-
-3. Run `general spec` in a project directory. This command will create a spec. The example of `general.yml` spec:
-
-   ```yml
-   project: Project.xcodeproj
-   outputs:
-     - templateName: rsb_mvp_vm_module
-       path: Classes/Presentation/Modules
-   ```
-
-4. Create a module with one of installed templates:
+1. Copy `.templates` folder to the root directory.
+2. Run `general spec` in a project directory. This command will create a spec.
+3. Create a module with one of installed templates:
 
    ```bash
    general -n main -t rsb_mvp_vm_module

@@ -50,8 +50,8 @@ SUBCOMMANDS:
 To learn more about the configuration file [see the dedicated documentation](/Documentation/SpecFile.md).
 
 ## Installing
-
-- [Mint](https://github.com/yonaskolb/Mint): `mint run rosberry/general`
+- [Homebrew](https://brew.sh): `brew install rosberry/tap/general`
+- [Mint](https://github.com/yonaskolb/Mint): `mint install rosberry/general`
 - From source: `make install`
 
 ## License

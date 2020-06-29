@@ -1,37 +1,37 @@
 {% include "header.stencil" %}
 
-final class {{ name | capitalize }}Presenter {
+final class {{ name }}Presenter {
 
     typealias Dependencies = Any
 
-    weak var view: {{ name | capitalize }}ViewInput?
-    weak var output: {{ name | capitalize }}ModuleOutput?
+    weak var view: {{ name }}ViewInput?
+    weak var output: {{ name }}ModuleOutput?
 
-    var state: {{ name | capitalize }}State
+    var state: {{ name }}State
 
     private let dependencies: Dependencies
 
-    init(state: {{ name | capitalize }}State, dependencies: Dependencies) {
+    init(state: {{ name }}State, dependencies: Dependencies) {
         self.state = state
         self.dependencies = dependencies
     }
 }
 
-// MARK: - {{ name | capitalize }}ViewOutput
+// MARK: - {{ name }}ViewOutput
 
-extension {{ name | capitalize }}Presenter: {{ name | capitalize }}ViewOutput {
+extension {{ name }}Presenter: {{ name }}ViewOutput {
 
     func viewDidLoad() {
         update(force: true, animated: false)
     }
 }
 
-// MARK: - {{ name | capitalize }}ModuleInput
+// MARK: - {{ name }}ModuleInput
 
-extension {{ name | capitalize }}Presenter: {{ name | capitalize }}ModuleInput {
+extension {{ name }}Presenter: {{ name }}ModuleInput {
 
     func update(force: Bool = false, animated: Bool) {
-        let viewModel = {{ name | capitalize }}ViewModel(state: state)
+        let viewModel = {{ name }}ViewModel(state: state)
         view?.update(with: viewModel, force: force, animated: animated)
     }
 }

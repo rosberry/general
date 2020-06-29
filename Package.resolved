@@ -29,12 +29,21 @@
         }
       },
       {
+        "package": "StencilSwiftKit",
+        "repositoryURL": "https://github.com/artemnovichkov/StencilSwiftKit.git",
+        "state": {
+          "branch": "stable",
+          "revision": "8a45643e0f6219c3ddb73c956c3cdad32f55d835",
+          "version": null
+        }
+      },
+      {
         "package": "swift-argument-parser",
         "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {
           "branch": null,
-          "revision": "3d79b2b5a2e5af52c14e462044702ea7728f5770",
-          "version": "0.1.0"
+          "revision": "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0",
+          "version": "0.2.0"
         }
       },
       {
@@ -42,8 +51,8 @@
         "repositoryURL": "https://github.com/tuist/XcodeProj.git",
         "state": {
           "branch": null,
-          "revision": "6eaf24df094990f74bb3459f3e5d7bce44c2163a",
-          "version": "7.11.1"
+          "revision": "cc9f600f2c34e782eb4fec99d6106bda5bade7be",
+          "version": "7.12.0"
         }
       },
       {

@@ -109,7 +109,7 @@ final class Generate: ParsableCommand {
             if relativeFileURL.pathExtension == "stencil" {
                 relativeFileURL.deletePathExtension()
             }
-            fileName = name.capitalized + relativeFileURL.lastPathComponent
+            fileName = name + relativeFileURL.lastPathComponent
 
             // make output url for the file
             var outputURL = URL(fileURLWithPath: path)
@@ -134,7 +134,7 @@ final class Generate: ParsableCommand {
             else {
                 throw Error.noOutput(template: template)
             }
-            let modulePath = Path(templatePath) + Path(name.capitalized)
+            let modulePath = Path(templatePath) + Path(name)
             outputURL.appendPathComponent(modulePath.string)
 
             // write rendered template to file

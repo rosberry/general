@@ -1,22 +1,22 @@
 {% include "header.stencil" %}
 
-protocol {{ name | capitalize }}ModuleInput: class {
+protocol {{ name }}ModuleInput: class {
 
-    var state: {{ name | capitalize }}State { get }
+    var state: {{ name }}State { get }
     func update(force: Bool, animated: Bool)
 }
 
-protocol {{ name | capitalize }}ModuleOutput: class {
+protocol {{ name }}ModuleOutput: class {
 
-    func {{ name }}ModuleClosed(_ moduleInput: {{ name | capitalize }}ModuleInput)
+    func {{ name|lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name }}ModuleInput)
 }
 
-final class {{ name | capitalize }}Module {
+final class {{ name }}Module {
 
-    var input: {{ name | capitalize }}ModuleInput {
+    var input: {{ name }}ModuleInput {
         return presenter
     }
-    var output: {{ name | capitalize }}ModuleOutput? {
+    var output: {{ name }}ModuleOutput? {
         get {
             return presenter.output
         }
@@ -24,14 +24,14 @@ final class {{ name | capitalize }}Module {
             presenter.output = newValue
         }
     }
-    let viewController: {{ name | capitalize }}ViewController
-    private let presenter: {{ name | capitalize }}Presenter
+    let viewController: {{ name }}ViewController
+    private let presenter: {{ name }}Presenter
 
-    init(state: {{ name | capitalize }}State = .init()) {
-        let listItemsFactory = {{ name | capitalize }}ListItemsFactory()
-        let presenter = {{ name | capitalize }}Presenter(state: state, dependencies: [Any](), listItemsFactory: listItemsFactory)
-        let viewModel = {{ name | capitalize }}ViewModel(state: state, listItemsFactory: listItemsFactory)
-        let viewController = {{ name | capitalize }}ViewController(viewModel: viewModel, output: presenter)
+    init(state: {{ name }}State = .init()) {
+        let listItemsFactory = {{ name }}ListItemsFactory()
+        let presenter = {{ name }}Presenter(state: state, dependencies: [Any](), listItemsFactory: listItemsFactory)
+        let viewModel = {{ name }}ViewModel(state: state, listItemsFactory: listItemsFactory)
+        let viewController = {{ name }}ViewController(viewModel: viewModel, output: presenter)
         listItemsFactory.output = presenter
         listItemsFactory.viewController = viewController
         presenter.view = viewController

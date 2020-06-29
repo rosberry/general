@@ -1,4 +1,4 @@
 {% include "header.stencil" %}
 
-final class {{ name | capitalize }}State {
+final class {{ name }}State {
 }

@@ -8,7 +8,7 @@ let package = Package(
     platforms: [.macOS(.v10_12)],
     dependencies: [
         //with bumped PathKit version
-        .package(url: "https://github.com/artemnovichkov/Stencil.git", .branch("master")),
+        .package(url: "https://github.com/artemnovichkov/StencilSwiftKit.git", .branch("stable")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0"))
@@ -19,7 +19,7 @@ let package = Package(
         .target(
             name: "General",
             dependencies: [
-                "Stencil",
+                "StencilSwiftKit",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Yams",
                 "XcodeProj"

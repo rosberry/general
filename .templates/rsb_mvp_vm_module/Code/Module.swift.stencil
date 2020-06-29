@@ -1,22 +1,22 @@
 {% include "header.stencil" %}
 
-protocol {{ name | capitalize }}ModuleInput: class {
+protocol {{ name }}ModuleInput: class {
 
-    var state: {{ name | capitalize }}State { get }
+    var state: {{ name }}State { get }
     func update(force: Bool, animated: Bool)
 }
 
-protocol {{ name | capitalize }}ModuleOutput: class {
+protocol {{ name }}ModuleOutput: class {
 
-    func {{ name }}ModuleClosed(_ moduleInput: {{ name | capitalize }}ModuleInput)
+    func {{ name|lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name }}ModuleInput)
 }
 
-final class {{ name | capitalize }}Module {
+final class {{ name }}Module {
 
-    var input: {{ name | capitalize }}ModuleInput {
+    var input: {{ name }}ModuleInput {
         return presenter
     }
-    var output: {{ name | capitalize }}ModuleOutput? {
+    var output: {{ name }}ModuleOutput? {
         get {
             return presenter.output
         }
@@ -24,13 +24,13 @@ final class {{ name | capitalize }}Module {
             presenter.output = newValue
         }
     }
-    let viewController: {{ name | capitalize }}ViewController
-    private let presenter: {{ name | capitalize }}Presenter
+    let viewController: {{ name }}ViewController
+    private let presenter: {{ name }}Presenter
 
-    init(state: {{ name | capitalize }}State = .init()) {
-        let presenter = {{ name | capitalize }}Presenter(state: state, dependencies: [Any]())
-        let viewModel = {{ name | capitalize }}ViewModel(state: state)
-        let viewController = {{ name | capitalize }}ViewController(viewModel: viewModel, output: presenter)
+    init(state: {{ name }}State = .init()) {
+        let presenter = {{ name }}Presenter(state: state, dependencies: [Any]())
+        let viewModel = {{ name }}ViewModel(state: state)
+        let viewController = {{ name }}ViewController(viewModel: viewModel, output: presenter)
         presenter.view = viewController
         self.viewController = viewController
         self.presenter = presenter

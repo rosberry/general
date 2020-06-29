@@ -1,7 +1,7 @@
 {% include "header.stencil" %}
 
-final class {{ name | capitalize }}ViewModel {
+final class {{ name }}ViewModel {
 
-    init(state: {{ name | capitalize }}State) {
+    init(state: {{ name }}State) {
     }
 }

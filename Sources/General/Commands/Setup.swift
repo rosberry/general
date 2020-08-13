@@ -1,6 +1,7 @@
 //
 //  Copyright © 2020 Rosberry. All rights reserved.
 //
+
 import Foundation
 import ArgumentParser
 import ZIPFoundation
@@ -17,11 +18,12 @@ final class Setup: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(commandName: "setup", abstract: "Provides your environment with templates")
 
-    @Option(name: .shortAndLong, help: "Remote url where tamplates placed")
-    var url: String?
-
-    @Option(name: .shortAndLong, help: "Use this option if templates are placed on github. Format: \"<github>\\ [branch]\". Default: \"\(Constants.defaultTemplatesGithub)\"")
-    var github: String?
+    @Option(name: .shortAndLong,
+            default: Constants.defaultTemplatesGithub,
+            help: .init(stringLiteral:
+                "Use this option if templates are placed on github." +
+                " Format: \"<github>\\ [branch]\". Default: \"\(Constants.defaultTemplatesGithub)\""))
+    var github: String
 
     @Option(name: .shortAndLong, default: false, help: "If specified loads templates into current folder")
     var local: Bool
@@ -31,9 +33,6 @@ final class Setup: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
-        if let url = self.url {
-            return try loadTemplatesFromPath(url)
-        }
         let url = try getGitRepoPath()
         try loadTemplatesFromPath(url)
     }
@@ -41,22 +40,34 @@ final class Setup: ParsableCommand {
     // MARK: - Private
 
     private func loadTemplatesFromPath(_ path: String) throws {
+        print("Loading templates from \(github)...")
         let archiveURL = try downloadArchive(at: path)
         let folderURL = try unzipArchive(at: archiveURL)
         let templates = loadTemplates(in: folderURL)
         let destination = getTemplatesDestination()
+        var moved = [URL]()
         do {
-            try move(templates, to: destination)
+            moved = try move(templates, to: destination)
         }
         catch {
             try remove(folderURL)
             throw error
         }
         try remove(folderURL)
+        print()
+        if moved.isEmpty {
+            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
+        }
+        else {
+            print("✨ Updated templates:")
+            moved.forEach { url in
+                print("\u{001B}[0;32m" + url.lastPathComponent)
+            }
+        }
+        print("\u{001B}[0;0m")
     }
 
     private func getGitRepoPath() throws -> String {
-        let github = self.github ?? Constants.defaultTemplatesGithub
         let components = github.split(separator: " ")
         guard let name =  components.first else {
             throw Error.githubName(github)
@@ -124,9 +135,9 @@ final class Setup: ParsableCommand {
                                                                includingPropertiesForKeys: nil,
                                                                options: [])
             for url in contents {
-                var isDirrectory: ObjCBool = false
-                _ = fileManager.fileExists(atPath: url.path, isDirectory: &isDirrectory)
-                if isDirrectory.boolValue {
+                var isDirectory: ObjCBool = false
+                _ = fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory)
+                if isDirectory.boolValue {
                     if fileManager.fileExists(atPath: (url + Constants.specFilename).path) {
                         templates.append(url)
                     }
@@ -134,40 +145,88 @@ final class Setup: ParsableCommand {
                         templates.append(contentsOf: loadTemplates(in: url))
                     }
                 }
+                else if url.pathExtension == "stencil" {
+                    templates.append(url.deletingLastPathComponent())
+                }
             }
         }
         catch {
-            return templates
+            return Array(Set(templates))
         }
-        return templates
+        return Array(Set(templates))
     }
 
     private func getTemplatesDestination() -> URL {
         if local {
-            return URL(fileURLWithPath: "./")
+            return URL(fileURLWithPath: "./" + Constants.templatesFolderName)
         }
         else {
-            return fileManager.homeDirectoryForCurrentUser
+            return fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
         }
     }
 
-    private func move(_ templates: [URL], to destination: URL) throws {
+    private func move(_ templates: [URL], to destination: URL) throws -> [URL] {
+        var moved = [URL]()
+
         do {
             try fileManager.createDirectory(at: destination, withIntermediateDirectories: true, attributes: nil)
         }
         catch {
             throw Error.write(destination)
         }
+
         for url in templates {
             let destination = destination + url.lastPathComponent
+            guard isNewerFileWithURL(url, than: destination) else {
+                continue
+            }
             do {
-                // TODO: check existing, make soft update
+                if fileManager.fileExists(atPath: destination.path) {
+                    try fileManager.removeItem(at: destination)
+                }
                 try fileManager.moveItem(at: url, to: destination)
+                moved.append(url)
             }
             catch {
                 throw Error.write(destination)
             }
         }
+        return moved
+    }
+
+    private func isNewerFileWithURL(_ lhs: URL, than rhs: URL) -> Bool {
+        guard let lhs = modificationDateOfFileWithURL(lhs),
+              let rhs = modificationDateOfFileWithURL(rhs) else {
+            return true
+        }
+        return lhs > rhs
+    }
+
+    private func modificationDateOfFileWithURL(_ url: URL) -> Date? {
+        var isDirectory: ObjCBool = false
+        fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory)
+        guard isDirectory.boolValue else {
+            return try? url.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+        }
+        guard let urls = try? fileManager.contentsOfDirectory(at: url,
+                                                              includingPropertiesForKeys: nil,
+                                                              options: []) else {
+            return nil
+        }
+        var date: Date?
+        for url in urls {
+            guard let fileDate = modificationDateOfFileWithURL(url) else {
+                continue
+            }
+            guard let lastDate = date else {
+                date = fileDate
+                continue
+            }
+            if fileDate > lastDate {
+                date = fileDate
+            }
+        }
+        return date
     }
 
     private func remove(_ url: URL) throws {

@@ -1,9 +1,8 @@
+// swift-tools-version:5.2
+
 //
 //  Copyright © 2020 Rosberry. All rights reserved.
 //
-
-// swift-tools-version:5.2
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
@@ -12,7 +11,7 @@ let package = Package(
     platforms: [.macOS(.v10_12)],
     dependencies: [
         //with bumped PathKit version
-        .package(url: "https://github.com/artemnovichkov/StencilSwiftKit.git", .branch("stable")),
+        .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .exact("0.1.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0")),

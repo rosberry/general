@@ -15,25 +15,25 @@
         "repositoryURL": "https://github.com/kylef/Spectre.git",
         "state": {
           "branch": null,
-          "revision": "f14ff47f45642aa5703900980b014c2e9394b6e5",
-          "version": "0.9.0"
+          "revision": "f717bbce0e19f0129fc001b2b6bed43b70fd8b87",
+          "version": "0.9.1"
         }
       },
       {
         "package": "Stencil",
-        "repositoryURL": "https://github.com/artemnovichkov/Stencil.git",
+        "repositoryURL": "https://github.com/rosberry/Stencil.git",
         "state": {
-          "branch": "master",
-          "revision": "f7a57b628f158886c83a71c2136a6ba9e5b06380",
+          "branch": "original",
+          "revision": "14e56194adfec5574bdd66a807f2360129dd870f",
           "version": null
         }
       },
       {
         "package": "StencilSwiftKit",
-        "repositoryURL": "https://github.com/artemnovichkov/StencilSwiftKit.git",
+        "repositoryURL": "https://github.com/rosberry/StencilSwiftKit.git",
         "state": {
           "branch": "stable",
-          "revision": "8a45643e0f6219c3ddb73c956c3cdad32f55d835",
+          "revision": "3a5169c92750d86890d773c663c3a0356de3b109",
           "version": null
         }
       },
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/tuist/XcodeProj.git",
         "state": {
           "branch": null,
-          "revision": "cc9f600f2c34e782eb4fec99d6106bda5bade7be",
-          "version": "7.12.0"
+          "revision": "81bb2bb333eafa68f8ecd8187a4bb56d51e78e97",
+          "version": "7.14.0"
         }
       },
       {

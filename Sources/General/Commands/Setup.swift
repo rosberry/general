@@ -18,15 +18,17 @@ final class Setup: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(commandName: "setup", abstract: "Provides your environment with templates")
 
-    @Option(name: .shortAndLong,
+    @Option(name: [.customLong("github"), .customShort("g")],
             default: Constants.defaultTemplatesGithub,
             help: .init(stringLiteral:
                 "Use this option if templates are placed on github." +
                 " Format: \"<github>\\ [branch]\". Default: \"\(Constants.defaultTemplatesGithub)\""))
-    var github: String
+    var githubPath: String
 
-    @Option(name: .shortAndLong, default: false, help: "If specified loads templates into current folder")
-    var local: Bool
+    @Option(name: [.customLong("local"), .customShort("l")],
+            default: false,
+            help: "If specified loads templates into current folder")
+    var shouldLoadLocally: Bool
 
     private lazy var fileManager: FileManager = .default
 
@@ -40,7 +42,7 @@ final class Setup: ParsableCommand {
     // MARK: - Private
 
     private func loadTemplatesFromPath(_ path: String) throws {
-        print("Loading templates from \(github)...")
+        print("Loading templates from \(githubPath)...")
         let archiveURL = try downloadArchive(at: path)
         let folderURL = try unzipArchive(at: archiveURL)
         let templates = loadTemplates(in: folderURL)
@@ -55,22 +57,13 @@ final class Setup: ParsableCommand {
         }
         try remove(folderURL)
         print()
-        if moved.isEmpty {
-            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
-        }
-        else {
-            print("✨ Updated templates:")
-            moved.forEach { url in
-                print("\u{001B}[0;32m" + url.lastPathComponent)
-            }
-        }
-        print("\u{001B}[0;0m")
+        displayResult(moved)
     }
 
     private func getGitRepoPath() throws -> String {
-        let components = github.split(separator: " ")
+        let components = githubPath.split(separator: " ")
         guard let name =  components.first else {
-            throw Error.githubName(github)
+            throw Error.githubName(githubPath)
         }
         var branch = "master"
         if components.count > 1 {
@@ -157,7 +150,7 @@ final class Setup: ParsableCommand {
     }
 
     private func getTemplatesDestination() -> URL {
-        if local {
+        if shouldLoadLocally {
             return URL(fileURLWithPath: "./" + Constants.templatesFolderName)
         }
         else {
@@ -236,6 +229,19 @@ final class Setup: ParsableCommand {
         catch {
             throw Error.remove(url)
         }
+    }
+
+    private func displayResult(_ urls: [URL]) {
+        if urls.isEmpty {
+            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
+        }
+        else {
+            print("✨ Updated templates:")
+            urls.forEach { url in
+                print("\u{001B}[0;32m" + url.lastPathComponent)
+            }
+        }
+        print("\u{001B}[0;0m")
     }
 }
 

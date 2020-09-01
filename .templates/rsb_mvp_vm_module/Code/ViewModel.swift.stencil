@@ -1,7 +1,7 @@
 {% include "header.stencil" %}
 
-final class {{ name }}ViewModel {
+final class {{ name | upperFirstLetter }}ViewModel {
 
-    init(state: {{ name }}State) {
+    init(state: {{ name | upperFirstLetter }}State) {
     }
 }

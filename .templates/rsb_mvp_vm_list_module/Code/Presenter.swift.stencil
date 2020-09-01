@@ -1,29 +1,29 @@
 {% include "header.stencil" %}
 
-final class {{ name }}Presenter {
+final class {{ name | upperFirstLetter }}Presenter {
 
     typealias Dependencies = Any
 
-    weak var view: {{ name }}ViewInput?
-    weak var output: {{ name }}ModuleOutput?
+    weak var view: {{ name | upperFirstLetter }}ViewInput?
+    weak var output: {{ name | upperFirstLetter }}ModuleOutput?
 
-    var state: {{ name | capitalize }}State
+    var state: {{ name | upperFirstLetter }}State
 
     private let dependencies: Dependencies
-    private let listItemsFactory: {{ name }}ListItemsFactory
+    private let listItemsFactory: {{ name  | upperFirstLetter }}ListItemsFactory
 
-    init(state: {{ name }}State,
+    init(state: {{ name | upperFirstLetter }}State,
          dependencies: Dependencies,
-         listItemsFactory: {{ name }}ListItemsFactory) {
+         listItemsFactory: {{ name | upperFirstLetter }}ListItemsFactory) {
         self.state = state
         self.dependencies = dependencies
         self.listItemsFactory = listItemsFactory
     }
 }
 
-// MARK: - {{ name }}ViewOutput
+// MARK: - {{ name  | upperFirstLetter }}ViewOutput
 
-extension {{ name }}Presenter: {{ name }}ViewOutput {
+extension {{ name  | upperFirstLetter }}Presenter: {{ name  | upperFirstLetter }}ViewOutput {
 
     func viewDidLoad() {
         update(force: true, animated: false)
@@ -32,10 +32,10 @@ extension {{ name }}Presenter: {{ name }}ViewOutput {
 
 // MARK: - {{ name }}ModuleInput
 
-extension {{ name }}Presenter: {{ name }}ModuleInput {
+extension {{ name  | upperFirstLetter }}Presenter: {{ name  | upperFirstLetter }}ModuleInput {
 
     func update(force: Bool = false, animated: Bool) {
-        let viewModel = {{ name }}ViewModel(state: state, listItemsFactory: listItemsFactory)
+        let viewModel = {{ name  | upperFirstLetter }}ViewModel(state: state, listItemsFactory: listItemsFactory)
         view?.update(with: viewModel, force: force, animated: animated)
     }
 }

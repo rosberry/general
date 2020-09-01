@@ -2,11 +2,11 @@
 
 import CollectionViewTools
 
-final class {{ name }}ViewModel {
+final class {{ name | upperFirstLetter }}ViewModel {
 
     let listSectionItems: [GeneralCollectionViewDiffSectionItem]
 
-    init(state: {{ name }}State, listItemsFactory: {{ name }}ListItemsFactory) {
+    init(state: {{ name | upperFirstLetter }}State, listItemsFactory: {{ name | upperFirstLetter }}ListItemsFactory) {
         listSectionItems = listItemsFactory.makeSectionItems(state: state)
     }
 }

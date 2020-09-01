@@ -2,7 +2,7 @@
 
 import UIKit
 
-final class {{ name | capitalize }}CollectionViewCell: UICollectionViewCell {
+final class {{ name | upperFirstLetter }}CollectionViewCell: UICollectionViewCell {
 
     // MARK: Subviews
 

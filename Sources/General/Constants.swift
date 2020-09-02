@@ -4,6 +4,7 @@
 
 enum Constants {
 
+    static let defaultTemplatesGithub = "rosberry/general"
     static let specFilename = "spec.yml"
     static let templatesFolderName = ".templates"
     static let commonTemplatesFolderName = "common"
@@ -12,4 +13,5 @@ enum Constants {
     static let template = "{{ name }}"
     static let projectName = "Project.xcodeproj"
     static let generalSpecName = "general.yml"
+    static let appFolderName = ".general"
 }

@@ -61,7 +61,7 @@ final class Generate: ParsableCommand {
 
     func run() throws {
         //create environment and spec
-        let templatesURL = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
+        let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template
         let specURL = templateURL + Constants.specFilename
         let templateSpec: TemplateSpec = try specFactory.makeSpec(url: specURL)
@@ -81,6 +81,15 @@ final class Generate: ParsableCommand {
     }
 
     // MARK: - Private
+
+    private func defineTemplatesURL() -> URL {
+        let folderName = Constants.templatesFolderName
+        let localPath = "./\(folderName)/"
+        if fileManager.fileExists(atPath: localPath + template) {
+            return URL(fileURLWithPath: localPath)
+        }
+        return fileManager.homeDirectoryForCurrentUser + folderName
+    }
 
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {
         let commonTemplatesURL = templatesURL + Constants.commonTemplatesFolderName

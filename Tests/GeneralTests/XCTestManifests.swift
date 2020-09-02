@@ -1,3 +1,7 @@
+//
+//  Copyright © 2020 Rosberry. All rights reserved.
+//
+
 import XCTest
 
 #if !canImport(ObjectiveC)

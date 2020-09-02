@@ -2,7 +2,6 @@
 //  Copyright © 2020 Rosberry. All rights reserved.
 //
 
-
 import XcodeProj
 
 extension PBXGroup {

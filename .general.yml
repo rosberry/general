@@ -1,0 +1,9 @@
+project: Sri.xcodeproj
+company: Rosberry
+outputs:
+  - templateName: rsb_mvp_vm_module
+    Path: Classes/Presentation/Modules
+  - templateName: rsb_mvp_vm_list_module
+    path: Classes/Presentation/Modules
+  - templateName: rsb_service
+    path: Classes/BusinessLogic/Services

@@ -45,11 +45,15 @@ final class Setup: ParsableCommand {
         print("Loading templates from \(githubPath)...")
         let archiveURL = try downloadArchive(at: path)
         let folderURL = try unzipArchive(at: archiveURL)
-        let templates = loadTemplates(in: folderURL)
+        let setupFiles = loadSteupFiles(in: folderURL)
         let destination = getTemplatesDestination()
+
         var moved = [URL]()
         do {
-            moved = try move(templates, to: destination)
+            moved = try move(setupFiles.templates, to: destination)
+            if let url = setupFiles.spec {
+                try moved.append(contentsOf: move([url], to: URL(fileURLWithPath: "./", isDirectory: true)))
+            }
         }
         catch {
             try remove(folderURL)
@@ -57,7 +61,7 @@ final class Setup: ParsableCommand {
         }
         try remove(folderURL)
         print()
-        displayResult(moved)
+        displayTemplatesResult(moved)
     }
 
     private func getGitRepoPath() throws -> String {
@@ -121,8 +125,9 @@ final class Setup: ParsableCommand {
         return folderURL
     }
 
-    private func loadTemplates(in url: URL) -> [URL] {
+    private func loadSteupFiles(in url: URL) -> (templates: [URL], spec: URL?) {
         var templates = [URL]()
+        var spec: URL?
         do {
             let contents = try fileManager.contentsOfDirectory(at: url,
                                                                includingPropertiesForKeys: nil,
@@ -135,18 +140,25 @@ final class Setup: ParsableCommand {
                         templates.append(url)
                     }
                     else {
-                        templates.append(contentsOf: loadTemplates(in: url))
+                        let setupFiles = loadSteupFiles(in: url)
+                        templates.append(contentsOf: setupFiles.templates)
+                        if let specURL = setupFiles.spec {
+                            spec = specURL
+                        }
                     }
                 }
                 else if url.pathExtension == "stencil" {
                     templates.append(url.deletingLastPathComponent())
                 }
+                else if url.lastPathComponent == Constants.generalSpecName {
+                    spec = url
+                }
             }
         }
         catch {
-            return Array(Set(templates))
+            return (Array(Set(templates)), spec)
         }
-        return Array(Set(templates))
+        return (Array(Set(templates)), spec)
     }
 
     private func getTemplatesDestination() -> URL {
@@ -231,12 +243,12 @@ final class Setup: ParsableCommand {
         }
     }
 
-    private func displayResult(_ urls: [URL]) {
+    private func displayTemplatesResult(_ urls: [URL]) {
         if urls.isEmpty {
-            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
+            print("\u{001B}[0;33mNo setup files modified 🤷‍♂️")
         }
         else {
-            print("✨ Updated templates:")
+            print("✨ Updated setup files:")
             urls.forEach { url in
                 print("\u{001B}[0;32m" + url.lastPathComponent)
             }

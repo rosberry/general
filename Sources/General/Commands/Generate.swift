@@ -22,7 +22,7 @@ final class Generate: ParsableCommand {
 
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
-        let specURL = URL(fileURLWithPath: "general.yml", relativeTo: pathURL)
+        let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)
         return try? specFactory.makeSpec(url: specURL)
     }()
 
@@ -155,7 +155,7 @@ final class Generate: ParsableCommand {
             let fileURL = outputURL + fileName
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
-                                       filePath: modulePath + Path(fileName))
+                                       filePath: Path(fileURL.path))
         }
     }
 }

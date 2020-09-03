@@ -2,7 +2,7 @@
 
 protocol Has{{ name | upperFirstLetter  }}Service {
 
-    var {{ name | upperFirstLetter }}Service: {{ name | upperFirstLetter }}Service { get }
+    var {{ name | lowerFirstLetter }}Service: {{ name | upperFirstLetter }}Service { get }
 }
 
 protocol {{ name | upperFirstLetter }}Service: class {

@@ -62,12 +62,12 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -n CommonCollectionViewCell -t rsb_cell"
-            isEnabled = "NO">
+            argument = "gen -t rsb_mvp_vm_list_module -n Common"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "setup -l true -g rosberry/general\ featire/local-templates"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

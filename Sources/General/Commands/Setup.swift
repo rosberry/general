@@ -30,26 +30,36 @@ final class Setup: ParsableCommand {
             help: "If specified loads templates into current folder")
     var shouldLoadLocally: Bool
 
+    @Option(name: [.customLong("project"), .customShort("p")],
+            help: "If specified loads templates into current folder")
+    var projectName: String?
+
     private lazy var fileManager: FileManager = .default
+    private lazy var specFactory: SpecFactory = .init()
 
     // MARK: - Lifecycle
 
     func run() throws {
         let url = try getGitRepoPath()
-        try loadTemplatesFromPath(url)
+        try loadSetupFilesFromPath(url)
     }
 
     // MARK: - Private
 
-    private func loadTemplatesFromPath(_ path: String) throws {
-        print("Loading templates from \(githubPath)...")
+    private func loadSetupFilesFromPath(_ path: String) throws {
+        print("Loading setup files from \(githubPath)...")
         let archiveURL = try downloadArchive(at: path)
         let folderURL = try unzipArchive(at: archiveURL)
-        let templates = loadTemplates(in: folderURL)
+        let setupFiles = loadSteupFiles(in: folderURL)
         let destination = getTemplatesDestination()
+
         var moved = [URL]()
+        var isSpecModified = false
         do {
-            moved = try move(templates, to: destination)
+            moved = try move(setupFiles.templates, to: destination)
+            if let url = setupFiles.spec {
+                isSpecModified = updateSpec(templateURL: url)
+            }
         }
         catch {
             try remove(folderURL)
@@ -57,7 +67,7 @@ final class Setup: ParsableCommand {
         }
         try remove(folderURL)
         print()
-        displayResult(moved)
+        displayTemplatesResult(moved, isSpecModified: isSpecModified)
     }
 
     private func getGitRepoPath() throws -> String {
@@ -121,8 +131,9 @@ final class Setup: ParsableCommand {
         return folderURL
     }
 
-    private func loadTemplates(in url: URL) -> [URL] {
+    private func loadSteupFiles(in url: URL) -> (templates: [URL], spec: URL?) {
         var templates = [URL]()
+        var spec: URL?
         do {
             let contents = try fileManager.contentsOfDirectory(at: url,
                                                                includingPropertiesForKeys: nil,
@@ -135,8 +146,15 @@ final class Setup: ParsableCommand {
                         templates.append(url)
                     }
                     else {
-                        templates.append(contentsOf: loadTemplates(in: url))
+                        let setupFiles = loadSteupFiles(in: url)
+                        templates.append(contentsOf: setupFiles.templates)
+                        if let specURL = setupFiles.spec {
+                            spec = specURL
+                        }
                     }
+                }
+                else if url.lastPathComponent == Constants.generalSpecName {
+                    spec = url
                 }
                 else if url.pathExtension == "stencil" {
                     templates.append(url.deletingLastPathComponent())
@@ -144,9 +162,9 @@ final class Setup: ParsableCommand {
             }
         }
         catch {
-            return Array(Set(templates))
+            return (Array(Set(templates)), spec)
         }
-        return Array(Set(templates))
+        return (Array(Set(templates)), spec)
     }
 
     private func getTemplatesDestination() -> URL {
@@ -222,6 +240,47 @@ final class Setup: ParsableCommand {
         return date
     }
 
+    private func updateSpec(templateURL: URL) -> Bool {
+        guard var spec: GeneralSpec = try? specFactory.makeSpec(url: templateURL) else {
+            return false
+        }
+        spec.project = projectName ?? ask("Enter project name", default: findProject())
+        spec.target = ask("Target (optional)")
+        spec.testTarget = ask("Test target (optional)")
+        spec.company = ask("Company (optional)", default: spec.company)
+        guard let data = try? specFactory.makeData(spec: spec) else {
+            return false
+        }
+        do {
+            try data.write(to: URL(fileURLWithPath: "./\(Constants.generalSpecName)"))
+            return true
+        }
+        catch {
+            return false
+        }
+    }
+
+    private func ask(_ question: String, default: String? = nil) -> String? {
+        if let value = `default` {
+            print("\(question) \u{001B}[0;32m(\(value))\u{001B}[0;0m:", terminator:" ")
+        }
+        else {
+            print("\(question):", terminator:"")
+        }
+        guard let value = readLine(),
+            value.isEmpty == false else {
+            return `default`
+        }
+        return value
+    }
+
+    private func findProject() -> String? {
+        let url = contensOfDirectory(at: "./").first { url in
+            url.pathExtension == "xcodeproj"
+        }
+        return url?.lastPathComponent
+    }
+
     private func remove(_ url: URL) throws {
         do {
             try fileManager.removeItem(at: url)
@@ -231,17 +290,31 @@ final class Setup: ParsableCommand {
         }
     }
 
-    private func displayResult(_ urls: [URL]) {
+    private func displayTemplatesResult(_ urls: [URL], isSpecModified: Bool) {
         if urls.isEmpty {
-            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
+            print("\u{001B}[0;33mNo setup files modified 🤷‍♂️")
         }
         else {
             print("✨ Updated templates:")
             urls.forEach { url in
                 print("\u{001B}[0;32m" + url.lastPathComponent)
             }
+
+        }
+        if isSpecModified {
+            print("\n\u{001B}[0;32mGeneral spec modified")
         }
         print("\u{001B}[0;0m")
+    }
+
+    private func contensOfDirectory(at path: String) -> [URL] {
+        contensOfDirectory(at: URL(fileURLWithPath: path, isDirectory: true))
+    }
+
+    private func contensOfDirectory(at url: URL) -> [URL] {
+        (try? fileManager.contentsOfDirectory(at: url,
+                                              includingPropertiesForKeys: nil,
+                                              options: [])) ?? []
     }
 }
 

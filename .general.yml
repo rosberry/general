@@ -1,4 +1,3 @@
-project: Sri.xcodeproj
 company: Rosberry
 outputs:
   - templateName: rsb_mvp_vm_module

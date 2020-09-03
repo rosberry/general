@@ -19,16 +19,14 @@ final class Setup: ParsableCommand {
     static let configuration: CommandConfiguration = .init(commandName: "setup", abstract: "Provides your environment with templates")
 
     @Option(name: [.customLong("github"), .customShort("g")],
-            default: Constants.defaultTemplatesGithub,
             help: .init(stringLiteral:
                 "Use this option if templates are placed on github." +
-                " Format: \"<github>\\ [branch]\". Default: \"\(Constants.defaultTemplatesGithub)\""))
-    var githubPath: String
+                " Format: \"<github>\\ [branch]\". Default: \"" + Constants.defaultTemplatesGithub + "\""))
+    var githubPath: String = Constants.defaultTemplatesGithub
 
     @Option(name: [.customLong("local"), .customShort("l")],
-            default: false,
             help: "If specified loads templates into current folder")
-    var shouldLoadLocally: Bool
+    var shouldLoadLocally: Bool = false
 
     @Option(name: [.customLong("project"), .customShort("p")],
             help: "If specified loads templates into current folder")

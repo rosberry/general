@@ -260,7 +260,7 @@ final class Setup: ParsableCommand {
 
     private func ask(_ question: String, default: String? = nil) -> String? {
         if let value = `default` {
-            print("\(question) \u{001B}[0;32m(\(value))\u{001B}[0;0m:", terminator:" ")
+            print("\(question) \u{001B}[0;32m(\(value))\u{001B}[0;0m:", terminator: " ")
         }
         else {
             print("\(question):", terminator:"")

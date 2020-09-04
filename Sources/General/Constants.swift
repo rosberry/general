@@ -14,4 +14,9 @@ enum Constants {
     static let projectName = "Project.xcodeproj"
     static let generalSpecName = ".general.yml"
     static let appFolderName = ".general"
+    static let stencilPathExtension = "stencil"
+    static let xcodeProjectPathExtension = "xcodeproj"
+    static let relativeCurrentPath = "./"
+    static let tmpFolderPath = "/tmp"
+    static let generalTmpFolderPrefix = "general"
 }

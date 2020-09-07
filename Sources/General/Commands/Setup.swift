@@ -47,8 +47,8 @@ final class Setup: ParsableCommand {
         let setupFiles = loadSetupFiles(in: folderURL)
         let destination = getTemplatesDestination()
 
-        var moved = [FileInfo]()
-        var isSpecModified = false
+        let moved: [FileInfo]
+        let isSpecModified: Bool
         do {
             moved = try move(setupFiles.templates, to: destination)
             isSpecModified = updateSpecIfNeeded(templateURL: setupFiles.spec)
@@ -58,7 +58,6 @@ final class Setup: ParsableCommand {
             throw error
         }
         try remove(folderURL)
-        print()
         displayResult(moved, isSpecModified: isSpecModified)
     }
 
@@ -67,12 +66,12 @@ final class Setup: ParsableCommand {
         guard let name = components.first else {
             throw Error.githubName(githubPath)
         }
-        var branch = "master"
+        var branch = Constants.defaultGithubBranch
         if components.count > 1 {
             branch = String(components[1])
         }
 
-        return "https://github.com/\(name)/archive/\(branch).zip"
+        return Constants.githubArchivePath(String(name), branch)
     }
 
     private func downloadArchive(at path: String) throws -> URL {
@@ -286,6 +285,7 @@ final class Setup: ParsableCommand {
     }
 
     private func displayResult(_ templates: [FileInfo], isSpecModified: Bool) {
+        print()
         if templates.isEmpty {
             print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
         }
@@ -308,7 +308,7 @@ extension Setup.Error: CustomStringConvertible {
     var description: String {
         switch self {
         case .githubName(let github):
-            return "Could not retrieve templates url from provided github (\(github)"
+            return "Could not retrieve templates url from provided github \(github)"
         case .url(let url):
             return "Invalid url provided \(url)"
         case .download(let url):

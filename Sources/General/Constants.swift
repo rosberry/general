@@ -19,4 +19,8 @@ enum Constants {
     static let relativeCurrentPath = "./"
     static let tmpFolderPath = "/tmp"
     static let generalTmpFolderPrefix = "general"
+    static let defaultGithubBranch = "master"
+    static let githubArchivePath: ((String, String) -> String) = { name, branch in
+        "https://github.com/\(name)/archive/\(branch).zip"
+    }
 }

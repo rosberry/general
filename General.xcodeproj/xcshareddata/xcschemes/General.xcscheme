@@ -62,7 +62,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "setup -r rosberry/general\ feature/camel-case"
+            argument = "setup -r rosberry/general\ 25a4ff8"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

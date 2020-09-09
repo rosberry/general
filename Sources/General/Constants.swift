@@ -19,4 +19,14 @@ enum Constants {
     static let relativeCurrentPath = "./"
     static let tmpFolderPath = "/tmp"
     static let generalTmpFolderPrefix = "general"
+    static let defaultGithubBranch = "master"
+    static let githubArchivePath: ((String, String) -> String) = { name, branch in
+        "https://github.com/\(name)/archive/\(branch).zip"
+    }
+}
+
+enum ColorChars {
+    static let yellow = "\u{001B}[0;33m"
+    static let green = "\u{001B}[0;32m"
+    static let `default` = "\u{001B}[0;0m"
 }

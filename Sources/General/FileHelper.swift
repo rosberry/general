@@ -1,8 +1,5 @@
 //
-//  FileHelper.swift
-//  AEXML
-//
-//  Created by Nick Tyunin on 03.09.2020.
+//  Copyright © 2020 Rosberry. All rights reserved.
 //
 
 import Foundation
@@ -34,11 +31,15 @@ final class FileHelper {
                      contentModificationDate: values?.contentModificationDate)
     }
 
-    func createDirectory(at path: String) -> Bool {
+    func createDirectory(at path: String) throws {
+        try fileManager.createDirectory(atPath: path,
+                                        withIntermediateDirectories: true,
+                                        attributes: nil)
+    }
+
+    func createDirectoryIfPossible(at path: String) -> Bool {
         do {
-            try fileManager.createDirectory(atPath: path,
-                                            withIntermediateDirectories: true,
-                                            attributes: nil)
+            try createDirectory(at: path)
         }
         catch {
             return false
@@ -46,7 +47,7 @@ final class FileHelper {
         return true
     }
 
-    func createDirectory(at url: URL) -> Bool {
-        createDirectory(at: url.path)
+    func createDirectoryIfPossible(at url: URL) -> Bool {
+        createDirectoryIfPossible(at: url.path)
     }
 }

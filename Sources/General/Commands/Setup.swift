@@ -8,15 +8,31 @@ import ZIPFoundation
 
 final class Setup: ParsableCommand {
 
-    enum Error: Swift.Error {
+    enum Error: Swift.Error, CustomStringConvertible {
         case githubName(_ github: String)
         case url(_ url: String)
         case download(_ url: URL)
         case write(_ url: URL)
         case remove(_ url: URL)
+
+        var description: String {
+            switch self {
+            case .githubName(let github):
+                return "Could not retrieve templates url from provided github \(github)"
+            case .url(let url):
+                return "Invalid url provided \(url)"
+            case .download(let url):
+                return "Cold not download teplates from url \(url)"
+            case .write(let destination):
+                return "Could not write templates to their destination \(destination)"
+            case .remove(let url):
+                return "Could not remove temp directory at \(url)"
+            }
+        }
     }
 
-    static let configuration: CommandConfiguration = .init(commandName: "setup", abstract: "Provides your environment with templates")
+    static let configuration: CommandConfiguration = .init(commandName: "setup",
+                                                           abstract: "Provides your environment with templates")
 
     @Option(name: [.customLong("repo"), .customShort("r")],
             help: .init(stringLiteral:
@@ -47,10 +63,10 @@ final class Setup: ParsableCommand {
         let setupFiles = loadSetupFiles(in: folderURL)
         let destination = getTemplatesDestination()
 
-        var moved = [FileInfo]()
-        var isSpecModified = false
+        let movedFiles: [FileInfo]
+        let isSpecModified: Bool
         do {
-            moved = try move(setupFiles.templates, to: destination)
+            movedFiles = try move(setupFiles.templates, to: destination)
             isSpecModified = updateSpecIfNeeded(templateURL: setupFiles.spec)
         }
         catch {
@@ -58,8 +74,7 @@ final class Setup: ParsableCommand {
             throw error
         }
         try remove(folderURL)
-        print()
-        displayResult(moved, isSpecModified: isSpecModified)
+        displayResult(movedFiles, isSpecModified: isSpecModified)
     }
 
     private func getGitRepoPath() throws -> String {
@@ -67,12 +82,12 @@ final class Setup: ParsableCommand {
         guard let name = components.first else {
             throw Error.githubName(githubPath)
         }
-        var branch = "master"
+        var branch = Constants.defaultGithubBranch
         if components.count > 1 {
             branch = String(components[1])
         }
 
-        return "https://github.com/\(name)/archive/\(branch).zip"
+        return Constants.githubArchivePath(String(name), branch)
     }
 
     private func downloadArchive(at path: String) throws -> URL {
@@ -103,7 +118,7 @@ final class Setup: ParsableCommand {
     private func tempFolderWithRandomName() throws -> URL {
         let folderName = "\(Constants.generalTmpFolderPrefix).\(UUID().uuidString)"
         let url = URL(fileURLWithPath: Constants.tmpFolderPath) + folderName
-        if fileHelper.createDirectory(at: url) == false {
+        if fileHelper.createDirectoryIfPossible(at: url) == false {
             throw Error.write(url)
         }
         return url
@@ -157,7 +172,7 @@ final class Setup: ParsableCommand {
 
     private func move(_ templates: [FileInfo], to destination: URL) throws -> [FileInfo] {
         var moved = [FileInfo]()
-        if fileHelper.createDirectory(at: destination) == false {
+        if fileHelper.createDirectoryIfPossible(at: destination) == false {
             throw Error.write(destination)
         }
 
@@ -257,7 +272,7 @@ final class Setup: ParsableCommand {
 
     private func ask(_ question: String, default: String? = nil) -> String? {
         if let value = `default` {
-            print("\(question) \u{001B}[0;32m(\(value))\u{001B}[0;0m:", terminator: " ")
+            print("\(question) \(green("(\(value))")):", terminator: " ")
         }
         else {
             print("\(question):", terminator: " ")
@@ -286,37 +301,19 @@ final class Setup: ParsableCommand {
     }
 
     private func displayResult(_ templates: [FileInfo], isSpecModified: Bool) {
+        print()
         if templates.isEmpty {
-            print("\u{001B}[0;33mNo templates modified 🤷‍♂️")
+            print(yellow("No templates modified 🤷‍♂️"))
         }
         else {
             print("✨ Updated templates:")
             templates.forEach { file in
-                print("\u{001B}[0;32m" + file.url.lastPathComponent)
+                print(green(file.url.lastPathComponent))
             }
 
         }
         if isSpecModified {
-            print("\n\u{001B}[0;32mGeneral spec modified")
-        }
-        print("\u{001B}[0;0m")
-    }
-}
-
-extension Setup.Error: CustomStringConvertible {
-
-    var description: String {
-        switch self {
-        case .githubName(let github):
-            return "Could not retrieve templates url from provided github (\(github)"
-        case .url(let url):
-            return "Invalid url provided \(url)"
-        case .download(let url):
-            return "Cold not download teplates from url \(url)"
-        case .write(let destination):
-            return "Could not write templates to their destination \(destination)"
-        case .remove(let url):
-            return "Could not remove temp directory at \(url)"
+            print(green("General spec modified"))
         }
     }
 }

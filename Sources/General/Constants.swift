@@ -28,5 +28,6 @@ enum Constants {
 enum ColorChars {
     static let yellow = "\u{001B}[0;33m"
     static let green = "\u{001B}[0;32m"
+    static let red = "\u{001B}[0;31m"
     static let `default` = "\u{001B}[0;0m"
 }

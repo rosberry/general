@@ -9,3 +9,7 @@ func yellow(_ string: String) -> String {
 func green(_ string: String) -> String {
     ColorChars.green + string + ColorChars.default
 }
+
+func red(_ string: String) -> String {
+    ColorChars.red + string + ColorChars.default
+}

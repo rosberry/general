@@ -4,7 +4,6 @@
 
 import Foundation
 import ArgumentParser
-import ZIPFoundation
 
 final class Setup: ParsableCommand {
 
@@ -13,20 +12,22 @@ final class Setup: ParsableCommand {
         case url(_ url: String)
         case download(_ url: URL)
         case write(_ url: URL)
-        case remove(_ url: URL)
+        case composite(_ errors: [Swift.Error])
 
         var description: String {
             switch self {
-            case .githubName(let github):
+            case let .githubName(github):
                 return "Could not retrieve templates url from provided github \(github)"
-            case .url(let url):
+            case let .url(url):
                 return "Invalid url provided \(url)"
-            case .download(let url):
-                return "Cold not download teplates from url \(url)"
-            case .write(let destination):
+            case let .download(url):
+                return "Cold not download templates from url \(url)"
+            case let .write(destination):
                 return "Could not write templates to their destination \(destination)"
-            case .remove(let url):
-                return "Could not remove temp directory at \(url)"
+            case let .composite(errors):
+                return  errors.reduce("Following errors occurred during process:\n") { result, error in
+                    result + " - \(error)\n"
+                }
             }
         }
     }
@@ -59,22 +60,30 @@ final class Setup: ParsableCommand {
     private func loadSetupFilesFromPath(_ path: String) throws {
         print("Loading setup files from \(githubPath)...")
         let archiveURL = try downloadArchive(at: path)
-        let folderURL = try unzipArchive(at: archiveURL)
-        let setupFiles = loadSetupFiles(in: folderURL)
+        let folderURL = try fileHelper.unzipArchive(at: archiveURL)
+        let setupFiles = try loadSetupFiles(in: folderURL)
         let destination = getTemplatesDestination()
 
-        let movedFiles: [FileInfo]
-        let isSpecModified: Bool
+        var movedFiles: [FileInfo] = []
+        var isSpecModified = false
+        var errors: [Swift.Error] = []
         do {
             movedFiles = try move(setupFiles.templates, to: destination)
-            isSpecModified = updateSpecIfNeeded(templateURL: setupFiles.spec)
         }
         catch {
-            try remove(folderURL)
-            throw error
+            errors.append(error)
         }
-        try remove(folderURL)
+        do {
+            isSpecModified = try updateSpecIfNeeded(templateURL: setupFiles.spec)
+        }
+        catch {
+            errors.append(error)
+        }
+        try fileHelper.removeFile(at: folderURL)
         displayResult(movedFiles, isSpecModified: isSpecModified)
+        if errors.isEmpty == false {
+            throw Error.composite(errors)
+        }
     }
 
     private func getGitRepoPath() throws -> String {
@@ -118,33 +127,20 @@ final class Setup: ParsableCommand {
     private func tempFolderWithRandomName() throws -> URL {
         let folderName = "\(Constants.generalTmpFolderPrefix).\(UUID().uuidString)"
         let url = URL(fileURLWithPath: Constants.tmpFolderPath) + folderName
-        if fileHelper.createDirectoryIfPossible(at: url) == false {
-            throw Error.write(url)
-        }
+        try fileHelper.createDirectory(at: url)
         return url
     }
 
-    private func unzipArchive(at url: URL) throws -> URL {
-        let folderURL = url.deletingLastPathComponent()
-        do {
-            try fileHelper.fileManager.unzipItem(at: url, to: folderURL)
-        }
-        catch {
-            throw Error.write(folderURL)
-        }
-        return folderURL
-    }
-
-    private func loadSetupFiles(in url: URL) -> (templates: [FileInfo], spec: URL?) {
+    private func loadSetupFiles(in url: URL) throws -> (templates: [FileInfo], spec: URL?) {
         var templates = [FileInfo]()
         var spec: URL?
-        fileHelper.contentsOfDirectory(at: url).forEach { file in
+        try fileHelper.contentsOfDirectory(at: url).forEach { file in
             if file.isDirectory {
                 if fileHelper.fileManager.fileExists(atPath: (file.url + Constants.specFilename).path) {
-                    templates.append(fileHelper.fileInfo(with: file.url))
+                    try templates.append(fileHelper.fileInfo(with: file.url))
                 }
                 else {
-                    let setupFiles = loadSetupFiles(in: file.url)
+                    let setupFiles = try loadSetupFiles(in: file.url)
                     templates.append(contentsOf: setupFiles.templates)
                     if let foundSpec = setupFiles.spec {
                         spec = foundSpec
@@ -155,7 +151,7 @@ final class Setup: ParsableCommand {
                 spec = file.url
             }
             else if file.url.pathExtension == Constants.stencilPathExtension {
-                templates.append(fileHelper.fileInfo(with: file.url.deletingLastPathComponent()))
+                try templates.append(fileHelper.fileInfo(with: file.url.deletingLastPathComponent()))
             }
         }
         return (Array(Set(templates)), spec)
@@ -172,45 +168,38 @@ final class Setup: ParsableCommand {
 
     private func move(_ templates: [FileInfo], to destination: URL) throws -> [FileInfo] {
         var moved = [FileInfo]()
-        if fileHelper.createDirectoryIfPossible(at: destination) == false {
-            throw Error.write(destination)
-        }
+        try fileHelper.createDirectory(at: destination)
 
         for file in templates {
-            let destination = fileHelper.fileInfo(with: destination + file.url.lastPathComponent)
-            guard isNewerFile(file, than: destination) else {
+            let destination = try fileHelper.fileInfo(with: destination + file.url.lastPathComponent)
+            guard try isNewerFile(file, than: destination) else {
                 continue
             }
-            do {
-                if destination.isExists {
-                    try fileHelper.fileManager.removeItem(at: destination.url)
-                }
-                try fileHelper.fileManager.moveItem(at: file.url, to: destination.url)
-                moved.append(file)
+            if destination.isExists {
+                try fileHelper.removeFile(at: destination.url)
             }
-            catch {
-                throw Error.write(destination.url)
-            }
+            try fileHelper.moveFile(at: file.url, to: destination.url)
+            moved.append(file)
         }
         return moved
     }
 
-    private func isNewerFile(_ lhs: FileInfo, than rhs: FileInfo) -> Bool {
-        guard let lhs = modificationDateOfFile(lhs),
-              let rhs = modificationDateOfFile(rhs) else {
+    private func isNewerFile(_ lhs: FileInfo, than rhs: FileInfo) throws -> Bool {
+        guard let lhs = try modificationDateOfFile(lhs),
+              let rhs = try modificationDateOfFile(rhs) else {
             return true
         }
         return lhs > rhs
     }
 
-    private func modificationDateOfFile(_ file: FileInfo) -> Date? {
+    private func modificationDateOfFile(_ file: FileInfo) throws -> Date? {
         guard file.isDirectory else {
             return file.contentModificationDate
         }
-        let files = fileHelper.contentsOfDirectory(at: file.url)
+        let files = try fileHelper.contentsOfDirectory(at: file.url)
         var date: Date?
         for file in files {
-            guard let fileDate = modificationDateOfFile(file) else {
+            guard let fileDate = try modificationDateOfFile(file) else {
                 continue
             }
             guard let lastDate = date else {
@@ -224,23 +213,23 @@ final class Setup: ParsableCommand {
         return date
     }
 
-    private func updateSpecIfNeeded(templateURL: URL?) -> Bool {
+    private func updateSpecIfNeeded(templateURL: URL?) throws -> Bool {
         guard let templateURL = templateURL else {
             return false
         }
         let destination = URL(fileURLWithPath: "\(Constants.relativeCurrentPath)\(Constants.generalSpecName)")
         guard fileHelper.fileManager.fileExists(atPath: destination.path),
               askBool(question: "General spec already exists. Do you want to replace it? (Yes, No)") == false else {
-            return updateSpec(templateURL: templateURL, destination: destination)
+            return try updateSpec(templateURL: templateURL, destination: destination)
         }
         return false
     }
 
-    private func updateSpec(templateURL: URL, destination: URL) -> Bool {
+    private func updateSpec(templateURL: URL, destination: URL) throws -> Bool {
         guard var spec: GeneralSpec = try? specFactory.makeSpec(url: templateURL) else {
             return false
         }
-        spec.project = ask("Enter project name", default: findProject())
+        spec.project = ask("Enter project name", default: try findProject())
         spec.target = ask("Target (optional)")
         spec.testTarget = ask("Test target (optional)")
         spec.company = ask("Company (optional)", default: spec.company)
@@ -284,20 +273,11 @@ final class Setup: ParsableCommand {
         return value
     }
 
-    private func findProject() -> String? {
-        let info = fileHelper.contentsOfDirectory(at: Constants.relativeCurrentPath).first { info in
+    private func findProject() throws -> String? {
+        let info = try fileHelper.contentsOfDirectory(at: Constants.relativeCurrentPath).first { info in
             info.url.pathExtension == Constants.xcodeProjectPathExtension
         }
         return info?.url.lastPathComponent
-    }
-
-    private func remove(_ url: URL) throws {
-        do {
-            try fileHelper.fileManager.removeItem(at: url)
-        }
-        catch {
-            throw Error.remove(url)
-        }
     }
 
     private func displayResult(_ templates: [FileInfo], isSpecModified: Bool) {

@@ -34,7 +34,7 @@ final class FileHelper {
                            "Occurred file system error: \(error.localizedDescription)")
 
             case let .unzip(url, error):
-                return red("Could unzip archive at path: \(url.path) to \(url.deletingLastPathComponent().path). " +
+                return red("Could not unzip archive at path: \(url.path) to \(url.deletingLastPathComponent().path). " +
                 "Occurred file system error: \(error.localizedDescription)")
             }
         }

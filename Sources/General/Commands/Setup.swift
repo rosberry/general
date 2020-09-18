@@ -172,11 +172,13 @@ final class Setup: ParsableCommand {
 
         for file in templates {
             let destination = try fileHelper.fileInfo(with: destination + file.url.lastPathComponent)
-            guard try isNewerFile(file, than: destination) else {
-                continue
-            }
             if destination.isExists {
-                try fileHelper.removeFile(at: destination.url)
+                if shouldUpdate(destination, with: file) {
+                    try fileHelper.removeFile(at: destination.url)
+                }
+                else {
+                    continue
+                }
             }
             try fileHelper.moveFile(at: file.url, to: destination.url)
             moved.append(file)
@@ -184,12 +186,13 @@ final class Setup: ParsableCommand {
         return moved
     }
 
-    private func isNewerFile(_ lhs: FileInfo, than rhs: FileInfo) throws -> Bool {
-        guard let lhs = try modificationDateOfFile(lhs),
-              let rhs = try modificationDateOfFile(rhs) else {
-            return true
+    private func shouldUpdate(_ destination: FileInfo, with file: FileInfo) -> Bool {
+        guard let lhs = try? modificationDateOfFile(destination),
+              let rhs = try? modificationDateOfFile(file) else {
+                return askBool(question: "Could not compare downloaded template" + green(destination.url.lastPathComponent) +
+                                         " with installed one. Do you want to replace it? (Yes, No)")
         }
-        return lhs > rhs
+        return rhs > lhs
     }
 
     private func modificationDateOfFile(_ file: FileInfo) throws -> Date? {

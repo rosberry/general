@@ -63,11 +63,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "gen -t rsb_mvp_vm_list_module -n Common"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "setup -l true -g rosberry/general\ featire/local-templates"
-            isEnabled = "NO">
+            argument = "setup -r rosberry/general\ featire/local-templates"
+            isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

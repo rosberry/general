@@ -64,16 +64,13 @@ final class FileHelper {
     }
 
     func fileInfo(with url: URL) throws -> FileInfo {
-        do {
-            let values = try url.resourceValues(forKeys: keys)
-            return .init(url: url,
-                         isDirectory: values.isDirectory == true,
-                         isExists: fileManager.fileExists(atPath: url.path),
-                         contentModificationDate: values.contentModificationDate)
-        }
-        catch {
-            throw Error.resourceValue(url, error: error)
-        }
+        let values = try? url.resourceValues(forKeys: keys)
+        var isDirectory: ObjCBool = false
+        let isExists = fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory)
+        return .init(url: url,
+                     isDirectory: isDirectory.boolValue,
+                     isExists: isExists,
+                     contentModificationDate: values?.contentModificationDate)
     }
 
     func createDirectory(at path: String) throws {

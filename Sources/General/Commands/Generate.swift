@@ -42,7 +42,7 @@ final class Generate: ParsableCommand {
     var output: String?
 
     @Argument(help: "The additional variables for templates.")
-    var variables: [Variable]
+    var variables: [Variable] = []
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())

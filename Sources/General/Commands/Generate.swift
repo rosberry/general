@@ -5,6 +5,7 @@
 import Foundation
 import ArgumentParser
 import Stencil
+import StencilSwiftKit
 import Yams
 import PathKit
 import XcodeProj
@@ -21,7 +22,7 @@ final class Generate: ParsableCommand {
 
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
-        let specURL = URL(fileURLWithPath: "general.yml", relativeTo: pathURL)
+        let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)
         return try? specFactory.makeSpec(url: specURL)
     }()
 
@@ -42,7 +43,7 @@ final class Generate: ParsableCommand {
     var output: String?
 
     @Argument(help: "The additional variables for templates.")
-    var variables: [Variable]
+    var variables: [Variable] = []
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())
@@ -61,7 +62,7 @@ final class Generate: ParsableCommand {
 
     func run() throws {
         //create environment and spec
-        let templatesURL = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
+        let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template
         let specURL = templateURL + Constants.specFilename
         let templateSpec: TemplateSpec = try specFactory.makeSpec(url: specURL)
@@ -82,6 +83,15 @@ final class Generate: ParsableCommand {
 
     // MARK: - Private
 
+    private func defineTemplatesURL() -> URL {
+        let folderName = Constants.templatesFolderName
+        let localPath = "./\(folderName)/"
+        if fileManager.fileExists(atPath: localPath + template) {
+            return URL(fileURLWithPath: localPath)
+        }
+        return fileManager.homeDirectoryForCurrentUser + folderName
+    }
+
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {
         let commonTemplatesURL = templatesURL + Constants.commonTemplatesFolderName
         let contents = try fileManager.contentsOfDirectory(at: templateURL,
@@ -96,6 +106,9 @@ final class Generate: ParsableCommand {
         var paths = [Path(commonTemplatesURL.path), Path(templateURL.path)]
         paths.append(contentsOf: directoryPaths)
         let environment = Environment(loader: FileSystemLoader(paths: paths))
+        environment.extensions.forEach { `extension` in
+            `extension`.registerStencilSwiftExtensions()
+        }
         return environment
     }
 
@@ -142,7 +155,7 @@ final class Generate: ParsableCommand {
             let fileURL = outputURL + fileName
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
-                                       filePath: modulePath + Path(fileName))
+                                       filePath: Path(fileURL.path))
         }
     }
 }

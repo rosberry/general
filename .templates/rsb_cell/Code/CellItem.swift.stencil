@@ -2,9 +2,9 @@
 
 import CollectionViewTools
 
-final class {{ name | capitalize }}CollectionViewCellItem: CollectionViewDiffCellItem {
+final class {{ name | upperFirstLetter }}CollectionViewCellItem: CollectionViewDiffCellItem {
 
-    private typealias Cell = {{ name | capitalize }}CollectionViewCell
+    private typealias Cell = {{ name | upperFirstLetter }}CollectionViewCell
 
     let diffIdentifier: String = ""
 
@@ -24,7 +24,7 @@ final class {{ name | capitalize }}CollectionViewCellItem: CollectionViewDiffCel
     }
 
     func isEqual(to item: DiffItem) -> Bool {
-        guard let rhs = item as? {{ name | capitalize }}CollectionViewCellItem else {
+        guard let rhs = item as? {{ name | upperFirstLetter }}CollectionViewCellItem else {
             return false
         }
         return true

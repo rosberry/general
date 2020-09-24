@@ -3,18 +3,18 @@
 import UIKit
 import CollectionViewTools
 
-protocol {{ name }}ViewInput: class {
-    func update(with viewModel: {{ name }}ViewModel, force: Bool, animated: Bool)
+protocol {{ name | upperFirstLetter}}ViewInput: class {
+    func update(with viewModel: {{ name | upperFirstLetter }}ViewModel, force: Bool, animated: Bool)
 }
 
-protocol {{ name }}ViewOutput: class {
+protocol {{ name | upperFirstLetter }}ViewOutput: class {
     func viewDidLoad()
 }
 
-final class {{ name }}ViewController: UIViewController {
+final class {{ name | upperFirstLetter }}ViewController: UIViewController {
 
-    private var viewModel: {{ name }}ViewModel
-    private let output: {{ name }}ViewOutput
+    private var viewModel: {{ name | upperFirstLetter }}ViewModel
+    private let output: {{ name | upperFirstLetter }}ViewOutput
 
     private lazy var collectionViewManager: CollectionViewManager = .init(collectionView: collectionView)
 
@@ -33,7 +33,7 @@ final class {{ name }}ViewController: UIViewController {
 
     // MARK: - Lifecycle
 
-    init(viewModel: {{ name }}ViewModel, output: {{ name }}ViewOutput) {
+    init(viewModel: {{ name | upperFirstLetter }}ViewModel, output: {{ name | upperFirstLetter }}ViewOutput) {
         self.viewModel = viewModel
         self.output = output
         super.init(nibName: nil, bundle: nil)
@@ -59,15 +59,15 @@ final class {{ name }}ViewController: UIViewController {
     }
 }
 
-// MARK: - {{ name }}ViewInput
+// MARK: - {{ name | upperFirstLetter }}ViewInput
 
-extension {{ name }}ViewController: {{ name }}ViewInput, ForceViewUpdate {
+extension {{ name | upperFirstLetter }}ViewController: {{ name | upperFirstLetter }}ViewInput, ForceViewUpdate {
 
-    func update(with viewModel: {{ name }}ViewModel, force: Bool, animated: Bool) {
+    func update(with viewModel: {{ name | upperFirstLetter }}ViewModel, force: Bool, animated: Bool) {
         let oldViewModel = self.viewModel
         self.viewModel = viewModel
 
-        func updateViewModel<Value: Equatable>(_ keyPath: KeyPath<{{ name }}ViewModel, Value>, configurationBlock: (Value) -> Void) {
+        func updateViewModel<Value: Equatable>(_ keyPath: KeyPath<{{ name | upperFirstLetter }}ViewModel, Value>, configurationBlock: (Value) -> Void) {
             update(new: viewModel, old: oldViewModel, keyPath: keyPath, force: force, configurationBlock: configurationBlock)
         }
 

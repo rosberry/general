@@ -15,25 +15,25 @@
         "repositoryURL": "https://github.com/kylef/Spectre.git",
         "state": {
           "branch": null,
-          "revision": "f14ff47f45642aa5703900980b014c2e9394b6e5",
-          "version": "0.9.0"
+          "revision": "f717bbce0e19f0129fc001b2b6bed43b70fd8b87",
+          "version": "0.9.1"
         }
       },
       {
         "package": "Stencil",
-        "repositoryURL": "https://github.com/artemnovichkov/Stencil.git",
+        "repositoryURL": "https://github.com/stencilproject/Stencil",
         "state": {
           "branch": "master",
-          "revision": "f7a57b628f158886c83a71c2136a6ba9e5b06380",
+          "revision": "22440c53690c84603cea018a5204c0f1e770461d",
           "version": null
         }
       },
       {
         "package": "StencilSwiftKit",
-        "repositoryURL": "https://github.com/artemnovichkov/StencilSwiftKit.git",
+        "repositoryURL": "https://github.com/rosberry/StencilSwiftKit.git",
         "state": {
           "branch": "stable",
-          "revision": "8a45643e0f6219c3ddb73c956c3cdad32f55d835",
+          "revision": "2264079b9d5dc507cad4e8433e715623c1510b62",
           "version": null
         }
       },
@@ -42,8 +42,8 @@
         "repositoryURL": "https://github.com/apple/swift-argument-parser.git",
         "state": {
           "branch": null,
-          "revision": "3d79b2b5a2e5af52c14e462044702ea7728f5770",
-          "version": "0.1.0"
+          "revision": "92646c0cdbaca076c8d3d0207891785b3379cbff",
+          "version": "0.3.1"
         }
       },
       {
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/tuist/XcodeProj.git",
         "state": {
           "branch": null,
-          "revision": "cc9f600f2c34e782eb4fec99d6106bda5bade7be",
-          "version": "7.12.0"
+          "revision": "81bb2bb333eafa68f8ecd8187a4bb56d51e78e97",
+          "version": "7.14.0"
         }
       },
       {
@@ -71,6 +71,15 @@
           "branch": null,
           "revision": "6652aa7b793d3c8a075db0614acb575fcaecf457",
           "version": "0.7.0"
+        }
+      },
+      {
+        "package": "ZIPFoundation",
+        "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "ec32d62d412578542c0ffb7a6ce34d3e64b43b94",
+          "version": "0.9.11"
         }
       }
     ]

@@ -1,22 +1,22 @@
 {% include "header.stencil" %}
 
-protocol {{ name }}ModuleInput: class {
+protocol {{ name | upperFirstLetter }}ModuleInput: class {
 
-    var state: {{ name }}State { get }
+    var state: {{ name | upperFirstLetter  }}State { get }
     func update(force: Bool, animated: Bool)
 }
 
-protocol {{ name }}ModuleOutput: class {
+protocol {{ name | upperFirstLetter }}ModuleOutput: class {
 
-    func {{ name|lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name }}ModuleInput)
+    func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter }}ModuleInput)
 }
 
-final class {{ name }}Module {
+final class {{ name | upperFirstLetter }}Module {
 
-    var input: {{ name }}ModuleInput {
+    var input: {{ name | upperFirstLetter }}ModuleInput {
         return presenter
     }
-    var output: {{ name }}ModuleOutput? {
+    var output: {{ name | upperFirstLetter }}ModuleOutput? {
         get {
             return presenter.output
         }
@@ -24,13 +24,13 @@ final class {{ name }}Module {
             presenter.output = newValue
         }
     }
-    let viewController: {{ name }}ViewController
-    private let presenter: {{ name }}Presenter
+    let viewController: {{ name | upperFirstLetter }}ViewController
+    private let presenter: {{ name | upperFirstLetter }}Presenter
 
-    init(state: {{ name }}State = .init()) {
-        let presenter = {{ name }}Presenter(state: state, dependencies: [Any]())
-        let viewModel = {{ name }}ViewModel(state: state)
-        let viewController = {{ name }}ViewController(viewModel: viewModel, output: presenter)
+    init(state: {{ name | upperFirstLetter }}State = .init()) {
+        let presenter = {{ name | upperFirstLetter }}Presenter(state: state, dependencies: [Any]())
+        let viewModel = {{ name | upperFirstLetter }}ViewModel(state: state)
+        let viewController = {{ name | upperFirstLetter }}ViewController(viewModel: viewModel, output: presenter)
         presenter.view = viewController
         self.viewController = viewController
         self.presenter = presenter

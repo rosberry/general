@@ -2,12 +2,12 @@
 
 import CollectionViewTools
 
-final class {{ name }}ListItemsFactory {
+final class {{ name | upperFirstLetter }}ListItemsFactory {
 
-    weak var viewController: {{ name }}ViewController?
-    weak var output: {{ name }}ViewOutput?
+    weak var viewController: {{ name | upperFirstLetter }}ViewController?
+    weak var output: {{ name | upperFirstLetter }}ViewOutput?
 
-    func makeSectionItems(state: {{ name }}State) -> [GeneralCollectionViewDiffSectionItem] {
+    func makeSectionItems(state: {{ name | lowerFirstLetter }}State) -> [GeneralCollectionViewDiffSectionItem] {
         return []
     }
 }

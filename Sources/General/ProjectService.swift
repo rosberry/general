@@ -4,6 +4,7 @@
 
 import PathKit
 import XcodeProj
+import Foundation
 
 final class ProjectService {
 
@@ -32,6 +33,18 @@ final class ProjectService {
             throw Error.noProject(path: path.string)
         }
 
+        // Folowing code fixes issue with absolute path linkinking.
+        // Creating of relative urls based on project url becomes useless
+        // due to XcodeProj internal issues.
+        var filePath = filePath
+        if filePath.string.contains(path.string) {
+            var string = filePath.string.replacingOccurrences(of: path.string, with: "")
+            if string.starts(with: "/") {
+                string.removeFirst()
+            }
+            filePath = Path(string)
+        }
+
         var components = filePath.components
         components.removeLast()
         let groupPath = Path(components: components)
@@ -39,8 +52,7 @@ final class ProjectService {
             throw Error.noGroup
         }
 
-        let fullPath = path + filePath
-        let file = try group.addFile(at: fullPath, sourceTree: .sourceRoot, sourceRoot: path)
+        let file = try group.addFile(at: filePath, sourceTree: .sourceRoot, sourceRoot: path)
         xcodeproj?.pbxproj.add(object: file)
         let targets = xcodeproj?.pbxproj.nativeTargets
         let target: PBXNativeTarget?

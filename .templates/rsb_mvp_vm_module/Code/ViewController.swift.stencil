@@ -1,6 +1,7 @@
 {% include "header.stencil" %}
 
 import UIKit
+import protocol Base.ForceViewUpdate
 
 protocol {{ name | upperFirstLetter }}ViewInput: class {
     func update(with viewModel: {{ name | upperFirstLetter }}ViewModel, force: Bool, animated: Bool)

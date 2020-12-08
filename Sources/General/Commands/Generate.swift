@@ -112,8 +112,8 @@ final class Generate: ParsableCommand {
         var paths = [Path(commonTemplatesURL.path), Path(templateURL.path)]
         paths.append(contentsOf: directoryPaths)
         let environment = Environment(loader: FileSystemLoader(paths: paths))
-        environment.extensions.forEach { `extension` in
-            `extension`.registerStencilSwiftExtensions()
+        environment.extensions.forEach { ext in
+            ext.registerStencilSwiftExtensions()
         }
         return environment
     }

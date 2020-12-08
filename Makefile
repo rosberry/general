@@ -3,7 +3,7 @@ bindir = $(prefix)/bin
 binary ?= general
 release_binary?=.build/release/General
 
-install: build completion
+install: build completions
 	mkdir -p $(bindir)
 	cp -f $(release_binary) $(bindir)/$(binary)
 
@@ -16,7 +16,9 @@ uninstall:
 clean:
 	rm -rf .build
 
-completion:
-	general --generate-completion-script zsh > /usr/local/share/zsh/site-functions/_general
+completions:
+	general --generate-completion-script zsh > _general
+	general --generate-completion-script bash > general
+	general --generate-completion-script fish > general.fish
 
 .PHONY: build install uninstall clean

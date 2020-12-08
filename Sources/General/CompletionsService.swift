@@ -1,5 +1,5 @@
 //
-// Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2020 Rosberry. All rights reserved.
 //
 
 import Foundation
@@ -23,7 +23,7 @@ extension CompletionKind {
             CompletionsService.templates()
         }
     }
-    
+
     static var targets: CompletionKind {
         .custom { _ in
             CompletionsService.targets()

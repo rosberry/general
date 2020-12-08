@@ -232,7 +232,7 @@ final class Setup: ParsableCommand {
         guard var spec: GeneralSpec = try? specFactory.makeSpec(url: templateURL) else {
             return false
         }
-        spec.project = ask("Enter project name", default: try ProjectService.findProject()?.description)
+        spec.project = ask("Enter project name", default: try ProjectService.findProject()?.url.lastPathComponent)
         spec.target = ask("Target (optional)")
         spec.testTarget = ask("Test target (optional)")
         spec.company = ask("Company (optional)", default: spec.company)

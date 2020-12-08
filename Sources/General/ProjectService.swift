@@ -21,9 +21,9 @@ final class ProjectService {
     init(path: Path) {
         self.path = path
     }
-    
+
     static func findProject() throws -> Path? {
-        try Path.current.children().first { $0.extension == Constants.xcodeProjectPathExtension  }
+        try Path.current.children().first { $0.extension == Constants.xcodeProjectPathExtension }
     }
 
     func createProject(projectName: String) throws {
@@ -112,10 +112,10 @@ extension ProjectService.Error: CustomStringConvertible {
 
     var description: String {
         switch self {
-            case .noProject(let path):
-                return "There is no pbxproj at " + path
-            case .noGroup:
-                return "Fail to add groups to Xcode project."
+        case .noProject(let path):
+            return "There is no pbxproj at " + path
+        case .noGroup:
+            return "Fail to add groups to Xcode project."
         }
     }
 }

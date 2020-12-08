@@ -30,8 +30,8 @@ final class Generate: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
-    @Option(name: .shortAndLong, default: FileManager.default.currentDirectoryPath, help: "The path for the project.")
-    var path: String
+    @Option(name: .shortAndLong, help: "The path for the project.")
+    var path: String = FileManager.default.currentDirectoryPath
 
     @Option(name: .shortAndLong, help: "The name of the module.")
     var name: String
@@ -41,6 +41,12 @@ final class Generate: ParsableCommand {
 
     @Option(name: .shortAndLong, help: "The output for the template.")
     var output: String?
+
+    @Option(name: .shortAndLong, help: "The target to which add files.")
+    var target: String?
+
+    @Option(name: .shortAndLong, help: "The test target to which add test files.")
+    var testTarget: String?
 
     @Argument(help: "The additional variables for templates.")
     var variables: [Variable] = []
@@ -73,9 +79,9 @@ final class Generate: ParsableCommand {
             try projectService.createProject(projectName: projectName)
         }
 
-        try add(templateSpec.files, to: generalSpec?.target, isTestTarget: false, with: environment)
+        try add(templateSpec.files, to: targetName(), isTestTarget: false, with: environment)
         if let testFiles = templateSpec.testFiles {
-            try add(testFiles, to: generalSpec?.testTarget, isTestTarget: true, with: environment)
+            try add(testFiles, to: testTargetName(), isTestTarget: true, with: environment)
         }
         try projectService.write()
         print("🎉 \(template) template with \(name) name was successfully generated.")
@@ -157,6 +163,14 @@ final class Generate: ParsableCommand {
             try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
                                        filePath: Path(fileURL.path))
         }
+    }
+
+    private func targetName(spec: GeneralSpec? = nil) -> String? {
+        target ?? (spec ?? generalSpec)?.target
+    }
+
+    private func testTargetName(spec: GeneralSpec? = nil) -> String? {
+        testTarget ?? (spec ?? generalSpec)?.testTarget
     }
 }
 

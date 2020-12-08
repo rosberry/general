@@ -30,22 +30,22 @@ final class Generate: ParsableCommand {
 
     static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
-    @Option(name: .shortAndLong, help: "The path for the project.")
+    @Option(name: .shortAndLong, completion: .directory, help: "The path for the project.")
     var path: String = FileManager.default.currentDirectoryPath
 
     @Option(name: .shortAndLong, help: "The name of the module.")
     var name: String
 
-    @Option(name: .shortAndLong, help: "The name of the template.")
+    @Option(name: .shortAndLong, help: "The name of the template.", completion: .templates)
     var template: String
 
-    @Option(name: .shortAndLong, help: "The output for the template.")
+    @Option(name: .shortAndLong, help: "The output for the template.", completion: .directory)
     var output: String?
 
-    @Option(name: .long, help: "The target to which add files.")
+    @Option(name: .long, help: "The target to which add files.", completion: .targets)
     var target: String?
 
-    @Option(name: .long, help: "The test target to which add test files.")
+    @Option(name: .long, help: "The test target to which add test files.", completion: .targets)
     var testTarget: String?
 
     @Argument(help: "The additional variables for templates.")
@@ -67,6 +67,7 @@ final class Generate: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
+        print(path)
         //create environment and spec
         let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template

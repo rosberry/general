@@ -21,6 +21,10 @@ final class ProjectService {
     init(path: Path) {
         self.path = path
     }
+    
+    static func findProject() throws -> Path? {
+        try Path.current.children().first { $0.extension == Constants.xcodeProjectPathExtension  }
+    }
 
     func createProject(projectName: String) throws {
         let xcodeprojPath = path + Path(projectName)

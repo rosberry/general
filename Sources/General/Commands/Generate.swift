@@ -67,7 +67,6 @@ final class Generate: ParsableCommand {
     // MARK: - Lifecycle
 
     func run() throws {
-        print(path)
         //create environment and spec
         let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template

@@ -13,7 +13,10 @@ final class CompletionsService {
     }
 
     static func targets() -> [String] {
-        (try? XcodeProj(path: "./General.xcodeproj").pbxproj.nativeTargets.map { $0.name }) ?? []
+        guard let projectPath = try? ProjectService.findProject() else {
+            return []
+        }
+        return (try? XcodeProj(path: projectPath).pbxproj.nativeTargets.map { $0.name }) ?? []
     }
 }
 

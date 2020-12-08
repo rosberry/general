@@ -42,10 +42,10 @@ final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The output for the template.")
     var output: String?
 
-    @Option(name: .shortAndLong, help: "The target to which add files.")
+    @Option(name: .long, help: "The target to which add files.")
     var target: String?
 
-    @Option(name: .shortAndLong, help: "The test target to which add test files.")
+    @Option(name: .long, help: "The test target to which add test files.")
     var testTarget: String?
 
     @Argument(help: "The additional variables for templates.")

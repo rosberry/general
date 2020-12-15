@@ -1,0 +1,7 @@
+{% include "header.stencil" %}
+
+import GenericModule
+
+final class {{ name | upperFirstLetter }}ViewModel: FactoryViewModel<{{ name | upperFirstLetter }}Factory> {
+
+}

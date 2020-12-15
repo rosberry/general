@@ -1,0 +1,10 @@
+{% include "header.stencil" %}
+
+import GenericModule
+
+final class {{ name | upperFirstLetter }}Presenter: {{ name | upperFirstLetter }}Module.Presenter {
+
+    override func viewDidLoad() {
+        update(force: true, animated: false)
+    }
+}

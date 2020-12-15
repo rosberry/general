@@ -47,14 +47,12 @@ final class {{ name | upperFirstLetter}}ViewController: UIViewController {
 
 }
 
-extension {{ name | upperFirstLetter}}ViewController: ViewInput, ForceViewUpdate {
+extension {{ name | upperFirstLetter}}ViewController: ViewInput {
     func update(with viewModel: {{ name | upperFirstLetter}}ViewModel, force: Bool, animated: Bool) {
         let oldViewModel = self.viewModel
         self.viewModel = viewModel
 
-        func updateViewModel<Value: Equatable>(_ keyPath: KeyPath<{{ name | upperFirstLetter}}ViewModel, Value>, configurationBlock: (Value) -> Void) {
-            update(new: viewModel, old: oldViewModel, keyPath: keyPath, force: force, configurationHandler: configurationBlock)
-        }
+        let updateViewModel = Update(newModel: viewModel, oldModel: oldViewModel, force: force)
 
         collectionViewManager.update(with: viewModel.listSectionItems, animated: animated)
     }

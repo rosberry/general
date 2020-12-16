@@ -1,0 +1,23 @@
+{% include "header.stencil" %}
+
+import GenericModule
+
+protocol {{ name | upperFirstLetter }}ModuleInput: ModuleInput<{{ name | upperFirstLetter }}State> {
+
+}
+
+protocol {{ name | upperFirstLetter }}ModuleOutput: class {
+
+    func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter }}ModuleInput)
+}
+
+typealias {{ name | upperFirstLetter }}ModuleDependencies = Any
+
+final class {{ name | upperFirstLetter }}Module: Module<{{ name | upperFirstLetter }}State, {{ name | upperFirstLetter }}ViewModel, {{ name | upperFirstLetter }}ViewController> {
+	typealias Dependencies = {{ name | upperFirstLetter }}ModuleDependencies
+    typealias Presenter = ModulePresenter<{{ name | upperFirstLetter }}ModuleOutput, Dependencies>
+
+    override func makeInput() -> BasePresenter {
+        {{ name | upperFirstLetter }}Presenter(state: state, dependencies: [Any]())
+    }
+}

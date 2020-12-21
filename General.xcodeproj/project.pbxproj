@@ -24,6 +24,7 @@
 		019849AC2508D5F300D217B4 /* ColorString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019849AA2508D5EC00D217B4 /* ColorString.swift */; };
 		01F8D828250105CC00903BF7 /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F8D8242501055D00903BF7 /* FileInfo.swift */; };
 		01F8D82B2501096A00903BF7 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F8D8292501092800903BF7 /* FileHelper.swift */; };
+		EC4AAC7B828B4681F8FA467E /* CompletionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC40E89D221F9C42B9787468 /* CompletionsService.swift */; };
 		OBJ_310 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_158 /* Document.swift */; };
 		OBJ_311 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_159 /* Element.swift */; };
 		OBJ_312 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_160 /* Error.swift */; };
@@ -291,203 +292,203 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "ZIPFoundation::ZIPFoundation";
+			remoteGlobalIDString = ZIPFoundation::ZIPFoundation;
 			remoteInfo = ZIPFoundation;
 		};
 		01F8D809250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "XcodeProj::XcodeProj";
+			remoteGlobalIDString = XcodeProj::XcodeProj;
 			remoteInfo = XcodeProj;
 		};
 		01F8D80A250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "AEXML::AEXML";
+			remoteGlobalIDString = AEXML::AEXML;
 			remoteInfo = AEXML;
 		};
 		01F8D80B250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
+			remoteGlobalIDString = PathKit::PathKit;
 			remoteInfo = PathKit;
 		};
 		01F8D80C250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "XcodeProjCExt::XcodeProjCExt";
+			remoteGlobalIDString = XcodeProjCExt::XcodeProjCExt;
 			remoteInfo = XcodeProjCExt;
 		};
 		01F8D80D250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "AEXML::AEXML";
+			remoteGlobalIDString = AEXML::AEXML;
 			remoteInfo = AEXML;
 		};
 		01F8D80E250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "XcodeProjCExt::XcodeProjCExt";
+			remoteGlobalIDString = XcodeProjCExt::XcodeProjCExt;
 			remoteInfo = XcodeProjCExt;
 		};
 		01F8D80F250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Yams::Yams";
+			remoteGlobalIDString = Yams::Yams;
 			remoteInfo = Yams;
 		};
 		01F8D810250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Yams::CYaml";
+			remoteGlobalIDString = Yams::CYaml;
 			remoteInfo = CYaml;
 		};
 		01F8D811250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Yams::CYaml";
+			remoteGlobalIDString = Yams::CYaml;
 			remoteInfo = CYaml;
 		};
 		01F8D812250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "swift-argument-parser::ArgumentParser";
+			remoteGlobalIDString = swift-argument-parser::ArgumentParser;
 			remoteInfo = ArgumentParser;
 		};
 		01F8D813250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "StencilSwiftKit::StencilSwiftKit";
+			remoteGlobalIDString = StencilSwiftKit::StencilSwiftKit;
 			remoteInfo = StencilSwiftKit;
 		};
 		01F8D814250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Stencil::Stencil";
+			remoteGlobalIDString = Stencil::Stencil;
 			remoteInfo = Stencil;
 		};
 		01F8D815250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
+			remoteGlobalIDString = PathKit::PathKit;
 			remoteInfo = PathKit;
 		};
 		01F8D816250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
+			remoteGlobalIDString = PathKit::PathKit;
 			remoteInfo = PathKit;
 		};
 		01F8D817250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Stencil::Stencil";
+			remoteGlobalIDString = Stencil::Stencil;
 			remoteInfo = Stencil;
 		};
 		01F8D818250100E900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
+			remoteGlobalIDString = PathKit::PathKit;
 			remoteInfo = PathKit;
 		};
 		01F8D819250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "General::General";
+			remoteGlobalIDString = General::General;
 			remoteInfo = General;
 		};
 		01F8D81A250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "ZIPFoundation::ZIPFoundation";
+			remoteGlobalIDString = ZIPFoundation::ZIPFoundation;
 			remoteInfo = ZIPFoundation;
 		};
 		01F8D81B250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "XcodeProj::XcodeProj";
+			remoteGlobalIDString = XcodeProj::XcodeProj;
 			remoteInfo = XcodeProj;
 		};
 		01F8D81C250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "AEXML::AEXML";
+			remoteGlobalIDString = AEXML::AEXML;
 			remoteInfo = AEXML;
 		};
 		01F8D81D250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "XcodeProjCExt::XcodeProjCExt";
+			remoteGlobalIDString = XcodeProjCExt::XcodeProjCExt;
 			remoteInfo = XcodeProjCExt;
 		};
 		01F8D81E250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Yams::Yams";
+			remoteGlobalIDString = Yams::Yams;
 			remoteInfo = Yams;
 		};
 		01F8D81F250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Yams::CYaml";
+			remoteGlobalIDString = Yams::CYaml;
 			remoteInfo = CYaml;
 		};
 		01F8D820250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "swift-argument-parser::ArgumentParser";
+			remoteGlobalIDString = swift-argument-parser::ArgumentParser;
 			remoteInfo = ArgumentParser;
 		};
 		01F8D821250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "StencilSwiftKit::StencilSwiftKit";
+			remoteGlobalIDString = StencilSwiftKit::StencilSwiftKit;
 			remoteInfo = StencilSwiftKit;
 		};
 		01F8D822250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "Stencil::Stencil";
+			remoteGlobalIDString = Stencil::Stencil;
 			remoteInfo = Stencil;
 		};
 		01F8D823250100EA00903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
+			remoteGlobalIDString = PathKit::PathKit;
 			remoteInfo = PathKit;
 		};
 		01F8D827250105C900903BF7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = "General::GeneralTests";
+			remoteGlobalIDString = General::GeneralTests;
 			remoteInfo = GeneralTests;
 		};
 /* End PBXContainerItemProxy section */
@@ -497,6 +498,7 @@
 		01F8D8242501055D00903BF7 /* FileInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
 		01F8D8292501092800903BF7 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC40E89D221F9C42B9787468 /* CompletionsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionsService.swift; sourceTree = "<group>"; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Create.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Create.swift; sourceTree = "<group>"; };
@@ -1475,6 +1477,7 @@
 				OBJ_28 /* main.swift */,
 				01F8D8292501092800903BF7 /* FileHelper.swift */,
 				019849AA2508D5EC00D217B4 /* ColorString.swift */,
+				EC40E89D221F9C42B9787468 /* CompletionsService.swift */,
 			);
 			name = General;
 			path = Sources/General;
@@ -2062,6 +2065,7 @@
 				OBJ_399 /* URL+Paths.swift in Sources */,
 				OBJ_400 /* main.swift in Sources */,
 				01F8D82B2501096A00903BF7 /* FileHelper.swift in Sources */,
+				EC4AAC7B828B4681F8FA467E /* CompletionsService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

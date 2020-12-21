@@ -17,7 +17,7 @@ final class Create: ParsableCommand {
     @Option(name: .shortAndLong, help: "The name of the template.")
     var template: String
 
-    @Option(name: .shortAndLong, help: "The path for the template.")
+    @Option(name: .shortAndLong, help: "The path for the template.", completion: .directory)
     var path: String?
 
     func run() throws {

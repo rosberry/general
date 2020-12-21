@@ -232,7 +232,7 @@ final class Setup: ParsableCommand {
         guard var spec: GeneralSpec = try? specFactory.makeSpec(url: templateURL) else {
             return false
         }
-        spec.project = ask("Enter project name", default: try findProject())
+        spec.project = ask("Enter project name", default: try ProjectService.findProject()?.url.lastPathComponent)
         spec.target = ask("Target (optional)")
         spec.testTarget = ask("Test target (optional)")
         spec.company = ask("Company (optional)", default: spec.company)
@@ -274,13 +274,6 @@ final class Setup: ParsableCommand {
             return `default`
         }
         return value
-    }
-
-    private func findProject() throws -> String? {
-        let info = try fileHelper.contentsOfDirectory(at: Constants.relativeCurrentPath).first { info in
-            info.url.pathExtension == Constants.xcodeProjectPathExtension
-        }
-        return info?.url.lastPathComponent
     }
 
     private func displayResult(_ templates: [FileInfo], isSpecModified: Bool) {

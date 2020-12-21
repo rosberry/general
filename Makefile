@@ -3,6 +3,17 @@ bindir = $(prefix)/bin
 binary ?= general
 release_binary?=.build/release/General
 
+$(binary): $(release_binary)
+	cp $(release_binary) $(binary)
+
+$(release_binary):
+	swift build -c release --disable-sandbox
+
+completions: $(binary)
+	$(binary) --generate-completion-script zsh > _general
+	$(binary) --generate-completion-script bash > general
+	$(binary) --generate-completion-script fish > general.fish
+
 install: build completions
 	mkdir -p $(bindir)
 	cp -f $(release_binary) $(bindir)/$(binary)
@@ -16,9 +27,4 @@ uninstall:
 clean:
 	rm -rf .build
 
-completions:
-	general --generate-completion-script zsh > _general
-	general --generate-completion-script bash > general
-	general --generate-completion-script fish > general.fish
-
-.PHONY: build install uninstall clean
+.PHONY: build install uninstall clean completions

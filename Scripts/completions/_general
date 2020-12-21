@@ -1,0 +1,141 @@
+#compdef general
+local context state state_descr line
+_general_commandname=$words[1]
+typeset -A opt_args
+
+_general() {
+    zstyle ":completion:*" matcher-list ''
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'gen:Generates modules from templates.'
+                'create:Creates a new template.'
+                'spec:Creates a new spec.'
+                'list:List of available templates.'
+                'setup:Provides your environment with templates'
+                'help:Show subcommand help information.'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (gen)
+                    _general_gen
+                    ;;
+                (create)
+                    _general_create
+                    ;;
+                (spec)
+                    _general_spec
+                    ;;
+                (list)
+                    _general_list
+                    ;;
+                (setup)
+                    _general_setup
+                    ;;
+                (help)
+                    _general_help
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_general_gen() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--path -p)'{--path,-p}'[The path for the project.]:path:_files -/'
+        '(--name -n)'{--name,-n}'[The name of the module.]:name:'
+        '(--template -t)'{--template,-t}'[The name of the template.]:template:{_custom_completion $_general_commandname ---completion gen -- --template $words}'
+        '(--output -o)'{--output,-o}'[The output for the template.]:output:_files -/'
+        '--target[The target to which add files.]:target:{_custom_completion $_general_commandname ---completion gen -- --target $words}'
+        '--test-target[The test target to which add test files.]:test-target:{_custom_completion $_general_commandname ---completion gen -- --test-target $words}'
+        ':variables:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_create() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--template -t)'{--template,-t}'[The name of the template.]:template:'
+        '(--path -p)'{--path,-p}'[The path for the template.]:path:_files -/'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_spec() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--path -p)'{--path,-p}'[The path for the template.]:path:_files -/'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_list() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_setup() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--repo -r)'{--repo,-r}'[Fetch templates from specified github repo. Format: "<github>\\ \[branch\]".]:repo:'
+        '(--global -g)'{--global,-g}'[If specified loads templates into user home directory]:global:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_help() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':subcommands:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+
+_custom_completion() {
+    local completions=("${(@f)$($*)}")
+    _describe '' completions
+}
+
+_general

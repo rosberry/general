@@ -10,9 +10,9 @@ $(release_binary):
 	swift build -c release --disable-sandbox
 
 completions: $(binary)
-	$(binary) --generate-completion-script zsh > _general
-	$(binary) --generate-completion-script bash > general
-	$(binary) --generate-completion-script fish > general.fish
+	./$(binary) --generate-completion-script zsh > _general
+	./$(binary) --generate-completion-script bash > general
+	./$(binary) --generate-completion-script fish > general.fish
 
 install: build completions
 	mkdir -p $(bindir)

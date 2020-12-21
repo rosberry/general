@@ -2,6 +2,7 @@ prefix ?= /usr/local
 bindir = $(prefix)/bin
 binary ?= general
 release_binary?=.build/release/General
+completions_folder=Scripts/completions
 
 $(binary): $(release_binary)
 	cp $(release_binary) $(binary)
@@ -10,10 +11,9 @@ $(release_binary):
 	swift build -c release --disable-sandbox
 
 completions: $(binary)
-	ls
-	./$(binary) --generate-completion-script zsh > _general
-	./$(binary) --generate-completion-script bash > general
-	./$(binary) --generate-completion-script fish > general.fish
+	./$(binary) --generate-completion-script zsh >  $(completions_folder)/_general
+	./$(binary) --generate-completion-script bash > $(completions_folder)/general
+	./$(binary) --generate-completion-script fish > $(completions_folder)/general.fish
 
 install: build completions
 	mkdir -p $(bindir)

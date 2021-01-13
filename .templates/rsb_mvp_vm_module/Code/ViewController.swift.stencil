@@ -1,4 +1,4 @@
-{% include "header.stencil" %}
+% include "header.stencil" %}
 
 import UIKit
 import protocol Base.ForceViewUpdate
@@ -51,3 +51,25 @@ extension {{ name | upperFirstLetter }}ViewController: {{ name | upperFirstLette
         // update view
     }
 }
+
+// MARK: - {{ name | upperFirstLetter }}ViewController Xcode preview
+
+#if DEBUG
+import SwiftUI
+
+extension {{ name | upperFirstLetter  }}ViewController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> {{ name | upperFirstLetter  }}ViewController {
+        {{ name | upperFirstLetter  }}Module().viewController
+    }
+
+    func updateUIViewController(_ uiViewController: {{ name | upperFirstLetter  }}ViewController,
+      context: Context) {
+    }
+}
+
+struct {{ name | upperFirstLetter  }}ViewControllerPreviews: PreviewProvider {
+    static var previews: some View {
+        {{ name | upperFirstLetter  }}Module().viewController
+    }
+}
+#endif

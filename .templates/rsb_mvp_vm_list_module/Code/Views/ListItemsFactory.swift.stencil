@@ -7,7 +7,7 @@ final class {{ name | upperFirstLetter }}ListItemsFactory {
     weak var viewController: {{ name | upperFirstLetter }}ViewController?
     weak var output: {{ name | upperFirstLetter }}ViewOutput?
 
-    func makeSectionItems(state: {{ name | lowerFirstLetter }}State) -> [GeneralCollectionViewDiffSectionItem] {
+    func makeSectionItems(state: {{ name | upperFirstLetter }}State) -> [GeneralCollectionViewDiffSectionItem] {
         return []
     }
 }

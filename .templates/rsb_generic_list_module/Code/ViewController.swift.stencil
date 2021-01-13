@@ -5,9 +5,13 @@ import GenericModule
 import Base
 import CollectionViewTools
 
+protocol {{ name | upperFirstLetter}}ViewOutput: ViewOutput {
+
+}
+
 final class {{ name | upperFirstLetter}}ViewController: UIViewController {
 
-    var output: ViewOutput?
+    var output: {{ name | upperFirstLetter}}ViewOutput?
     var viewModel: {{ name | upperFirstLetter}}ViewModel
 
     private lazy var collectionViewManager: CollectionViewManager = .init(collectionView: collectionView)
@@ -57,3 +61,30 @@ extension {{ name | upperFirstLetter}}ViewController: ViewInput {
         collectionViewManager.update(with: viewModel.listSectionItems, animated: animated)
     }
 }
+
+// MARK: - {{ name | upperFirstLetter }}ViewController Xcode preview
+
+#if DEBUG
+import SwiftUI
+
+final class Preview{{ name | upperFirstLetter  }}ModuleOutput: {{ name | upperFirstLetter  }}ModuleOutput {
+    func thirdModuleClosed(_ moduleInput: ThirdModuleInput) {
+    }
+}
+
+extension {{ name | upperFirstLetter  }}ViewController: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> {{ name | upperFirstLetter  }}ViewController {
+        {{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController
+    }
+
+    func updateUIViewController(_ uiViewController: {{ name | upperFirstLetter  }}ViewController,
+      context: Context) {
+    }
+}
+
+struct {{ name | upperFirstLetter  }}ViewControllerPreviews: PreviewProvider {
+    static var previews: some View {
+        {{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController
+    }
+}
+#endif

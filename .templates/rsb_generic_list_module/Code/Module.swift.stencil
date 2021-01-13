@@ -14,11 +14,9 @@ protocol {{ name | upperFirstLetter }}ModuleOutput: class {
 typealias {{ name | upperFirstLetter }}ModuleDependencies = Any
 
 final class {{ name | upperFirstLetter }}Module: FactoryModule<{{ name | upperFirstLetter }}Factory, {{ name | upperFirstLetter }}ViewModel, {{ name | upperFirstLetter }}ViewController> {
-    typealias Dependencies = {{ name | upperFirstLetter }}ModuleDependencies
-    typealias Presenter = {{ name | upperFirstLetter }}Module.FactoryPresenter<{{ name | upperFirstLetter }}ModuleOutput> & FirstModuleInput & FirstViewOutput
+    typealias Presenter = {{ name | upperFirstLetter }}Module.FactoryPresenter<{{ name | upperFirstLetter }}ModuleOutput> & {{ name | upperFirstLetter }}ModuleInput & {{ name | upperFirstLetter }}ViewOutput
 
     override func makeInput() -> BasePresenter {
-        let presenter = {{ name | upperFirstLetter }}Presenter(state: state, dependencies: Any)
-        return presenter
+        {{ name | upperFirstLetter }}Presenter(state: state, dependencies: [])
     }
 }

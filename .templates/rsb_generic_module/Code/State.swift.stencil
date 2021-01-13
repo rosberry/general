@@ -1,0 +1,4 @@
+{% include "header.stencil" %}
+
+final class {{ name | upperFirstLetter }}State {
+}

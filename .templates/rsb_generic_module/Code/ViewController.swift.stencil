@@ -3,7 +3,6 @@
 import UIKit
 import GenericModule
 import Base
-import CollectionViewTools
 
 protocol {{ name | upperFirstLetter}}ViewOutput: ViewOutput {
 
@@ -13,19 +12,6 @@ final class {{ name | upperFirstLetter}}ViewController: UIViewController {
 
     var output: {{ name | upperFirstLetter}}ViewOutput?
     var viewModel: {{ name | upperFirstLetter}}ViewModel
-
-    private lazy var collectionViewManager: CollectionViewManager = .init(collectionView: collectionView)
-
-    // MARK: - Subviews
-
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .clear
-        view.alwaysBounceVertical = true
-        return view
-    }()
 
     // MARK: - Lifecycle
 
@@ -40,15 +26,12 @@ final class {{ name | upperFirstLetter}}ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(collectionView)
         output?.viewDidLoad()
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        collectionView.frame = view.bounds
     }
-
 }
 
 extension {{ name | upperFirstLetter}}ViewController: ViewInput {
@@ -57,8 +40,6 @@ extension {{ name | upperFirstLetter}}ViewController: ViewInput {
         self.viewModel = viewModel
 
         let updateViewModel = Update(newModel: viewModel, oldModel: oldViewModel, force: force)
-
-        collectionViewManager.update(with: viewModel.listSectionItems, animated: animated)
     }
 }
 

@@ -62,4 +62,4 @@ extension {{ name | upperFirstLetter}}ViewController: ViewInput {
     }
 }
 
-{% include "preview/view_controller/generic.stencil" %}
+{% include "generic_view_controller_preview.stencil" %}

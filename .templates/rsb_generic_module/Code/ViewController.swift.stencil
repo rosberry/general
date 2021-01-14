@@ -43,29 +43,4 @@ extension {{ name | upperFirstLetter}}ViewController: ViewInput {
     }
 }
 
-// MARK: - {{ name | upperFirstLetter }}ViewController Xcode preview
-
-#if DEBUG
-import SwiftUI
-
-final class Preview{{ name | upperFirstLetter  }}ModuleOutput: {{ name | upperFirstLetter  }}ModuleOutput {
-    func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter  }}ModuleInput) {
-    }
-}
-
-extension {{ name | upperFirstLetter  }}ViewController: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> {{ name | upperFirstLetter  }}ViewController {
-        {{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController
-    }
-
-    func updateUIViewController(_ uiViewController: {{ name | upperFirstLetter  }}ViewController,
-      context: Context) {
-    }
-}
-
-struct {{ name | upperFirstLetter  }}ViewControllerPreviews: PreviewProvider {
-    static var previews: some View {
-        {{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController
-    }
-}
-#endif
+{% include "preview/view_controller/generic.stencil" %}

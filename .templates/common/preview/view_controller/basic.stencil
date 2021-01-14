@@ -1,0 +1,9 @@
+{% include "preview/view_controller/begin.stencil" %}
+
+extension {{ name | upperFirstLetter  }}ViewController {
+    static func makePreviewViewController() -> {{ name | upperFirstLetter  }}ViewController {
+        {{ name | upperFirstLetter  }}Module(state: .init()).viewController
+    }
+}
+
+{% include "preview/view_controller/end.stencil" %}

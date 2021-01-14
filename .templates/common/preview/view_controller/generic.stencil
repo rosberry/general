@@ -1,0 +1,13 @@
+{% include "preview/view_controller/begin.stencil" %}
+final class Preview{{ name | upperFirstLetter  }}ModuleOutput: {{ name | upperFirstLetter  }}ModuleOutput {
+    func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter  }}ModuleInput) {
+    }
+}
+
+extension {{ name | upperFirstLetter  }}ViewController {
+    static func makePreviewViewController() -> {{ name | upperFirstLetter  }}ViewController {
+        {{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController
+    }
+}
+
+{% include "preview/view_controller/end.stencil" %}

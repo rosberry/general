@@ -1,5 +1,0 @@
-// MARK: - {{ name | upperFirstLetter }}ViewController Xcode preview
-
-#if DEBUG
-
-import SwiftUI

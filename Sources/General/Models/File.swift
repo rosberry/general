@@ -7,5 +7,6 @@ import Foundation
 struct File: Codable, CustomStringConvertible {
 
     let template: String
-    let name: String? = nil
+    let name: String?
+    let output: String?
 }

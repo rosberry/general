@@ -1,0 +1,10 @@
+struct PreviewConfig: Hashable {
+    let name: String
+    let scheme: ColorScheme = .light
+
+    static let `default`: [PreviewConfig] = [
+        .init(name: "iPhone SE"),
+        .init(name: "iPhone 8"),
+        .init(name: "iPhone 11", scheme: .dark),
+    ]
+}

@@ -121,19 +121,24 @@ final class Generate: ParsableCommand {
     private func add(_ files: [File], to target: String?, isTestTarget: Bool, with environment: Environment) throws {
         for file in files {
             // render template for the file based on common and template files
-            let rendered = try environment.renderTemplate(name: file.template, context: context)
+            let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
 
             var fileName = file.name ?? file.template
             var relativeFileURL = URL(fileURLWithPath: fileName)
             if relativeFileURL.pathExtension == "stencil" {
                 relativeFileURL.deletePathExtension()
             }
-            fileName = name + relativeFileURL.lastPathComponent
+            if file.name == nil {
+                fileName = name + relativeFileURL.lastPathComponent
+            }
+            else {
+                fileName = relativeFileURL.lastPathComponent
+            }
 
             // make output url for the file
             var outputURL = URL(fileURLWithPath: path)
             let templatePath: String
-            if let output = output {
+            if let output = file.output ?? output {
                 outputURL.appendPathComponent(output)
                 templatePath = ""
             }
@@ -153,12 +158,16 @@ final class Generate: ParsableCommand {
             else {
                 throw Error.noOutput(template: template)
             }
-            let modulePath = Path(templatePath) + Path(name)
+            let modulePath = file.output == nil ? Path(templatePath) + Path(name) : Path(templatePath)
             outputURL.appendPathComponent(modulePath.string)
 
             // write rendered template to file
-            try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             let fileURL = outputURL + fileName
+            guard !fileManager.fileExists(atPath: fileURL.path) else {
+                print(yellow("File already exists: \(fileURL.path)"))
+                continue
+            }
+            try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
                                        filePath: Path(fileURL.path))

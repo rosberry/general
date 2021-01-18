@@ -122,47 +122,29 @@ final class Generate: ParsableCommand {
         for file in files {
             // render template for the file based on common and template files
             let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
-
-            var fileName = file.name ?? file.template
-            var relativeFileURL = URL(fileURLWithPath: fileName)
-            if relativeFileURL.pathExtension == "stencil" {
-                relativeFileURL.deletePathExtension()
-            }
-            if file.name == nil {
-                fileName = name + relativeFileURL.lastPathComponent
-            }
-            else {
-                fileName = relativeFileURL.lastPathComponent
-            }
+            let module = name
+            let fileName = file.fileName(in: module)
 
             // make output url for the file
             var outputURL = URL(fileURLWithPath: path)
-            let templatePath: String
-            if let output = file.output ?? output {
+            if let output = file.output {
                 outputURL.appendPathComponent(output)
-                templatePath = ""
             }
-            else if let generalSpec = generalSpec, let output = generalSpec.output(forTemplateName: template) {
-                if isTestTarget {
-                    if let testPath = output.testPath {
-                        templatePath = testPath
-                    }
-                    else {
-                        throw Error.noOutput(template: template)
-                    }
+            else if let folder = outputFolder(isTestTarget: isTestTarget) {
+                outputURL.appendPathComponent(folder)
+                outputURL.appendPathComponent(name)
+                if let subfolder = file.folder {
+                    outputURL.appendPathComponent(subfolder)
                 }
-                else {
-                    templatePath = output.path
-                }
+                outputURL.appendPathComponent(fileName)
             }
             else {
                 throw Error.noOutput(template: template)
             }
-            let modulePath = file.output == nil ? Path(templatePath) + Path(name) : Path(templatePath)
-            outputURL.appendPathComponent(modulePath.string)
 
             // write rendered template to file
-            let fileURL = outputURL + fileName
+            let fileURL = outputURL
+            outputURL.deleteLastPathComponent()
             guard !fileManager.fileExists(atPath: fileURL.path) else {
                 print(yellow("File already exists: \(fileURL.path)"))
                 continue
@@ -180,6 +162,15 @@ final class Generate: ParsableCommand {
 
     private func testTargetName(spec: GeneralSpec? = nil) -> String? {
         testTarget ?? (spec ?? generalSpec)?.testTarget
+    }
+
+    private func outputFolder(isTestTarget: Bool) -> String? {
+        guard let generalSpec = generalSpec,
+            let output = generalSpec.output(forTemplateName: template),
+            let path = isTestTarget ? output.testPath : output.path else {
+            return nil
+        }
+        return path
     }
 }
 

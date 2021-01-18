@@ -4,6 +4,6 @@ files:
 - template: Code/ViewModel.swift.stencil
 - template: Code/Presenter.swift.stencil
 - template: Code/State.swift.stencil
+  folder: State
 - template: preview/config.stencil
-  name: PreviewConfig.swift
-  output: Classes/Core
+  output: Classes/Core/PreviewConfig.swift

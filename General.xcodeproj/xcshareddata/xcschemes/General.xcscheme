@@ -62,7 +62,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_generic_list_module -n First"
+            argument = "gen -t rsb_generic_list_module -n Second"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

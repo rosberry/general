@@ -62,7 +62,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_generic_list_module -n Library"
+            argument = "gen -t rsb_button -n My --output Classes/Presentation/Common"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

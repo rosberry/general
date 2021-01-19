@@ -78,11 +78,8 @@ final class Generate: ParsableCommand {
         if let projectName = generalSpec?.project {
             try projectService.createProject(projectName: projectName)
         }
-
-        try add(templateSpec.files, to: targetName(), isTestTarget: false, with: environment)
-        if let testFiles = templateSpec.testFiles {
-            try add(testFiles, to: testTargetName(), isTestTarget: true, with: environment)
-        }
+        try add(templateSpec, to: targetName(), isTestTarget: false, with: environment)
+        try add(templateSpec, to: testTargetName(), isTestTarget: true, with: environment)
         try projectService.write()
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
@@ -118,8 +115,8 @@ final class Generate: ParsableCommand {
         return environment
     }
 
-    private func add(_ files: [File], to target: String?, isTestTarget: Bool, with environment: Environment) throws {
-        for file in files {
+    private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
+        for file in isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files {
             // render template for the file based on common and template files
             let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
             let module = name
@@ -132,7 +129,12 @@ final class Generate: ParsableCommand {
             }
             else if let folder = outputFolder(isTestTarget: isTestTarget) {
                 outputURL.appendPathComponent(folder)
-                outputURL.appendPathComponent(name)
+                if let suffix = templateSpec.suffix {
+                    outputURL.appendPathComponent(name + suffix)
+                }
+                else {
+                    outputURL.appendPathComponent(name)
+                }
                 if let subfolder = file.folder {
                     outputURL.appendPathComponent(subfolder)
                 }

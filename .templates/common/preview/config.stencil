@@ -1,10 +1,61 @@
+#if DEBUG
+import SwiftUI
+
 struct PreviewConfig: Hashable {
     let name: String
-    let scheme: ColorScheme = .light
+    let device: String
+    let scheme: ColorScheme
+    let layout: PreviewLayout
 
-    static let `default`: [PreviewConfig] = [
+    init(name: String, device: String = "iPhone 8", scheme: ColorScheme = .light, layout: PreviewLayout = .device) {
+        self.name = name
+        self.device = device
+        self.scheme = scheme
+        self.layout = layout
+    }
+
+    static let device: [PreviewConfig] = [
         .init(name: "iPhone SE"),
         .init(name: "iPhone 8"),
         .init(name: "iPhone 11", scheme: .dark),
     ]
 }
+
+extension PreviewLayout: CustomStringConvertible, Hashable {
+
+    public var description: String {
+        switch self {
+        case .device:
+            return "device"
+        case .sizeThatFits:
+            return "sizeThatFits"
+        case let .fixed(width, height):
+            return "(\(width),\(height))"
+        @unknown default:
+            debugPrint("Unknown layout case")
+            return "unknown"
+        }
+    }
+
+    public static func ==(lsh: PreviewLayout, rhs: PreviewLayout) -> Bool {
+        lsh.description == rhs.description
+    }
+
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(description)
+    }
+}
+
+extension PreviewProvider {
+    static func group(with configs: [PreviewConfig], @ViewBuilder content: @escaping () -> AnyView) -> some View {
+        Group {
+            ForEach(configs, id: \.self) { config in
+                content().previewLayout(config.layout)
+                         .colorScheme(config.scheme)
+                         .previewDevice(PreviewDevice(rawValue: config.name))
+                         .previewDisplayName(config.name)
+            }
+        }
+    }
+}
+#endif

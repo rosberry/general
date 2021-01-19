@@ -165,6 +165,9 @@ final class Generate: ParsableCommand {
     }
 
     private func outputFolder(isTestTarget: Bool) -> String? {
+        if let output = self.output {
+            return output
+        }
         guard let generalSpec = generalSpec,
             let output = generalSpec.output(forTemplateName: template),
             let path = isTestTarget ? output.testPath : output.path else {

@@ -1,0 +1,6 @@
+{% extends "preview/view/View.swift.stencil" %}
+
+{% block view %}CollectionViewCell{% endblock %}
+{% block superview %}UICollectionViewCell{% endblock %}
+{% block variable %}cell{% endblock %}
+{% block configs %}[.init(name: "Default", layout: .fixed(width: 420, height: 150))]{% endblock %}

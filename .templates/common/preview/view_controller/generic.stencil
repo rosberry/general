@@ -1,0 +1,10 @@
+{% extends "preview/view_controller/basic.stencil" %}
+
+{% block helpers %}
+final class Preview{{ name | upperFirstLetter  }}ModuleOutput: {{ name | upperFirstLetter  }}ModuleOutput {
+    func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter  }}ModuleInput) {
+    }
+}
+{% endblock %}
+
+{% block viewController %}{{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController{% endblock %}

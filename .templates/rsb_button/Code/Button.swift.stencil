@@ -1,6 +1,0 @@
-{% extends "preview/view/View.swift.stencil" %}
-
-{% block view %}Button{% endblock %}
-{% block superview %}UIButton{% endblock %}
-{% block variable %}button{% endblock %}
-{% block configs %}[.init(name: "Default", layout: .fixed(width: 300, height: 56))]{% endblock %}

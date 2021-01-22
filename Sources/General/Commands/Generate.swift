@@ -78,8 +78,11 @@ final class Generate: ParsableCommand {
         if let projectName = generalSpec?.project {
             try projectService.createProject(projectName: projectName)
         }
-        try add(templateSpec, to: targetName(), isTestTarget: false, with: environment)
-        try add(templateSpec, to: testTargetName(), isTestTarget: true, with: environment)
+
+        try add(templateSpec.files, to: targetName(), isTestTarget: false, with: environment)
+        if let testFiles = templateSpec.testFiles {
+            try add(testFiles, to: testTargetName(), isTestTarget: true, with: environment)
+        }
         try projectService.write()
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
@@ -115,43 +118,47 @@ final class Generate: ParsableCommand {
         return environment
     }
 
-    private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
-        for file in isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files {
+    private func add(_ files: [File], to target: String?, isTestTarget: Bool, with environment: Environment) throws {
+        for file in files {
             // render template for the file based on common and template files
-            let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
-            let module = name
-            let fileName = file.fileName(in: module)
+            let rendered = try environment.renderTemplate(name: file.template, context: context)
+
+            var fileName = file.name ?? file.template
+            var relativeFileURL = URL(fileURLWithPath: fileName)
+            if relativeFileURL.pathExtension == "stencil" {
+                relativeFileURL.deletePathExtension()
+            }
+            fileName = name + relativeFileURL.lastPathComponent
 
             // make output url for the file
             var outputURL = URL(fileURLWithPath: path)
-            if let output = file.output {
+            let templatePath: String
+            if let output = output {
                 outputURL.appendPathComponent(output)
+                templatePath = ""
             }
-            else if let folder = outputFolder(isTestTarget: isTestTarget) {
-                outputURL.appendPathComponent(folder)
-                if let suffix = templateSpec.suffix {
-                    outputURL.appendPathComponent(name + suffix)
+            else if let generalSpec = generalSpec, let output = generalSpec.output(forTemplateName: template) {
+                if isTestTarget {
+                    if let testPath = output.testPath {
+                        templatePath = testPath
+                    }
+                    else {
+                        throw Error.noOutput(template: template)
+                    }
                 }
                 else {
-                    outputURL.appendPathComponent(name)
+                    templatePath = output.path
                 }
-                if let subfolder = file.folder {
-                    outputURL.appendPathComponent(subfolder)
-                }
-                outputURL.appendPathComponent(fileName)
             }
             else {
                 throw Error.noOutput(template: template)
             }
+            let modulePath = Path(templatePath) + Path(name)
+            outputURL.appendPathComponent(modulePath.string)
 
             // write rendered template to file
-            let fileURL = outputURL
-            outputURL.deleteLastPathComponent()
-            guard !fileManager.fileExists(atPath: fileURL.path) else {
-                print(yellow("File already exists: \(fileURL.path)"))
-                continue
-            }
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+            let fileURL = outputURL + fileName
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
             try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
                                        filePath: Path(fileURL.path))
@@ -164,18 +171,6 @@ final class Generate: ParsableCommand {
 
     private func testTargetName(spec: GeneralSpec? = nil) -> String? {
         testTarget ?? (spec ?? generalSpec)?.testTarget
-    }
-
-    private func outputFolder(isTestTarget: Bool) -> String? {
-        if let output = self.output {
-            return output
-        }
-        guard let generalSpec = generalSpec,
-            let output = generalSpec.output(forTemplateName: template),
-            let path = isTestTarget ? output.testPath : output.path else {
-            return nil
-        }
-        return path
     }
 }
 

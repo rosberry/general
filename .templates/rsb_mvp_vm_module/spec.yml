@@ -1,9 +1,6 @@
 files:
-- template: Code/Module.swift.stencil
-- template: Code/Presenter.swift.stencil
-- template: Code/ViewController.swift.stencil
-- template: Code/ViewModel.swift.stencil
-- template: Code/State.swift.stencil
-  folder: State
-- template: preview/config.stencil
-  output: Classes/Core/PreviewConfig.swift
+ - template: Code/Module.swift.stencil
+ - template: Code/Presenter.swift.stencil
+ - template: Code/State.swift.stencil
+ - template: Code/ViewController.swift.stencil
+ - template: Code/ViewModel.swift.stencil

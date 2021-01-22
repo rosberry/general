@@ -1,5 +1,3 @@
 files:
-- template: Code/CollectionViewCell.swift.stencil
-- template: preview/config.stencil
-  output: Classes/Core/PreviewConfig.swift
-suffix: CollectionViewCell
+ - template: Code/Cell.swift.stencil
+ - template: Code/CellItem.swift.stencil

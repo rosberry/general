@@ -51,5 +51,3 @@ extension {{ name | upperFirstLetter }}ViewController: {{ name | upperFirstLette
         // update view
     }
 }
-
-{% include "preview/view_controller/basic.stencil" %}

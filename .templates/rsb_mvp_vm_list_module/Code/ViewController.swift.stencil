@@ -2,7 +2,6 @@
 
 import UIKit
 import CollectionViewTools
-import protocol Base.ForceViewUpdate
 
 protocol {{ name | upperFirstLetter}}ViewInput: class {
     func update(with viewModel: {{ name | upperFirstLetter }}ViewModel, force: Bool, animated: Bool)
@@ -69,11 +68,9 @@ extension {{ name | upperFirstLetter }}ViewController: {{ name | upperFirstLette
         self.viewModel = viewModel
 
         func updateViewModel<Value: Equatable>(_ keyPath: KeyPath<{{ name | upperFirstLetter }}ViewModel, Value>, configurationBlock: (Value) -> Void) {
-            update(new: viewModel, old: oldViewModel, keyPath: keyPath, force: force, configurationHandler: configurationBlock)
+            update(new: viewModel, old: oldViewModel, keyPath: keyPath, force: force, configurationBlock: configurationBlock)
         }
 
         collectionViewManager.update(with: viewModel.listSectionItems, animated: animated)
     }
 }
-
-{% include "preview/view_controller/basic.stencil" %}

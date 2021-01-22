@@ -5,13 +5,9 @@ import GenericModule
 import Base
 import CollectionViewTools
 
-protocol {{ name | upperFirstLetter}}ViewOutput: ViewOutput {
-
-}
-
 final class {{ name | upperFirstLetter}}ViewController: UIViewController {
 
-    var output: {{ name | upperFirstLetter}}ViewOutput?
+    var output: ViewOutput?
     var viewModel: {{ name | upperFirstLetter}}ViewModel
 
     private lazy var collectionViewManager: CollectionViewManager = .init(collectionView: collectionView)
@@ -48,6 +44,7 @@ final class {{ name | upperFirstLetter}}ViewController: UIViewController {
         super.viewDidLayoutSubviews()
         collectionView.frame = view.bounds
     }
+
 }
 
 extension {{ name | upperFirstLetter}}ViewController: ViewInput {
@@ -60,5 +57,3 @@ extension {{ name | upperFirstLetter}}ViewController: ViewInput {
         collectionViewManager.update(with: viewModel.listSectionItems, animated: animated)
     }
 }
-
-{% include "preview/view_controller/generic.stencil" %}

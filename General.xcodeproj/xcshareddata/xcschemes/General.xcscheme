@@ -62,7 +62,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_button -n My --output Classes/Presentation/Common"
+            argument = "gen -t rsb_mvp_vm_list_module -n Common"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "setup -r rosberry/general\ featire/local-templates"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

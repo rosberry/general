@@ -24,11 +24,11 @@ final class {{ name | upperFirstLetter }}ViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .clear
-        view.alwaysBounceVertical = true
-        view.contentInsetAdjustmentBehavior = .never
-        view.isPrefetchingEnabled = false
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = true
+        collectionView.contentInsetAdjustmentBehavior = .never
+        collectionView.isPrefetchingEnabled = false
         return view
     }()
 

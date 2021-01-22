@@ -21,10 +21,10 @@ final class {{ name | upperFirstLetter}}ViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .clear
-        view.alwaysBounceVertical = true
-        return view
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.backgroundColor = .clear
+        collectionView.alwaysBounceVertical = true
+        return collectionView
     }()
 
     // MARK: - Lifecycle

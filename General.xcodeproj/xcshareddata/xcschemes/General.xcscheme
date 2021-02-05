@@ -62,7 +62,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_button -n My --output Classes/Presentation/Common"
+            argument = "setup"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

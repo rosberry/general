@@ -55,7 +55,7 @@ final class Generate: ParsableCommand {
         let year = Calendar.current.component(.year, from: .init())
         var context: [String: Any] = ["name": name,
                                       "year": year]
-        if let company = generalSpec?.company {
+        if let company = generalSpec?.xcodeproj?.company {
             context["company"] = company
         }
         for variable in variables {
@@ -75,12 +75,17 @@ final class Generate: ParsableCommand {
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
 
-        if let projectName = generalSpec?.project {
-            try projectService.createProject(projectName: projectName)
+        if let xcodeproj = generalSpec?.xcodeproj {
+            if let projectName = xcodeproj.project {
+                try projectService.createProject(projectName: projectName)
+            }
+            try add(templateSpec, to: target ?? xcodeproj.target, isTestTarget: false, with: environment)
+            try add(templateSpec, to: testTarget ?? xcodeproj.testTarget, isTestTarget: true, with: environment)
+            try projectService.write()
         }
-        try add(templateSpec, to: targetName(), isTestTarget: false, with: environment)
-        try add(templateSpec, to: testTargetName(), isTestTarget: true, with: environment)
-        try projectService.write()
+        else {
+            try add(templateSpec, environment: environment)
+        }
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
 
@@ -115,8 +120,9 @@ final class Generate: ParsableCommand {
         return environment
     }
 
-    private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
-        for file in isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files {
+    private func add(_ templateSpec: TemplateSpec, isTestTarget: Bool = false, environment: Environment, completion: ((URL) throws -> Void)? = nil) throws {
+        let files = isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files
+        for file in files {
             // render template for the file based on common and template files
             let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
             let module = name
@@ -153,17 +159,8 @@ final class Generate: ParsableCommand {
             }
             try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
             try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
-            try projectService.addFile(targetName: target, isTestTarget: isTestTarget,
-                                       filePath: Path(fileURL.path))
+            try completion?(fileURL)
         }
-    }
-
-    private func targetName(spec: GeneralSpec? = nil) -> String? {
-        target ?? (spec ?? generalSpec)?.target
-    }
-
-    private func testTargetName(spec: GeneralSpec? = nil) -> String? {
-        testTarget ?? (spec ?? generalSpec)?.testTarget
     }
 
     private func outputFolder(isTestTarget: Bool) -> String? {
@@ -178,6 +175,20 @@ final class Generate: ParsableCommand {
         return path
     }
 }
+
+// MARK: - XcodeProj
+
+extension Generate {
+    private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
+        try add(templateSpec, isTestTarget: isTestTarget, environment: environment) { fileURL in
+            try self.projectService.addFile(targetName: target,
+                                            isTestTarget: isTestTarget,
+                                            filePath: Path(fileURL.path))
+        }
+    }
+}
+
+// MARK: - Generate.Error
 
 extension Generate.Error: CustomStringConvertible {
 

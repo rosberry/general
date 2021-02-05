@@ -41,7 +41,7 @@ final class Spec: ParsableCommand {
         }
 
         // create a new spec
-        let spec = GeneralSpec(project: projectName, company: company)
+        let spec = GeneralSpec(xcodeproj: .init(project: projectName, target: nil, testTarget: nil, company: company))
         if let specData = try? specFactory.makeData(spec: spec) {
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
             print("🎉 Spec was successfully created.")

@@ -45,8 +45,34 @@ final class Setup: ParsableCommand {
             help: "If specified loads templates into user home directory")
     var shouldLoadGlobally: Bool = false
 
+    @Option(name: [.customLong("xcodeproj"), .customShort("x")],
+            help: "Configures name of .xcdoeproj file where files should be plased")
+    var xcodeProject: String?
+
+    @Option(name: [.customLong("target"), .customShort("t")],
+            help: "Configures xcode project target where generated files should be placed")
+    var target: String?
+
+    @Option(name: [.customLong("test-target")],
+            help: "Configures xcode project test target where generated files should be placed")
+    var testTarget: String?
+
+    @Option(name: [.customLong("company"), .customShort("c")],
+            help: "Configures company name that will be placed in file headers")
+    var company: String?
+
+    @Option(name: [.customLong("platform"), .customShort("p")],
+            help: "Configures provide platform specific specs. Currently supported platforms: iOS, macOS")
+    var platform: String?
+
     private lazy var specFactory: SpecFactory = .init()
     private lazy var fileHelper: FileHelper = .default
+
+    private var isXcodeProject: Bool {
+        let platform = self.platform?.lowercased()
+        return platform == "ios" || platform == "macos" ||
+               xcodeProject != nil || target != nil || testTarget != nil || company != nil
+    }
 
     // MARK: - Lifecycle
 
@@ -232,10 +258,13 @@ final class Setup: ParsableCommand {
         guard var spec: GeneralSpec = try? specFactory.makeSpec(url: templateURL) else {
             return false
         }
-        spec.project = ask("Enter project name", default: try ProjectService.findProject()?.url.lastPathComponent)
-        spec.target = ask("Target (optional)")
-        spec.testTarget = ask("Test target (optional)")
-        spec.company = ask("Company (optional)", default: spec.company)
+        if isXcodeProject {
+            spec.xcodeproj = .init(project: try? _xcodeProject.wrappedValue ?? ask("Enter project name",
+                                                                              default: try ProjectService.findProject()?.url.lastPathComponent),
+                                   target: _target.wrappedValue ?? ask("Target (optional)"),
+                                   testTarget: _testTarget.wrappedValue ?? ask("Test target (optional)"),
+                                   company: _company.wrappedValue ?? ask("Company (optional)", default: spec.xcodeproj?.company))
+        }
         guard let data = try? specFactory.makeData(spec: spec) else {
             return false
         }

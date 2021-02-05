@@ -6,17 +6,11 @@ import Foundation
 
 struct GeneralSpec: Codable, CustomStringConvertible {
 
-    var project: String?
-    var target: String?
-    var testTarget: String?
-    var company: String?
+    var xcodeproj: XcodeprojSpec?
     let outputs: [Output]
 
-    init(project: String?, target: String? = nil, testTarget: String? = nil, company: String?, outputs: [Output] = []) {
-        self.project = project
-        self.target = target
-        self.testTarget = testTarget
-        self.company = company
+    init(xcodeproj: XcodeprojSpec?, outputs: [Output] = []) {
+        self.xcodeproj = xcodeproj
         self.outputs = outputs
     }
 

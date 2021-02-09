@@ -13,7 +13,7 @@ let package = Package(
         .library(
             name: "GeneralKit",
             targets: ["GeneralKit"]),
-    ]
+    ],
     dependencies: [
         //with bumped PathKit version
         .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),

@@ -29,8 +29,5 @@ let package = Package(
                 "XcodeProj",
                 "ZIPFoundation"
         ]),
-        .testTarget(
-            name: "GeneralTests",
-            dependencies: ["General"])
     ]
 )

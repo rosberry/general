@@ -7,6 +7,5 @@ public struct Plugin: Codable, Equatable, CustomStringConvertible {
     let name: String
     public let description: String
     let repo: String
-    let files: [String]
-    let dependencies: [String]
+    let `class`: String
 }

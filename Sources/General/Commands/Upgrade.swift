@@ -20,11 +20,23 @@ public final class Upgrade: ParsableCommand {
     }
 
     public func run() throws {
-        if let version = self.version {
-            try upgradeService.upgrade(to: .concrete(version))
+        let version = parseVersion()
+        try upgradeService.upgrade(to: version)
+        try updateConfig { config in
+            var config = config
+            config.version = upgradeService.fetchConcreteVersion(from: version)
+            return config
+        }
+    }
+
+    // MARK: - Private
+
+    private func parseVersion() -> UpgradeService.Version {
+        if let string = self.version {
+            return .concrete(string)
         }
         else {
-            try upgradeService.upgrade(to: .latest)
+            return .latest
         }
     }
 }

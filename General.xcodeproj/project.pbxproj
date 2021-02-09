@@ -428,13 +428,6 @@
 			remoteGlobalIDString = "PathKit::PathKit";
 			remoteInfo = PathKit;
 		};
-		0107C15925CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "General::General";
-			remoteInfo = General;
-		};
 		0107C15A25CBB62900090987 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = OBJ_1 /* Project object */;
@@ -1669,7 +1662,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				OBJ_453 /* PBXTargetDependency */,
 				OBJ_454 /* PBXTargetDependency */,
 				OBJ_455 /* PBXTargetDependency */,
 				OBJ_456 /* PBXTargetDependency */,
@@ -2468,11 +2460,6 @@
 			isa = PBXTargetDependency;
 			target = "General::GeneralTests" /* GeneralTests */;
 			targetProxy = 0107C16325CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_453 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "General::General" /* General */;
-			targetProxy = 0107C15925CBB62900090987 /* PBXContainerItemProxy */;
 		};
 		OBJ_454 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;

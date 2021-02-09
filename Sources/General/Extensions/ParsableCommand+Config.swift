@@ -11,4 +11,8 @@ extension ParsableCommand {
         }
         return config
     }
+
+    func updateConfig(handler: (GeneralConfig) -> GeneralConfig) throws {
+        try ConfigFactory.update(handler)
+    }
 }

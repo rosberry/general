@@ -43,7 +43,7 @@ public final class UpgradeService {
         try githubService.downloadFiles(at: githubPath, to: destination)
     }
 
-    private func fetchConcreteVersion(from version: Version) -> String {
+    func fetchConcreteVersion(from version: Version) -> String {
         switch version {
         case let .concrete(version):
             return version

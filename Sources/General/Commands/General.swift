@@ -30,7 +30,8 @@ final class General: ParsableCommand {
                                   Spec.self,
                                   List.self,
                                   Setup.self,
-                                  Upgrade.self],
+                                  Upgrade.self,
+                                  Add.self],
                     defaultSubcommand: defaultCommand)
     }
 }

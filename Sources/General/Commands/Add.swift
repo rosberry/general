@@ -67,7 +67,6 @@ public final class Add: ParsableCommand {
         let plugin = try findPluginToInstall()
         try upgradeService.upgrade(to: .current) {
             try self.updateDependencies(with: plugin)
-            try self.addPluginFiles(with: plugin)
             try self.updateConfig(with: plugin)
         }
     }
@@ -140,10 +139,6 @@ public final class Add: ParsableCommand {
     }
 
     private func updateDependencies(with plugin: Plugin) throws {
-        // TODO:
-    }
-
-    private func addPluginFiles(with plugin: Plugin) throws {
         // TODO:
     }
 

@@ -4,6 +4,7 @@
 
 import ArgumentParser
 import Foundation
+import GeneralKit
 
 final class General: ParsableCommand {
 

@@ -34,5 +34,10 @@ let package = Package(
                 "XcodeProj",
                 "ZIPFoundation"
         ]),
+        .target(
+            name: "General",
+            dependencies: [
+                "GeneralKit"
+        ])
     ]
 )

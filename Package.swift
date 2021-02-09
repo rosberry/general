@@ -9,6 +9,11 @@ import PackageDescription
 let package = Package(
     name: "General",
     platforms: [.macOS(.v10_12)],
+    products: [
+        .library(
+            name: "GeneralKit",
+            targets: ["GeneralKit"]),
+    ]
     dependencies: [
         //with bumped PathKit version
         .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),

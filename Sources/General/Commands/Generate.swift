@@ -10,7 +10,7 @@ import Yams
 import PathKit
 import XcodeProj
 
-final class Generate: ParsableCommand {
+public final class Generate: ParsableCommand {
 
     enum Error: Swift.Error {
         case noOutput(template: String)
@@ -26,9 +26,14 @@ final class Generate: ParsableCommand {
         return try? specFactory.makeSpec(url: specURL)
     }()
 
+    // MARK: - Lifecycle
+
+    public init() {
+    }
+
     // MARK: - Parameters
 
-    static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
+    public static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
     @Option(name: .shortAndLong, completion: .directory, help: "The path for the project.")
     var path: String = FileManager.default.currentDirectoryPath
@@ -66,7 +71,7 @@ final class Generate: ParsableCommand {
 
     // MARK: - Lifecycle
 
-    func run() throws {
+    public func run() throws {
         //create environment and spec
         let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template
@@ -79,8 +84,7 @@ final class Generate: ParsableCommand {
             if let projectName = xcodeproj.project {
                 try projectService.createProject(projectName: projectName)
             }
-            try add(templateSpec, to: target ?? xcodeproj.target, isTestTarget: false, with: environment)
-            try add(templateSpec, to: testTarget ?? xcodeproj.testTarget, isTestTarget: true, with: environment)
+            try add(templateSpec, to: target ?? xcodeproj.target, with: environment)
             try projectService.write()
         }
         else {
@@ -120,9 +124,8 @@ final class Generate: ParsableCommand {
         return environment
     }
 
-    private func add(_ templateSpec: TemplateSpec, isTestTarget: Bool = false, environment: Environment, completion: ((URL) throws -> Void)? = nil) throws {
-        let files = isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files
-        for file in files {
+    private func add(_ templateSpec: TemplateSpec, environment: Environment, completion: ((URL) throws -> Void)? = nil) throws {
+        for file in templateSpec.files {
             // render template for the file based on common and template files
             let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
             let module = name
@@ -133,7 +136,7 @@ final class Generate: ParsableCommand {
             if let output = file.output {
                 outputURL.appendPathComponent(output)
             }
-            else if let folder = outputFolder(isTestTarget: isTestTarget) {
+            else if let folder = outputFolder() {
                 outputURL.appendPathComponent(folder)
                 if let suffix = templateSpec.suffix {
                     outputURL.appendPathComponent(name + suffix)
@@ -163,26 +166,25 @@ final class Generate: ParsableCommand {
         }
     }
 
-    private func outputFolder(isTestTarget: Bool) -> String? {
+    private func outputFolder() -> String? {
         if let output = self.output {
             return output
         }
         guard let generalSpec = generalSpec,
-            let output = generalSpec.output(forTemplateName: template),
-            let path = isTestTarget ? output.testPath : output.path else {
+            let output = generalSpec.output(forTemplateName: template) else {
             return nil
         }
-        return path
+        return output.path
     }
 }
 
 // MARK: - XcodeProj
 
 extension Generate {
-    private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
-        try add(templateSpec, isTestTarget: isTestTarget, environment: environment) { fileURL in
+    private func add(_ templateSpec: TemplateSpec, to target: String?, with environment: Environment) throws {
+        try add(templateSpec, environment: environment) { fileURL in
             try self.projectService.addFile(targetName: target,
-                                            isTestTarget: isTestTarget,
+                                            isTestTarget: false,
                                             filePath: Path(fileURL.path))
         }
     }

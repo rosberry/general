@@ -4,7 +4,7 @@
 
 import XcodeProj
 
-extension PBXGroup {
+public extension PBXGroup {
 
     func group(withPath path: String) -> PBXGroup? {
         children.first { element in

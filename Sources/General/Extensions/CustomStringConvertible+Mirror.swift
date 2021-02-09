@@ -2,7 +2,7 @@
 //  Copyright © 2020 Rosberry. All rights reserved.
 //
 
-extension CustomStringConvertible {
+public extension CustomStringConvertible {
 
     var description: String {
         var description = "\(type(of: self))\n"

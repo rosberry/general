@@ -4,7 +4,7 @@
 import Foundation
 import ArgumentParser
 
-final class Spec: ParsableCommand {
+public final class Spec: ParsableCommand {
 
     private lazy var specFactory: SpecFactory = .init()
     private lazy var fileManager: FileManager = .default
@@ -12,12 +12,17 @@ final class Spec: ParsableCommand {
 
     // MARK: - Parameters
 
-    static let configuration: CommandConfiguration = .init(abstract: "Creates a new spec.")
+    public static let configuration: CommandConfiguration = .init(abstract: "Creates a new spec.")
 
     @Option(name: .shortAndLong, completion: .directory, help: "The path for the template.")
     var path: String = FileManager.default.currentDirectoryPath
 
-    func run() throws {
+    // MARK: - Lifecycle
+
+    public init() {
+    }
+
+    public func run() throws {
         //folder url for a new spec
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
         let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)

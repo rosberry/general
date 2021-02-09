@@ -3,15 +3,34 @@
 //
 
 import ArgumentParser
+import Foundation
 
 final class General: ParsableCommand {
 
-    static let configuration: CommandConfiguration = .init(abstract: "Generates code from templates.",
-                                                           version: "0.3",
-                                                           subcommands: [Generate.self,
-                                                                         Create.self,
-                                                                         Spec.self,
-                                                                         List.self,
-                                                                         Setup.self],
-                                                           defaultSubcommand: Generate.self)
+    static var configuration: CommandConfiguration {
+        let config = ConfigFactory.default
+        var commands = [ParsableCommand.Type]()
+        var defaultCommand: ParsableCommand.Type?
+
+        let commandsMap = config?.commands.compactMapValues({ className in
+            NSClassFromString(className) as? ParsableCommand.Type
+        })
+
+        if let map = commandsMap {
+            commands = Array(map.values)
+            if let key = config?.defaultCommand {
+                defaultCommand = map[key]
+            }
+        }
+
+        return .init(abstract: "Generates code from templates.",
+                     version: Constants.version,
+                    subcommands: commands +
+                                 [Create.self,
+                                  Spec.self,
+                                  List.self,
+                                  Setup.self,
+                                  Upgrade.self],
+                    defaultSubcommand: defaultCommand)
+    }
 }

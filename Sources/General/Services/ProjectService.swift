@@ -6,7 +6,7 @@ import PathKit
 import XcodeProj
 import Foundation
 
-final class ProjectService {
+public final class ProjectService {
 
     enum Error: Swift.Error {
         case noProject(path: String)

@@ -2,9 +2,15 @@
 //  Copyright © 2020 Rosberry. All rights reserved.
 //
 
-enum Constants {
+import Foundation
 
-    static let defaultTemplatesGithub = "rosberry/general-templates ios"
+public enum Constants {
+    static let version = "3.0"
+    static let shell = "/bin/bash"
+    static let generalHomePath = "\(NSHomeDirectory())/.general"
+    static let configPath = "\(generalHomePath)/.config"
+    static let pluginsPath = "\(generalHomePath)//plugins"
+    static let downloadedSourcePath = "\(generalHomePath)/source"
     static let specFilename = "spec.yml"
     static let templatesFolderName = ".templates"
     static let commonTemplatesFolderName = "common"
@@ -20,6 +26,7 @@ enum Constants {
     static let tmpFolderPath = "/tmp"
     static let generalTmpFolderPrefix = "general"
     static let defaultGithubBranch = "master"
+    static let githubRepo = "rosberry/general"
     static let githubArchivePath: ((String, String) -> String) = { name, branch in
         "https://github.com/\(name)/archive/\(branch).zip"
     }

@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct FileInfo: Hashable {
+public struct FileInfo: Hashable {
     let url: URL
     let isDirectory: Bool
     let isExists: Bool

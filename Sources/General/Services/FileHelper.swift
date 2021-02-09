@@ -5,7 +5,7 @@
 import Foundation
 import ZIPFoundation
 
-final class FileHelper {
+public final class FileHelper {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case createDirectory(_ url: URL, error: Swift.Error)

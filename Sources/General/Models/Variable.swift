@@ -4,7 +4,7 @@
 
 import ArgumentParser
 
-struct Variable {
+public struct Variable {
 
     let key: String
     let value: String
@@ -12,7 +12,7 @@ struct Variable {
 
 extension Variable: ExpressibleByArgument {
 
-    init?(argument: String) {
+    public init?(argument: String) {
         let components = argument.components(separatedBy: ":")
         guard components.count == 2 else {
             return nil

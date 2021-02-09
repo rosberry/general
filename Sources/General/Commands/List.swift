@@ -4,17 +4,22 @@
 import Foundation
 import ArgumentParser
 
-final class List: ParsableCommand {
+public final class List: ParsableCommand {
 
     private lazy var fileManager: FileManager = .default
 
     // MARK: - Parameters
 
-    static let configuration: CommandConfiguration = .init(abstract: "List of available templates.")
+    public static let configuration: CommandConfiguration = .init(abstract: "List of available templates.")
 
-    func run() throws {
+    public func run() throws {
         let url = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
         try printContentOfDirectory(at: url)
+    }
+
+    // MARK: - Lifecycle
+
+    public init() {
     }
 
     // MARK: - Private

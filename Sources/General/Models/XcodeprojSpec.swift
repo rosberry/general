@@ -4,7 +4,7 @@
 
 import Foundation
 
-struct XcodeprojSpec: Codable, CustomStringConvertible {
+public struct XcodeprojSpec: Codable, CustomStringConvertible {
 
     var project: String?
     var target: String?

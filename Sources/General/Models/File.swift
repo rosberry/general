@@ -5,7 +5,7 @@
 import Foundation
 import PathKit
 
-struct File: Codable, CustomStringConvertible {
+public struct File: Codable, CustomStringConvertible {
     let template: String
     let name: String?
     let output: String?

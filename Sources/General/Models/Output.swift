@@ -3,9 +3,8 @@
 //
 import Foundation
 
-struct Output: Codable, CustomStringConvertible {
+public struct Output: Codable, CustomStringConvertible {
 
     let templateName: String
     let path: String
-    let testPath: String?
 }

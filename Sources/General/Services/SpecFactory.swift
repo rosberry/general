@@ -5,7 +5,7 @@
 import Foundation
 import Yams
 
-final class SpecFactory {
+public final class SpecFactory {
 
     let decoder: YAMLDecoder
     let encoder: YAMLEncoder

@@ -1,14 +1,15 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
+
 import Foundation
 import ArgumentParser
+import GeneralKit
 
 public final class Spec: ParsableCommand {
 
     private lazy var specFactory: SpecFactory = .init()
     private lazy var fileManager: FileManager = .default
-    private lazy var projectService: ProjectService = .init(path: .init(path))
 
     // MARK: - Parameters
 
@@ -31,22 +32,8 @@ public final class Spec: ParsableCommand {
             print("\(Constants.generalSpecName) already exists.")
             return
         }
-        let contents = try fileManager.contentsOfDirectory(atPath: pathURL.path)
-        var projectName = Constants.projectName
-        if let name = contents.first(where: { content in content.contains(".xcodeproj") }) {
-            projectName = name
-        }
 
-        // get organization name if possible
-        var company: String?
-        try? projectService.createProject(projectName: projectName)
-        if let attributes = try? projectService.readAttributes(),
-            let organizationName = attributes["ORGANIZATIONNAME"] as? String {
-            company = organizationName
-        }
-
-        // create a new spec
-        let spec = GeneralSpec(xcodeproj: .init(project: projectName, target: nil, testTarget: nil, company: company))
+        let spec = GeneralSpec(outputs: [])
         if let specData = try? specFactory.makeData(spec: spec) {
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
             print("🎉 Spec was successfully created.")

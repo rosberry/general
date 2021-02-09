@@ -7,16 +7,16 @@ import Foundation
 
 public final class UpgradeService {
 
-    enum Version {
+    public enum Version {
         case current
         case latest
         case concrete(String)
     }
 
-    enum Error: Swift.Error, CustomStringConvertible {
+    public enum Error: Swift.Error, CustomStringConvertible {
         case build
 
-        var description: String {
+        public var description: String {
             switch self {
             case .build:
                 return "Could not build app from source code"
@@ -27,10 +27,25 @@ public final class UpgradeService {
     private lazy var githubService: GithubService = .init()
     private lazy var shell: Shell = .init()
 
-    func upgrade(to version: Version, customizationHandler: (() throws -> Void)? = nil) throws {
+    public init() {
+        //
+    }
+
+    public func upgrade(to version: Version, customizationHandler: (() throws -> Void)? = nil) throws {
         try cloneGeneralIfNeeded(version: version)
         try customizationHandler?()
         try buildGeneral()
+    }
+
+    public func fetchConcreteVersion(from version: Version) -> String {
+        switch version {
+        case let .concrete(version):
+            return version
+        case .latest:
+            return Constants.defaultGithubBranch
+        case .current:
+            return ConfigFactory.default?.version ?? Constants.defaultGithubBranch
+        }
     }
 
     // MARK: - Private
@@ -41,17 +56,6 @@ public final class UpgradeService {
         let githubPath = Constants.githubArchivePath(repo, version)
         let destination = Constants.downloadedSourcePath
         try githubService.downloadFiles(at: githubPath, to: destination)
-    }
-
-    func fetchConcreteVersion(from version: Version) -> String {
-        switch version {
-        case let .concrete(version):
-            return version
-        case .latest:
-            return Constants.defaultGithubBranch
-        case .current:
-            return ConfigFactory.default?.version ?? Constants.defaultGithubBranch
-        }
     }
 
     private func buildGeneral() throws {

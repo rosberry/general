@@ -5,16 +5,13 @@
 import Foundation
 
 public struct GeneralSpec: Codable, CustomStringConvertible {
+    public let outputs: [Output]
 
-    var xcodeproj: XcodeprojSpec?
-    let outputs: [Output]
-
-    init(xcodeproj: XcodeprojSpec?, outputs: [Output] = []) {
-        self.xcodeproj = xcodeproj
+    public init(outputs: [Output] = []) {
         self.outputs = outputs
     }
 
-    func output(forTemplateName templateName: String) -> Output? {
+    public func output(forTemplateName templateName: String) -> Output? {
         outputs.first { output in
             output.templateName == templateName
         }

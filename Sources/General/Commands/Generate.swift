@@ -8,7 +8,7 @@ import Stencil
 import StencilSwiftKit
 import Yams
 import PathKit
-import XcodeProj
+import GeneralKit
 
 public final class Generate: ParsableCommand {
 
@@ -18,7 +18,6 @@ public final class Generate: ParsableCommand {
 
     private lazy var specFactory: SpecFactory = .init()
     private lazy var fileManager: FileManager = .default
-    private lazy var projectService: ProjectService = .init(path: .init(path))
 
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
@@ -47,22 +46,13 @@ public final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The output for the template.", completion: .directory)
     var output: String?
 
-    @Option(name: .long, help: "The target to which add files.", completion: .targets)
-    var target: String?
-
-    @Option(name: .long, help: "The test target to which add test files.", completion: .targets)
-    var testTarget: String?
-
     @Argument(help: "The additional variables for templates.")
-    var variables: [Variable] = []
+    var variables: [GeneralKit.Variable] = []
 
     private var context: [String: Any] {
         let year = Calendar.current.component(.year, from: .init())
         var context: [String: Any] = ["name": name,
                                       "year": year]
-        if let company = generalSpec?.xcodeproj?.company {
-            context["company"] = company
-        }
         for variable in variables {
             context[variable.key] = variable.value
         }
@@ -79,17 +69,7 @@ public final class Generate: ParsableCommand {
         let templateSpec: TemplateSpec = try specFactory.makeSpec(url: specURL)
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
-
-        if let xcodeproj = generalSpec?.xcodeproj {
-            if let projectName = xcodeproj.project {
-                try projectService.createProject(projectName: projectName)
-            }
-            try add(templateSpec, to: target ?? xcodeproj.target, with: environment)
-            try projectService.write()
-        }
-        else {
-            try add(templateSpec, environment: environment)
-        }
+        try add(templateSpec, environment: environment)
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
 
@@ -175,18 +155,6 @@ public final class Generate: ParsableCommand {
             return nil
         }
         return output.path
-    }
-}
-
-// MARK: - XcodeProj
-
-extension Generate {
-    private func add(_ templateSpec: TemplateSpec, to target: String?, with environment: Environment) throws {
-        try add(templateSpec, environment: environment) { fileURL in
-            try self.projectService.addFile(targetName: target,
-                                            isTestTarget: false,
-                                            filePath: Path(fileURL.path))
-        }
     }
 }
 

@@ -5,9 +5,8 @@
 import ArgumentParser
 
 public struct Variable {
-
-    let key: String
-    let value: String
+    public let key: String
+    public let value: String
 }
 
 extension Variable: ExpressibleByArgument {

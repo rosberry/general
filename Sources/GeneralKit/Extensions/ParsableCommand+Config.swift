@@ -4,7 +4,7 @@
 
 import ArgumentParser
 
-extension ParsableCommand {
+public extension ParsableCommand {
     func config() throws -> GeneralConfig {
         guard let config = ConfigFactory.default else {
             throw ConfigFactory.Error.invalidConfig

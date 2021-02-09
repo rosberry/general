@@ -4,6 +4,7 @@
 
 import Foundation
 import ArgumentParser
+import GeneralKit
 
 public final class Create: ParsableCommand {
 
@@ -40,7 +41,8 @@ public final class Create: ParsableCommand {
         try fileManager.createDirectory(at: moduleURL, withIntermediateDirectories: true, attributes: nil)
 
         // create a spec for a new template
-        let spec = TemplateSpec(files: [.init(template: Constants.filesFolderName + "/" + Constants.templateFilename, name: nil, output: nil, folder: nil)], suffix: nil)
+        let spec = TemplateSpec(files: [.init(template: Constants.filesFolderName + "/" + Constants.templateFilename)],
+                                suffix: nil)
         if let specData = try? specFactory.makeData(spec: spec) {
             let specURL = moduleURL + Constants.specFilename
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)

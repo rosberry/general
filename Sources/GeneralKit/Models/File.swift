@@ -6,13 +6,20 @@ import Foundation
 import PathKit
 
 public struct File: Codable, CustomStringConvertible {
-    let template: String
-    let name: String?
-    let output: String?
-    let folder: String?
+    public let template: String
+    public let name: String?
+    public let output: String?
+    public let folder: String?
+
+    public init(template: String, name: String? = nil, output: String? = nil, folder: String? = nil) {
+        self.template = template
+        self.name = name
+        self.output = output
+        self.folder = folder
+    }
 }
 
-extension File {
+public extension File {
     func fileName(in module: String) -> String {
         if let name = self.name {
             return name

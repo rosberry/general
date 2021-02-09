@@ -12,13 +12,6 @@ public final class CompletionsService {
         (try? FileManager.default.contentsOfDirectory(atPath: "./\(Constants.templatesFolderName)")) ?? []
     }
 
-    static func targets() -> [String] {
-        guard let projectPath = try? ProjectService.findProject() else {
-            return []
-        }
-        return (try? XcodeProj(path: projectPath).pbxproj.nativeTargets.map { $0.name }) ?? []
-    }
-
     static func plugins() -> [String] {
         ConfigFactory.default?.availablePlugins.map(\.name) ?? []
     }
@@ -36,12 +29,6 @@ public extension CompletionKind {
     static var templates: CompletionKind {
         .custom { _ in
             CompletionsService.templates()
-        }
-    }
-
-    static var targets: CompletionKind {
-        .custom { _ in
-            CompletionsService.targets()
         }
     }
 

@@ -25,7 +25,7 @@ public final class ConfigFactory {
     let decoder: YAMLDecoder
     let encoder: YAMLEncoder
 
-    init(decoder: YAMLDecoder = .init(), encoder: YAMLEncoder = .init()) {
+    public init(decoder: YAMLDecoder = .init(), encoder: YAMLEncoder = .init()) {
         self.decoder = decoder
         self.encoder = encoder
     }

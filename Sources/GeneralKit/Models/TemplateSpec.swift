@@ -5,6 +5,11 @@
 import Foundation
 
 public struct TemplateSpec: Codable, CustomStringConvertible {
-    let files: [File]
-    let suffix: String?
+    public let files: [File]
+    public let suffix: String?
+
+    public init(files: [File], suffix: String? = nil) {
+        self.files = files
+        self.suffix = suffix
+    }
 }

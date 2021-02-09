@@ -7,7 +7,7 @@ import ZIPFoundation
 
 public final class FileHelper {
 
-    enum Error: Swift.Error, CustomStringConvertible {
+    public enum Error: Swift.Error, CustomStringConvertible {
         case createDirectory(_ url: URL, error: Swift.Error)
         case resourceValue(_ url: URL, error: Swift.Error)
         case contentsOfDirectory(_ url: URL, error: Swift.Error)
@@ -15,7 +15,7 @@ public final class FileHelper {
         case move(_ url: URL, destination: URL, error: Swift.Error)
         case unzip(_ url: URL, error: Swift.Error)
 
-        var description: String {
+        public var description: String {
             switch self {
             case let .createDirectory(url, error):
                 return red("Could not create directory at path: \(url.path). " +
@@ -40,17 +40,16 @@ public final class FileHelper {
         }
     }
 
-    static var `default` = FileHelper()
+    public static var `default` = FileHelper()
 
     private lazy var keys: Set<URLResourceKey> = [.isDirectoryKey, .contentModificationDateKey]
+    public lazy var fileManager: FileManager = .default
 
-    lazy var fileManager: FileManager = .default
-
-    func contentsOfDirectory(at path: String) throws -> [FileInfo] {
+    public func contentsOfDirectory(at path: String) throws -> [FileInfo] {
         try contentsOfDirectory(at: URL(fileURLWithPath: path, isDirectory: true))
     }
 
-    func contentsOfDirectory(at url: URL) throws -> [FileInfo] {
+    public func contentsOfDirectory(at url: URL) throws -> [FileInfo] {
         let contents: [URL]
         do {
             contents = try fileManager.contentsOfDirectory(at: url,
@@ -63,7 +62,7 @@ public final class FileHelper {
         return try contents.map(fileInfo(with:))
     }
 
-    func fileInfo(with url: URL) throws -> FileInfo {
+    public func fileInfo(with url: URL) throws -> FileInfo {
         let values = try? url.resourceValues(forKeys: keys)
         var isDirectory: ObjCBool = false
         let isExists = fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory)
@@ -73,7 +72,7 @@ public final class FileHelper {
                      contentModificationDate: values?.contentModificationDate)
     }
 
-    func createDirectory(at path: String) throws {
+    public func createDirectory(at path: String) throws {
         do {
             try fileManager.createDirectory(atPath: path,
                                             withIntermediateDirectories: true,
@@ -84,11 +83,11 @@ public final class FileHelper {
         }
     }
 
-    func createDirectory(at url: URL) throws {
+    public func createDirectory(at url: URL) throws {
         try createDirectory(at: url.path)
     }
 
-    func removeFile(at url: URL) throws {
+    public func removeFile(at url: URL) throws {
         do {
             try fileManager.removeItem(at: url)
         }
@@ -97,7 +96,7 @@ public final class FileHelper {
         }
     }
 
-    func moveFile(at url: URL, to destination: URL) throws {
+    public func moveFile(at url: URL, to destination: URL) throws {
         do {
             try fileManager.moveItem(at: url, to: destination)
         }
@@ -106,7 +105,7 @@ public final class FileHelper {
         }
     }
 
-    func unzipArchive(at url: URL) throws -> URL {
+    public func unzipArchive(at url: URL) throws -> URL {
         let folderURL = url.deletingLastPathComponent()
         do {
             try fileManager.unzipItem(at: url, to: folderURL)

@@ -35,6 +35,10 @@ public final class GithubService {
 
     private let fileHelper: FileHelper = .default
 
+    public init() {
+        //
+    }
+
     public func getGitRepoPath(githubPath: String) throws -> String {
         let components = githubPath.split(separator: " ")
         guard let name = components.first else {

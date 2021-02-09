@@ -19,7 +19,6 @@ let package = Package(
         .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.1.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
-        .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0")),
         .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0"))
     ],
     targets: [
@@ -31,7 +30,6 @@ let package = Package(
                 "StencilSwiftKit",
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 "Yams",
-                "XcodeProj",
                 "ZIPFoundation"
         ]),
         .target(

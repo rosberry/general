@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0135306525D27297006D8150 /* Render.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0135306425D27297006D8150 /* Render.swift */; };
+		0135306525D27297006D8150 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0135306425D27297006D8150 /* Renderer.swift */; };
+		0135309325D28B6A006D8150 /* SetupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0135309225D28B6A006D8150 /* SetupService.swift */; };
 		OBJ_195 /* BashCompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_93 /* BashCompletionsGenerator.swift */; };
 		OBJ_196 /* CompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_94 /* CompletionsGenerator.swift */; };
 		OBJ_197 /* FishCompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_95 /* FishCompletionsGenerator.swift */; };
@@ -56,7 +57,6 @@
 		OBJ_253 /* Generate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Generate.swift */; };
 		OBJ_254 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* List.swift */; };
 		OBJ_255 /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* Setup.swift */; };
-		OBJ_256 /* Spec.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Spec.swift */; };
 		OBJ_257 /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Upgrade.swift */; };
 		OBJ_258 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* General.swift */; };
 		OBJ_259 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* main.swift */; };
@@ -305,7 +305,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0135306425D27297006D8150 /* Render.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Render.swift; sourceTree = "<group>"; };
+		0135306425D27297006D8150 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
+		0135309225D28B6A006D8150 /* SetupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupService.swift; sourceTree = "<group>"; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralKit::Product" /* GeneralKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeneralKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add.swift; sourceTree = "<group>"; };
@@ -356,7 +357,6 @@
 		OBJ_146 /* SwiftIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftIdentifier.swift; sourceTree = "<group>"; };
 		OBJ_147 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/nick/Documents/GitHub/general/.build/checkouts/StencilSwiftKit/Package.swift; sourceTree = "<group>"; };
 		OBJ_149 /* Package.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Package.swift; path = /Users/nick/Documents/GitHub/general/.build/checkouts/Stencil/Package.swift; sourceTree = "<group>"; };
-		OBJ_15 /* Spec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spec.swift; sourceTree = "<group>"; };
 		OBJ_150 /* Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		OBJ_151 /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		OBJ_152 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -548,14 +548,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0135306325D27287006D8150 /* Generate */ = {
-			isa = PBXGroup;
-			children = (
-				0135306425D27297006D8150 /* Render.swift */,
-			);
-			path = Generate;
-			sourceTree = "<group>";
-		};
 		OBJ_106 /* Parsable Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -735,7 +727,7 @@
 		OBJ_38 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				0135306325D27287006D8150 /* Generate */,
+				0135306425D27297006D8150 /* Renderer.swift */,
 				OBJ_39 /* CompletionsService.swift */,
 				OBJ_40 /* ConfigFactory.swift */,
 				OBJ_41 /* FileHelper.swift */,
@@ -743,6 +735,7 @@
 				OBJ_43 /* Shell */,
 				OBJ_45 /* SpecFactory.swift */,
 				OBJ_46 /* UpgradeService.swift */,
+				0135309225D28B6A006D8150 /* SetupService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -784,7 +777,7 @@
 			name = "ZIPFoundation 0.9.11";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -799,7 +792,6 @@
 				OBJ_188 /* Makefile */,
 				OBJ_189 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_50 /* ZIPFoundation */ = {
@@ -912,7 +904,6 @@
 				OBJ_12 /* Generate.swift */,
 				OBJ_13 /* List.swift */,
 				OBJ_14 /* Setup.swift */,
-				OBJ_15 /* Spec.swift */,
 				OBJ_16 /* Upgrade.swift */,
 			);
 			path = Commands;
@@ -1260,7 +1251,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_174 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1350,7 +1341,6 @@
 				OBJ_253 /* Generate.swift in Sources */,
 				OBJ_254 /* List.swift in Sources */,
 				OBJ_255 /* Setup.swift in Sources */,
-				OBJ_256 /* Spec.swift in Sources */,
 				OBJ_257 /* Upgrade.swift in Sources */,
 				OBJ_258 /* General.swift in Sources */,
 				OBJ_259 /* main.swift in Sources */,
@@ -1380,11 +1370,12 @@
 				OBJ_303 /* CompletionsService.swift in Sources */,
 				OBJ_304 /* ConfigFactory.swift in Sources */,
 				OBJ_305 /* FileHelper.swift in Sources */,
-				0135306525D27297006D8150 /* Render.swift in Sources */,
+				0135306525D27297006D8150 /* Renderer.swift in Sources */,
 				OBJ_306 /* GithubService.swift in Sources */,
 				OBJ_307 /* Shell.swift in Sources */,
 				OBJ_308 /* SpecFactory.swift in Sources */,
 				OBJ_309 /* UpgradeService.swift in Sources */,
+				0135309325D28B6A006D8150 /* SetupService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

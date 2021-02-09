@@ -8,17 +8,17 @@ import GeneralKit
 public final class List: ParsableCommand {
 
     private lazy var fileManager: FileManager = .default
+    public static let configuration: CommandConfiguration = .init(abstract: "List of available templates.")
 
     // MARK: - Parameters
 
-    public static let configuration: CommandConfiguration = .init(abstract: "List of available templates.")
+    // MARK: - Lifecycle
 
     public func run() throws {
         let url = fileManager.homeDirectoryForCurrentUser + Constants.templatesFolderName
         try printContentOfDirectory(at: url)
     }
 
-    // MARK: - Lifecycle
 
     public init() {
     }

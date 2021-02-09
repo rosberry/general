@@ -28,7 +28,6 @@ final class General: ParsableCommand {
                      version: Constants.version,
                     subcommands: commands +
                                  [Create.self,
-                                  Spec.self,
                                   List.self,
                                   Setup.self,
                                   Upgrade.self,

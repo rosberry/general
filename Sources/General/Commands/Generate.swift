@@ -10,11 +10,6 @@ public final class Generate: ParsableCommand {
     
     public static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
-    // MARK: - Lifecycle
-
-    public init() {
-    }
-
     // MARK: - Parameters
 
     @Option(name: .shortAndLong, completion: .directory, help: "The path for the project.")
@@ -33,6 +28,9 @@ public final class Generate: ParsableCommand {
     var variables: [GeneralKit.Variable] = []
 
     // MARK: - Lifecycle
+
+    public init() {
+    }
 
     public func run() throws {
         let renderer = Renderer(name: name, template: template, path: path, variables: variables, output: output)

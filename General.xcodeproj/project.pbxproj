@@ -13,7 +13,6 @@
 			buildPhases = (
 			);
 			dependencies = (
-				OBJ_435 /* PBXTargetDependency */,
 			);
 			name = GeneralPackageTests;
 			productName = GeneralPackageTests;
@@ -145,17 +144,6 @@
 		OBJ_407 /* StencilSwiftKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "StencilSwiftKit::StencilSwiftKit::Product" /* StencilSwiftKit.framework */; };
 		OBJ_408 /* Stencil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Stencil::Stencil::Product" /* Stencil.framework */; };
 		OBJ_409 /* PathKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "PathKit::PathKit::Product" /* PathKit.framework */; };
-		OBJ_441 /* GeneralTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_35 /* GeneralTests.swift */; };
-		OBJ_442 /* XCTestManifests.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_36 /* XCTestManifests.swift */; };
-		OBJ_444 /* ZIPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "ZIPFoundation::ZIPFoundation::Product" /* ZIPFoundation.framework */; };
-		OBJ_445 /* XcodeProj.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "XcodeProj::XcodeProj::Product" /* XcodeProj.framework */; };
-		OBJ_446 /* AEXML.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "AEXML::AEXML::Product" /* AEXML.framework */; };
-		OBJ_447 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Yams::Yams::Product" /* Yams.framework */; };
-		OBJ_448 /* CYaml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Yams::CYaml::Product" /* CYaml.framework */; };
-		OBJ_449 /* ArgumentParser.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "swift-argument-parser::ArgumentParser::Product" /* ArgumentParser.framework */; };
-		OBJ_450 /* StencilSwiftKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "StencilSwiftKit::StencilSwiftKit::Product" /* StencilSwiftKit.framework */; };
-		OBJ_451 /* Stencil.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Stencil::Stencil::Product" /* Stencil.framework */; };
-		OBJ_452 /* PathKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "PathKit::PathKit::Product" /* PathKit.framework */; };
 		OBJ_467 /* PathKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_282 /* PathKit.swift */; };
 		OBJ_474 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_281 /* Package.swift */; };
 		OBJ_479 /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_259 /* Context.swift */; };
@@ -428,76 +416,6 @@
 			remoteGlobalIDString = "PathKit::PathKit";
 			remoteInfo = PathKit;
 		};
-		0107C15A25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "ZIPFoundation::ZIPFoundation";
-			remoteInfo = ZIPFoundation;
-		};
-		0107C15B25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "XcodeProj::XcodeProj";
-			remoteInfo = XcodeProj;
-		};
-		0107C15C25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "AEXML::AEXML";
-			remoteInfo = AEXML;
-		};
-		0107C15D25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "Yams::Yams";
-			remoteInfo = Yams;
-		};
-		0107C15E25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "Yams::CYaml";
-			remoteInfo = CYaml;
-		};
-		0107C15F25CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "swift-argument-parser::ArgumentParser";
-			remoteInfo = ArgumentParser;
-		};
-		0107C16025CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "StencilSwiftKit::StencilSwiftKit";
-			remoteInfo = StencilSwiftKit;
-		};
-		0107C16125CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "Stencil::Stencil";
-			remoteInfo = Stencil;
-		};
-		0107C16225CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "PathKit::PathKit";
-			remoteInfo = PathKit;
-		};
-		0107C16325CBB62900090987 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = OBJ_1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = "General::GeneralTests";
-			remoteInfo = GeneralTests;
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -517,7 +435,6 @@
 		01F2BF9225D23BE50051985B /* UpgradeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeService.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
-		"General::GeneralTests::Product" /* GeneralTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GeneralTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_100 /* Equality.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equality.generated.swift; sourceTree = "<group>"; };
 		OBJ_101 /* Sourcery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sourcery.swift; sourceTree = "<group>"; };
 		OBJ_103 /* XCRemoteSwiftPackageReference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCRemoteSwiftPackageReference.swift; sourceTree = "<group>"; };
@@ -807,22 +724,6 @@
 				OBJ_407 /* StencilSwiftKit.framework in Frameworks */,
 				OBJ_408 /* Stencil.framework in Frameworks */,
 				OBJ_409 /* PathKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_443 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_444 /* ZIPFoundation.framework in Frameworks */,
-				OBJ_445 /* XcodeProj.framework in Frameworks */,
-				OBJ_446 /* AEXML.framework in Frameworks */,
-				OBJ_447 /* Yams.framework in Frameworks */,
-				OBJ_448 /* CYaml.framework in Frameworks */,
-				OBJ_449 /* ArgumentParser.framework in Frameworks */,
-				OBJ_450 /* StencilSwiftKit.framework in Frameworks */,
-				OBJ_451 /* Stencil.framework in Frameworks */,
-				OBJ_452 /* PathKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,7 +1214,6 @@
 			children = (
 				"General::General::Product" /* General */,
 				"Stencil::Stencil::Product" /* Stencil.framework */,
-				"General::GeneralTests::Product" /* GeneralTests.xctest */,
 				"ZIPFoundation::ZIPFoundation::Product" /* ZIPFoundation.framework */,
 				"AEXML::AEXML::Product" /* AEXML.framework */,
 				"PathKit::PathKit::Product" /* PathKit.framework */,
@@ -1652,31 +1552,6 @@
 			productReference = "General::General::Product" /* General */;
 			productType = "com.apple.product-type.tool";
 		};
-		"General::GeneralTests" /* GeneralTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = OBJ_437 /* Build configuration list for PBXNativeTarget "GeneralTests" */;
-			buildPhases = (
-				OBJ_440 /* Sources */,
-				OBJ_443 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				OBJ_454 /* PBXTargetDependency */,
-				OBJ_455 /* PBXTargetDependency */,
-				OBJ_456 /* PBXTargetDependency */,
-				OBJ_457 /* PBXTargetDependency */,
-				OBJ_458 /* PBXTargetDependency */,
-				OBJ_459 /* PBXTargetDependency */,
-				OBJ_460 /* PBXTargetDependency */,
-				OBJ_461 /* PBXTargetDependency */,
-				OBJ_462 /* PBXTargetDependency */,
-			);
-			name = GeneralTests;
-			productName = GeneralTests;
-			productReference = "General::GeneralTests::Product" /* GeneralTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 		"General::SwiftPMPackageDescription" /* GeneralPackageDescription */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = OBJ_426 /* Build configuration list for PBXNativeTarget "GeneralPackageDescription" */;
@@ -1959,7 +1834,6 @@
 				"General::General" /* General */,
 				"General::SwiftPMPackageDescription" /* GeneralPackageDescription */,
 				"General::GeneralPackageTests::ProductTarget" /* GeneralPackageTests */,
-				"General::GeneralTests" /* GeneralTests */,
 				"PathKit::PathKit" /* PathKit */,
 				"PathKit::SwiftPMPackageDescription" /* PathKitPackageDescription */,
 				"Stencil::Stencil" /* Stencil */,
@@ -2147,15 +2021,6 @@
 			buildActionMask = 0;
 			files = (
 				01F2BF9825D243000051985B /* Package.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		OBJ_440 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 0;
-			files = (
-				OBJ_441 /* GeneralTests.swift in Sources */,
-				OBJ_442 /* XCTestManifests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2455,56 +2320,6 @@
 			isa = PBXTargetDependency;
 			target = "PathKit::PathKit" /* PathKit */;
 			targetProxy = 0107C15825CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_435 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "General::GeneralTests" /* GeneralTests */;
-			targetProxy = 0107C16325CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_454 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "ZIPFoundation::ZIPFoundation" /* ZIPFoundation */;
-			targetProxy = 0107C15A25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_455 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "XcodeProj::XcodeProj" /* XcodeProj */;
-			targetProxy = 0107C15B25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_456 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "AEXML::AEXML" /* AEXML */;
-			targetProxy = 0107C15C25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_457 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "Yams::Yams" /* Yams */;
-			targetProxy = 0107C15D25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_458 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "Yams::CYaml" /* CYaml */;
-			targetProxy = 0107C15E25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_459 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "swift-argument-parser::ArgumentParser" /* ArgumentParser */;
-			targetProxy = 0107C15F25CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_460 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "StencilSwiftKit::StencilSwiftKit" /* StencilSwiftKit */;
-			targetProxy = 0107C16025CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_461 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "Stencil::Stencil" /* Stencil */;
-			targetProxy = 0107C16125CBB62900090987 /* PBXContainerItemProxy */;
-		};
-		OBJ_462 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = "PathKit::PathKit" /* PathKit */;
-			targetProxy = 0107C16225CBB62900090987 /* PBXContainerItemProxy */;
 		};
 		OBJ_502 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2994,62 +2809,6 @@
 		OBJ_434 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-			};
-			name = Release;
-		};
-		OBJ_438 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/.build/checkouts/Yams/Sources/CYaml/include",
-				);
-				INFOPLIST_FILE = General.xcodeproj/GeneralTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				OTHER_CFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GeneralTests;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
-			};
-			name = Debug;
-		};
-		OBJ_439 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/.build/checkouts/Yams/Sources/CYaml/include",
-				);
-				INFOPLIST_FILE = General.xcodeproj/GeneralTests_Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @loader_path/../Frameworks @loader_path/Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.15;
-				OTHER_CFLAGS = "$(inherited)";
-				OTHER_LDFLAGS = "$(inherited)";
-				OTHER_SWIFT_FLAGS = "$(inherited)";
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited)";
-				SWIFT_VERSION = 5.0;
-				TARGET_NAME = GeneralTests;
-				TVOS_DEPLOYMENT_TARGET = 9.0;
-				WATCHOS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
 		};
@@ -3585,15 +3344,6 @@
 			buildConfigurations = (
 				OBJ_433 /* Debug */,
 				OBJ_434 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		OBJ_437 /* Build configuration list for PBXNativeTarget "GeneralTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				OBJ_438 /* Debug */,
-				OBJ_439 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

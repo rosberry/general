@@ -58,7 +58,8 @@ public final class Add: ParsableCommand {
     public func run() throws {
         try fetchPluginsMeta()
         let plugin = try findPlugin()
-        try upgradeService.upgrade(to: .current, customizationHandler: {
+        // TODO: Return to current
+        try upgradeService.upgrade(to: .concrete("feature/xcode-independent"), customizationHandler: {
             try self.install(plugin)
         })
     }
@@ -67,17 +68,20 @@ public final class Add: ParsableCommand {
 
     private func install(_ plugin: Plugin) throws {
         let url = URL(fileURLWithPath: Constants.downloadedSourcePath)
-        guard let swiftPachageFile = try? fileHelper.fileInfo(with: url + Constants.packageSwiftPath),
+        guard let swiftPackageFile = try? fileHelper.fileInfo(with: url + Constants.packageSwiftPath),
             let generalFile = try? fileHelper.fileInfo(with: url + Constants.generalSwiftPath) else {
                 throw Error.installation
         }
+
+        try insertStringService.insert(string: "\"\(plugin.package)\"",
+                                       template: Constants.targetDependencyTemplate,
+                                       file: swiftPackageFile,
+                                       terminator: ",")
+
         try insertStringService.insert(string: makePackageDependency(plugin),
                                        template: Constants.packageDependencyTemplate,
-                                       file: swiftPachageFile)
-
-        try insertStringService.insert(string: plugin.package,
-                                       template: Constants.targetDependencyTemplate,
-                                       file: swiftPachageFile)
+                                       file: swiftPackageFile,
+                                       terminator: ",")
 
         try insertStringService.insert(string: "import \(plugin.package)",
                                        template: Constants.importDependencyTemplate,
@@ -91,7 +95,6 @@ public final class Add: ParsableCommand {
             }
             return config
         }
-        print(try config())
     }
 
     private func fetchPluginsMeta() throws {
@@ -176,7 +179,8 @@ public final class Add: ParsableCommand {
         let components = plugin.repo.split(separator: " ")
         let gitPath = "https://github.com/\(components[0]).git"
         if components.count == 2 {
-            return ".package(url: \"\(gitPath)\", .upToNextMajor(from: \"\"))"
+            // TODO: Switch to upToNextMajors
+            return ".package(url: \"\(gitPath)\", .branch(\"\(components[1])\"))"
         }
         else {
             return ".package(url: \"\(gitPath)\")"

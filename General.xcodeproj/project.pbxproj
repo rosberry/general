@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0135306525D27297006D8150 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0135306425D27297006D8150 /* Renderer.swift */; };
 		0135309325D28B6A006D8150 /* SetupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0135309225D28B6A006D8150 /* SetupService.swift */; };
+		01D2985D25D2B88F002C5103 /* InsertStringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D2985C25D2B88F002C5103 /* InsertStringService.swift */; };
 		OBJ_195 /* BashCompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_93 /* BashCompletionsGenerator.swift */; };
 		OBJ_196 /* CompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_94 /* CompletionsGenerator.swift */; };
 		OBJ_197 /* FishCompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_95 /* FishCompletionsGenerator.swift */; };
@@ -307,6 +308,7 @@
 /* Begin PBXFileReference section */
 		0135306425D27297006D8150 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		0135309225D28B6A006D8150 /* SetupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupService.swift; sourceTree = "<group>"; };
+		01D2985C25D2B88F002C5103 /* InsertStringService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertStringService.swift; sourceTree = "<group>"; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralKit::Product" /* GeneralKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeneralKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add.swift; sourceTree = "<group>"; };
@@ -736,6 +738,7 @@
 				OBJ_45 /* SpecFactory.swift */,
 				OBJ_46 /* UpgradeService.swift */,
 				0135309225D28B6A006D8150 /* SetupService.swift */,
+				01D2985C25D2B88F002C5103 /* InsertStringService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1355,6 +1358,7 @@
 				OBJ_288 /* Constants.swift in Sources */,
 				OBJ_289 /* CustomStringConvertible+Mirror.swift in Sources */,
 				OBJ_290 /* PBXGroup+Groups.swift in Sources */,
+				01D2985D25D2B88F002C5103 /* InsertStringService.swift in Sources */,
 				OBJ_291 /* ParsableCommand+Ask.swift in Sources */,
 				OBJ_292 /* ParsableCommand+Config.swift in Sources */,
 				OBJ_293 /* URL+Paths.swift in Sources */,

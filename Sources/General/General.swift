@@ -5,6 +5,7 @@
 import ArgumentParser
 import Foundation
 import GeneralKit
+// {% PluginImport %}
 
 final class General: ParsableCommand {
 

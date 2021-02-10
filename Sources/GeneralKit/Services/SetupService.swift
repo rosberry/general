@@ -14,9 +14,8 @@ public final class SetupService {
     }
 
     public func setup(githubPath: String, shouldLoadGlobally: Bool, customizationHandler: (([FileInfo]) throws -> Void)? = nil) throws {
-        let url = try githubService.getGitRepoPath(githubPath: githubPath)
         let destination = getTemplatesDestination(shouldLoadGlobally: shouldLoadGlobally)
-        let files = try downloadFiles(from: url, destination: destination)
+        let files = try downloadFiles(from: githubPath, destination: destination)
         try customizationHandler?(files)
         displayResult(files)
     }

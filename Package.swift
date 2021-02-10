@@ -20,6 +20,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.1.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
         .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0"))
+        // {% PackageDependency %}
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -36,6 +37,7 @@ let package = Package(
             name: "General",
             dependencies: [
                 "GeneralKit"
+            // {% TargetDependency %}
         ])
     ]
 )

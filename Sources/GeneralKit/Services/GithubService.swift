@@ -33,16 +33,17 @@ public final class GithubService {
         }
     }
 
-    private let fileHelper: FileHelper = .default
+    private lazy var fileHelper: FileHelper = .default
+    private lazy var shell: Shell = .init()
 
     public init() {
         //
     }
 
-    public func getGitRepoPath(githubPath: String) throws -> String {
-        let components = githubPath.split(separator: " ")
+    public func getGitRepoPath(repo: String) throws -> String {
+        let components = repo.split(separator: " ")
         guard let name = components.first else {
-            throw Error.githubName(githubPath)
+            throw Error.githubName(repo)
         }
         var branch = Constants.defaultGithubBranch
         if components.count > 1 {
@@ -53,10 +54,11 @@ public final class GithubService {
     }
 
     @discardableResult
-    public func downloadFiles(at gitRepoPath: String,
+    public func downloadFiles(at repo: String,
                               to destination: String,
                               askForUpdate: (FileInfo, FileInfo) -> Bool = { _, _ in true },
                               matchHandler: (FileInfo) -> Bool = { _ in true }) throws -> [FileInfo] {
+        let gitRepoPath = try getGitRepoPath(repo: repo)
         let archiveURL = try downloadArchive(at: gitRepoPath)
         let folderURL = try fileHelper.unzipArchive(at: archiveURL)
         guard let directory = try? fetchFiles(in: folderURL, matchHandler: matchHandler).filter({ file in
@@ -107,7 +109,6 @@ public final class GithubService {
             return try Data(contentsOf: url)
         }
         catch {
-            // TODO: Authorize request if needed
             throw Error.download(url)
         }
     }

@@ -30,6 +30,11 @@ public enum Constants {
     public static let githubArchivePath: ((String, String) -> String) = { name, branch in
         "https://github.com/\(name)/archive/\(branch).zip"
     }
+    public static let packageSwiftPath = "Package.swift"
+    public static let generalSwiftPath = "Sources/General/General.swift"
+    public static let packageDependencyTemplate = "// {% PackageDependency %}"
+    public static let targetDependencyTemplate = "// {% TargetDependency %}"
+    public static let importDependencyTemplate = "// {% PluginImport %}"
 }
 
 enum ColorChars {

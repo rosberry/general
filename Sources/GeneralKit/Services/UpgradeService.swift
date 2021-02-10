@@ -53,9 +53,8 @@ public final class UpgradeService {
     private func cloneGeneralIfNeeded(version: Version) throws {
         let version = fetchConcreteVersion(from: version)
         let repo = Constants.githubRepo
-        let githubPath = Constants.githubArchivePath(repo, version)
         let destination = Constants.downloadedSourcePath
-        try githubService.downloadFiles(at: githubPath, to: destination)
+        try githubService.downloadFiles(at: "\(repo) \(version)", to: destination)
     }
 
     private func buildGeneral() throws {

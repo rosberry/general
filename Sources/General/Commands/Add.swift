@@ -11,11 +11,20 @@ public final class Add: ParsableCommand {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case noPlugin
+        case noPackageSwift
+        case noSwiftPackageValue(String)
+        case installation
 
         var description: String {
             switch self {
             case .noPlugin:
                 return "Could not find plugin to install"
+            case .noPackageSwift:
+                return "Could not locate Package.swift"
+            case let .noSwiftPackageValue(value):
+                return "Package.swift does not declares value \(value)"
+            case .installation:
+                return "Could not install plugin"
             }
         }
     }
@@ -34,115 +43,143 @@ public final class Add: ParsableCommand {
                 " Format: \"<github>\\ [branch]\"."), completion: .pluginsRepos)
     var githubPath: String?
 
+    private lazy var upgradeService: UpgradeService = .init()
+    private lazy var insertStringService: InsertStringService = .init()
     private lazy var githubService: GithubService = .init()
     private lazy var fileHelper: FileHelper = .default
-    private lazy var upgradeService: UpgradeService = .init()
+    private lazy var shell: Shell = .init()
 
     // MARK: - Lifecycle
 
     public init() {
+        //
     }
 
     public func run() throws {
-        guard try isAllowedToInstall() else {
-            return
-        }
-        try installPlugin()
+        try fetchPluginsMeta()
+        let plugin = try findPlugin()
+        try upgradeService.upgrade(to: .current, customizationHandler: {
+            try self.install(plugin)
+        })
     }
 
     // MARK: - Private
 
-    private func isAllowedToInstall() throws -> Bool {
-        guard try findInstalledPlugin() != nil else {
-            return true
+    private func install(_ plugin: Plugin) throws {
+        let url = URL(fileURLWithPath: Constants.downloadedSourcePath)
+        guard let swiftPachageFile = try? fileHelper.fileInfo(with: url + Constants.packageSwiftPath),
+            let generalFile = try? fileHelper.fileInfo(with: url + Constants.generalSwiftPath) else {
+                throw Error.installation
         }
-        return askBool(question: "This action will replace currently installed plugin. Do you want to continue [yes, no]?")
+        try insertStringService.insert(string: makePackageDependency(plugin),
+                                       template: Constants.packageDependencyTemplate,
+                                       file: swiftPachageFile)
+
+        try insertStringService.insert(string: plugin.package,
+                                       template: Constants.targetDependencyTemplate,
+                                       file: swiftPachageFile)
+
+        try insertStringService.insert(string: "import \(plugin.package)",
+                                       template: Constants.importDependencyTemplate,
+                                       file: generalFile)
+
+        try updateConfig { config in
+            var config = config
+            config.installedPlugins.append(plugin)
+            config.availablePlugins.removeAll { availablePlugin in
+                availablePlugin == plugin
+            }
+            return config
+        }
+        print(try config())
     }
 
-    private func findInstalledPlugin() throws -> Plugin? {
-        findCandidates(in: try config().installedPlugins).first
-    }
-
-    private func installPlugin() throws {
-        let plugin = try findPluginToInstall()
-        try upgradeService.upgrade(to: .current) {
-            try self.updateDependencies(with: plugin)
-            try self.updateConfig(with: plugin)
+    private func fetchPluginsMeta() throws {
+        guard let repo = githubPath else {
+            return
+        }
+        print("Fetching plugins from \(repo)")
+        try githubService.downloadFiles(at: repo, to: "\(Constants.pluginsPath)/\(makeFolderName(repo: repo))")
+        let files = try fileHelper.contentsOfDirectory(at: Constants.pluginsPath)
+        var availablePlugins = [Plugin]()
+        try files.forEach { file in
+            guard file.isDirectory else {
+                return
+            }
+            let plugins = try parsePlugins(repo: repo, directory: file)
+            availablePlugins.append(contentsOf: plugins)
+        }
+        try updateConfig { config in
+            var config = config
+            config.availablePlugins = availablePlugins.filter { plugin in
+                !config.installedPlugins.contains(plugin)
+            }
+            return config
         }
     }
 
-    private func findPluginToInstall() throws -> Plugin {
-        var plugins = try findCandidates()
-        if plugins.isEmpty {
-            plugins = try loadCandidates()
+    private func findPlugin() throws -> Plugin {
+        let plugins = try self.config().availablePlugins.filter { plugin in
+            plugin.name == pluginName
         }
-        guard let plugin = askChoice("More than one acceptible plugin was found", values: plugins) else {
+        guard !plugins.isEmpty,
+              let plugin = askChoice("More the one plugin with name `\(pluginName)` was found. Please selecect one", values: plugins) else {
             throw Error.noPlugin
         }
         return plugin
     }
 
-    private func findCandidates() throws -> [Plugin] {
-        findCandidates(in: try config().availablePlugins)
+    private func makeFolderName(repo: String) -> String {
+        return repo.replacingOccurrences(of: " ", with: "-").replacingOccurrences(of: "/", with: "-")
     }
 
-    private func loadCandidates() throws -> [Plugin] {
-        guard let repo = githubPath ?? ask("Could not locate required plugin. Please specify the repo:") else {
-            return []
-        }
-        let plugins = try githubService.downloadFiles(at: repo,
-                                                      to: Constants.pluginsPath,
-                                                      matchHandler: isPlugin).compactMap(loadPlugin)
-
-        try save(repo: repo, plugins: plugins)
-        return findCandidates(in: plugins)
-    }
-
-    private func findCandidates(in plugins: [Plugin]) -> [Plugin] {
-        var result = [Plugin]()
-        plugins.forEach { plugin in
-            if plugin.name == pluginName,
-               (githubPath ?? plugin.repo) == plugin.repo {
-                result.append(plugin)
+    private func parsePlugins(repo: String, directory: FileInfo) throws -> [Plugin] {
+        let packageSwift = try parsePackageSwift(directory: directory)
+        let products = try mapValues(in: packageSwift, arrayName: "products", valueName: "name")
+        var plugins = [Plugin]()
+        try products.forEach { product in
+            let file = try fileHelper.fileInfo(with: directory.url + "Sources/\(product)/Commands")
+            guard file.isExists, file.isDirectory else {
+                return
             }
+            let commandFiles = try fileHelper.contentsOfDirectory(at: file.url)
+            plugins.append(contentsOf: commandFiles.compactMap { file in
+                let name = file.url.deletingPathExtension().lastPathComponent
+                return .init(name: name, repo: repo, package: product)
+            })
+        }
+        return plugins
+    }
+
+    private func parsePackageSwift(directory: FileInfo) throws -> [String: Any] {
+        guard let packageSwiftFile = try? fileHelper.fileInfo(with: directory.url + Constants.packageSwiftPath),
+              packageSwiftFile.isExists,
+              let dump = try? shell(silent: "cd \(directory.url.path); swift package dump-package"),
+              dump.status == 0,
+              let data = dump.stdOut.data(using: .utf8),
+              let result = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
+            throw Error.noPackageSwift
         }
         return result
     }
 
-    private func isPlugin(_ file: FileInfo) -> Bool {
-        return pluginSpec(with: file) != nil
-    }
-
-    private func loadPlugin(with file: FileInfo) throws -> Plugin? {
-        guard let spec = pluginSpec(with: file),
-              let string = try? String(contentsOf: spec.url) else {
-            return nil
+    private func mapValues(in packageSwift: [String: Any], arrayName: String, valueName: String) throws -> [String] {
+        guard let products = packageSwift[arrayName] as? [[String: Any]] else {
+            throw Error.noSwiftPackageValue(arrayName)
         }
-        let decoder = YAMLDecoder()
-        return try decoder.decode(from: string)
-    }
-
-    private func pluginSpec(with file: FileInfo) -> FileInfo? {
-        let specURL = file.url + Constants.specFilename
-        guard file.isDirectory && fileHelper.fileManager.fileExists(atPath: specURL.path) else {
-            return nil
-        }
-        return try? fileHelper.fileInfo(with: specURL)
-    }
-
-    private func save(repo: String, plugins: [Plugin]) throws {
-        try ConfigFactory.update { config in
-            var config = config
-            config.pluginsRepos = config.addingUnique(repo, by: \.pluginsRepos)
-            return config
+        return products.compactMap { product in
+            product[valueName] as? String
         }
     }
 
-    private func updateDependencies(with plugin: Plugin) throws {
-        // TODO:
-    }
-
-    private func updateConfig(with plugin: Plugin) throws {
-        // TODO:
+    private func makePackageDependency(_ plugin: Plugin) -> String {
+        let components = plugin.repo.split(separator: " ")
+        let gitPath = "https://github.com/\(components[0]).git"
+        if components.count == 2 {
+            return ".package(url: \"\(gitPath)\", .upToNextMajor(from: \"\"))"
+        }
+        else {
+            return ".package(url: \"\(gitPath)\")"
+        }
     }
 }

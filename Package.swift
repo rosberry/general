@@ -15,7 +15,6 @@ let package = Package(
             targets: ["General"]),
     ],
     dependencies: [
-        //with bumped PathKit version
         .package(url: "https://github.com/rosberry/GeneralKit.git", .branch("feature/xcode-independent")),
         // {% PackageDependency %}
     ],

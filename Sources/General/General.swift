@@ -30,7 +30,6 @@ final class General: ParsableCommand {
                     subcommands: commands +
                                  [Create.self,
                                   List.self,
-                                  Setup.self,
                                   Upgrade.self,
                                   Add.self,
                                   Remove.self],

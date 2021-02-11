@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0147998025D51C6F00287F51 /* PluginCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0147997F25D51C6E00287F51 /* PluginCommand.swift */; };
 		01DA0D2B25D3FAE0001469B1 /* Remove.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA0D2A25D3FAE0001469B1 /* Remove.swift */; };
 		OBJ_198 /* BashCompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_96 /* BashCompletionsGenerator.swift */; };
 		OBJ_199 /* CompletionsGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_97 /* CompletionsGenerator.swift */; };
@@ -307,6 +308,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0147997F25D51C6E00287F51 /* PluginCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PluginCommand.swift; sourceTree = "<group>"; };
 		01DA0D2A25D3FAE0001469B1 /* Remove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Remove.swift; sourceTree = "<group>"; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"GeneralKit::GeneralKit::Product" /* GeneralKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeneralKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -759,6 +761,7 @@
 		OBJ_29 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				0147997F25D51C6E00287F51 /* PluginCommand.swift */,
 				OBJ_30 /* File.swift */,
 				OBJ_31 /* FileInfo.swift */,
 				OBJ_32 /* GeneralConfig.swift */,
@@ -797,7 +800,7 @@
 			path = Shell;
 			sourceTree = "<group>";
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -812,7 +815,6 @@
 				OBJ_191 /* Makefile */,
 				OBJ_192 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_52 /* ZIPFoundation 0.9.11 */ = {
@@ -1280,7 +1282,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_177 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1404,6 +1406,7 @@
 				OBJ_308 /* InsertStringService.swift in Sources */,
 				OBJ_309 /* Renderer.swift in Sources */,
 				OBJ_310 /* SetupService.swift in Sources */,
+				0147998025D51C6F00287F51 /* PluginCommand.swift in Sources */,
 				OBJ_311 /* Shell.swift in Sources */,
 				OBJ_312 /* SpecFactory.swift in Sources */,
 				OBJ_313 /* UpgradeService.swift in Sources */,

@@ -33,15 +33,19 @@ public final class Add: ParsableCommand {
 
     // MARK: - Parameters
 
-    @Argument(help: "Specifies the name of plugin that should be installed",
-              completion: .plugins)
-    var pluginName: String
+    @Option(name: [.customLong("commands"), .customShort("c")],
+            help: .init(stringLiteral: "Specifies concrere plugin commands that should be installed"))
+    var commands: String?
 
     @Option(name: [.customLong("repo"), .customShort("r")],
             help: .init(stringLiteral:
                 "Fetch plugin from specified github repo." +
                 " Format: \"<github>\\ [branch]\"."), completion: .pluginsRepos)
-    var githubPath: String?
+    var githubPath: String
+
+    @Option(name: [.customLong("force"), .customShort("f")],
+            help: .init(stringLiteral: "Rebuilds general completely event it is already complied with specified plugin"))
+    var shouldForceReuild: Bool = false
 
     private lazy var upgradeService: UpgradeService = .init()
     private lazy var insertStringService: InsertStringService = .init()
@@ -58,12 +62,25 @@ public final class Add: ParsableCommand {
     public func run() throws {
         let config = try self.config()
         do {
-            try fetchPluginsMeta()
-            let plugin = try findPlugin()
-            // TODO: Return to current
-            try upgradeService.upgrade(to: .concrete("feature/xcode-independent"), customizationHandler: {
-                try self.install(plugin)
-            })
+            let availabelePlugins = try fetchPluginsMeta()
+            let plugins = try findMatchPlugins(in: availabelePlugins)
+
+            func updateSourceCode() throws {
+                try plugins.forEach(self.updateSourceCode)
+            }
+
+            func needUpgrade() -> Bool {
+                shouldForceReuild || !config.installedPlugins.contains { plugin in
+                    plugin.repo == githubPath
+                }
+            }
+
+            if needUpgrade() {
+                // TODO: Return to current
+                try upgradeService.upgrade(to: .concrete("feature/xcode-independent"),
+                                           customizationHandler: updateSourceCode)
+            }
+            try plugins.forEach(self.registerCommands)
         }
         catch {
             try updateConfig { _ in
@@ -71,15 +88,10 @@ public final class Add: ParsableCommand {
             }
             throw error
         }
-        print(green("Plugin `\(pluginName)` is successfully installed"))
+        print(green("Plugin `\(githubPath)` is successfully installed"))
     }
 
     // MARK: - Private
-
-    private func install(_ plugin: Plugin) throws {
-        try updateSourceCode(with: plugin)
-        try registerCommand(with: plugin)
-    }
 
     private func updateSourceCode(with plugin: Plugin) throws {
         let url = URL(fileURLWithPath: Constants.downloadedSourcePath)
@@ -88,7 +100,7 @@ public final class Add: ParsableCommand {
                 throw Error.installation
         }
 
-        try insertStringService.insert(string: "\"\(plugin.package)\"",
+        try insertStringService.insert(string: "\"\(plugin.name)\"",
                                        template: Constants.targetDependencyTemplate,
                                        file: swiftPackageFile,
                                        terminator: ",")
@@ -98,67 +110,60 @@ public final class Add: ParsableCommand {
                                        file: swiftPackageFile,
                                        terminator: ",")
 
-        try insertStringService.insert(string: "import \(plugin.package)",
+        try insertStringService.insert(string: "import \(plugin.name)",
                                        template: Constants.importDependencyTemplate,
                                        file: generalFile)
 
         try updateConfig { config in
             var config = config
             config.installedPlugins.append(plugin)
-            config.availablePlugins.removeAll { availablePlugin in
-                availablePlugin == plugin
-            }
             return config
         }
     }
 
-    private func registerCommand(with plugin: Plugin) throws {
+    private func registerCommands(with plugin: Plugin) throws {
         try updateConfig { config in
             var config = config
-            if config.commands[plugin.command] != nil,
-                askBool(question: "Plugin `\(plugin.name)` overrides current command `\(plugin.command)`. Do you want to continue?") {
-                config.commands[plugin.command] = "\(plugin.package).\(plugin.name)"
+            plugin.commands.forEach { command in
+                if config.commands[command.executable] != nil,
+                    askBool(question: "Command `\(command.name)` from plugin `\(plugin.name)` overrides current command. Do you want to continue?") {
+                    config.commands[command.executable] = "\(plugin.name).\(command.name)"
+                }
             }
             return config
         }
     }
 
-    private func fetchPluginsMeta() throws {
-        guard let repo = githubPath else {
-            return
-        }
-        print("Fetching plugins from \(repo)")
-        let folder = "\(Constants.pluginsPath)/\(makeFolderName(repo: repo))"
-        try githubService.downloadFiles(at: repo, to: folder)
-        try repo.data(using: .utf8)?.write(to: .init(fileURLWithPath: "\(folder)/.git_source"))
+    private func fetchPluginsMeta() throws -> [Plugin] {
+        print("Fetching plugins from \(githubPath)")
+        let folder = "\(Constants.pluginsPath)/\(makeFolderName(repo: githubPath))"
+        try githubService.downloadFiles(at: githubPath, to: folder)
+        try githubPath.data(using: .utf8)?.write(to: .init(fileURLWithPath: "\(folder)/.git_source"))
         let files = try fileHelper.contentsOfDirectory(at: Constants.pluginsPath)
         var availablePlugins = [Plugin]()
         try files.forEach { file in
             guard file.isDirectory else {
                 return
             }
-            let plugins = try parsePlugins(repo: repo, directory: file)
+            let plugins = try parsePlugins(repo: githubPath, directory: file)
             availablePlugins.append(contentsOf: plugins)
         }
         try updateConfig { config in
             var config = config
-            config.availablePlugins = availablePlugins.filter { plugin in
-                !config.installedPlugins.contains(plugin)
-            }
-            config.pluginsRepos = config.addingUnique(repo, by: \.pluginsRepos)
+            config.pluginsRepos = config.addingUnique(githubPath, by: \.pluginsRepos)
             return config
         }
+        return availablePlugins
     }
 
-    private func findPlugin() throws -> Plugin {
-        let plugins = try self.config().availablePlugins.filter { plugin in
-            plugin.name == pluginName
+    private func findMatchPlugins(in plugins: [Plugin]) throws -> [Plugin] {
+        let plugins = plugins.filter { plugin in
+            plugin.repo == githubPath
         }
-        guard !plugins.isEmpty,
-              let plugin = askChoice("More the one plugin with name `\(pluginName)` was found. Please selecect one", values: plugins) else {
+        guard !plugins.isEmpty else {
             throw Error.noPlugin
         }
-        return plugin
+        return plugins
     }
 
     private func makeFolderName(repo: String) -> String {
@@ -168,20 +173,16 @@ public final class Add: ParsableCommand {
     private func parsePlugins(repo: String, directory: FileInfo) throws -> [Plugin] {
         let packageSwift = try parsePackageSwift(directory: directory)
         let products = try mapValues(in: packageSwift, arrayName: "products", valueName: "name")
-        var plugins = [Plugin]()
-        try products.forEach { product in
+        return try products.compactMap { product in
             let file = try fileHelper.fileInfo(with: directory.url + "Sources/\(product)/Commands")
             guard file.isExists,
                   file.isDirectory,
                 let repo = try? String(contentsOf: directory.url + ".git_source") else {
-                return
+                return nil
             }
             let commandFiles = try fileHelper.contentsOfDirectory(at: file.url)
-            plugins.append(contentsOf: commandFiles.compactMap { file in
-                self.parsePlugin(file, product: product, repo: repo)
-            })
+            return self.parsePlugin(commandFiles, product: product, repo: repo)
         }
-        return plugins
     }
 
     private func parsePackageSwift(directory: FileInfo) throws -> [String: Any] {
@@ -196,13 +197,16 @@ public final class Add: ParsableCommand {
         return result
     }
 
-    private func parsePlugin(_ file: FileInfo, product: String, repo: String) -> Plugin? {
-        let name = file.url.deletingPathExtension().lastPathComponent
-        let command = parseCommandName(in: file) ?? name.lowercased()
-        return Plugin(name: name, command: command, repo: repo, package: product)
+    private func parsePlugin(_ files: [FileInfo], product: String, repo: String) -> Plugin? {
+        let commands: [PluginCommand] = files.compactMap { file in
+            let name = file.url.deletingPathExtension().lastPathComponent
+            let executable = parseCommandExecutablle(in: file) ?? name.lowercased()
+            return .init(name: name, executable: executable)
+        }
+        return Plugin(name: product, commands: commands, repo: repo)
     }
 
-    private func parseCommandName(in file: FileInfo) -> String? {
+    private func parseCommandExecutablle(in file: FileInfo) -> String? {
         guard let sourceCode = try? String(contentsOf: file.url) else {
             return nil
         }

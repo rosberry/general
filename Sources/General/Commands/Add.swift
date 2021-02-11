@@ -29,9 +29,9 @@ public final class Add: ParsableCommand {
         }
     }
 
-    // MARK: - Parameters
-
     public static let configuration: CommandConfiguration = .init(abstract: "Adds plugin from repo")
+
+    // MARK: - Parameters
 
     @Argument(help: "Specifies the name of plugin that should be installed",
               completion: .plugins)
@@ -71,6 +71,7 @@ public final class Add: ParsableCommand {
             }
             throw error
         }
+        print(green("Plugin `\(pluginName)` is successfully installed"))
     }
 
     // MARK: - Private
@@ -144,6 +145,7 @@ public final class Add: ParsableCommand {
             config.availablePlugins = availablePlugins.filter { plugin in
                 !config.installedPlugins.contains(plugin)
             }
+            config.pluginsRepos = config.addingUnique(repo, by: \.pluginsRepos)
             return config
         }
     }

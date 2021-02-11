@@ -1,6 +1,7 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
+
 import Foundation
 import ArgumentParser
 import GeneralKit
@@ -8,6 +9,7 @@ import GeneralKit
 public final class Upgrade: ParsableCommand {
 
     private lazy var upgradeService: UpgradeService = .init()
+    public static let configuration: CommandConfiguration = .init(abstract: "Upgrades general to specified version")
 
     // MARK: - Parameters
 

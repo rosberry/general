@@ -10,7 +10,7 @@ import GeneralKit
 final class General: ParsableCommand {
 
     static var configuration: CommandConfiguration {
-        let config = ConfigFactory.default
+        let config = ConfigFactory.shared
         var commands = [ParsableCommand.Type]()
         var defaultCommand: ParsableCommand.Type?
 
@@ -32,7 +32,8 @@ final class General: ParsableCommand {
                                   List.self,
                                   Setup.self,
                                   Upgrade.self,
-                                  Add.self],
+                                  Add.self,
+                                  Remove.self],
                     defaultSubcommand: defaultCommand)
     }
 }

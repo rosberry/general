@@ -84,6 +84,7 @@ final class Remove: ParsableCommand {
                     }
                     remove(command: command)
                 }
+                print(green("Specified plugin commands are successfully removed"))
                 return config
             }
 
@@ -94,11 +95,13 @@ final class Remove: ParsableCommand {
                 plugin.commands.forEach { command in
                     remove(command: command.executable)
                 }
+                print(green("All plugin commands are successfully removed"))
                 return config
             }
 
             if let commands = self.commands {
                 commands.forEach(remove)
+                print(green("Specified commands are successfully removed"))
                 return config
             }
 

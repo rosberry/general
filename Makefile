@@ -3,6 +3,7 @@ bindir = $(prefix)/bin
 binary ?= general
 release_binary?=.build/release/General
 completions_folder=Scripts/completions
+zsh_completions_folder=/usr/local/share/zsh/site-functions
 
 $(binary): $(release_binary)
 	cp $(release_binary) $(binary)
@@ -18,6 +19,7 @@ completions: $(binary)
 install: build completions
 	mkdir -p $(bindir)
 	cp -f $(release_binary) $(bindir)/$(binary)
+	cp -f $(completions_folder)/_general $(zsh_completions_folder)
 
 build:
 	swift build -c release --disable-sandbox

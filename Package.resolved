@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/rosberry/GeneralIOs.git",
         "state": {
           "branch": "feature/general-ios",
-          "revision": "116c56adb3b206c6d02c342806e0894cda853e40",
+          "revision": "f0f07c65b2c30fa862788a25a99961a63c361b4b",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/rosberry/GeneralKit.git",
         "state": {
           "branch": "feature/xcode-independent",
-          "revision": "6f1446c33fa66b42d0d51c277515dc89c3b41168",
+          "revision": "94a4f5ebd6e382d0db09dd400c43d29464605dde",
           "version": null
         }
       },

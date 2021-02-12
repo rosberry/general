@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "config"
+            argument = "setup -r ios"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

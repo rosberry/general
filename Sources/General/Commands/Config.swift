@@ -76,20 +76,9 @@ final class Config: ParsableCommand {
         }
     }
 
-    private class Set: ParsableCommand {
-        static var configuration: CommandConfiguration {
-            return .init(abstract: "Allows to specify concrete config value",
-                         subcommands: [Repo.self])
-        }
-
-        required init() {
-            //
-        }
-    }
-
     static var configuration: CommandConfiguration {
         return .init(abstract: "Provides an access to config file",
-                     subcommands: [Print.self, Reset.self, Set.self],
+                     subcommands: [Print.self, Reset.self, Repo.self],
                     defaultSubcommand: Print.self)
     }
 }

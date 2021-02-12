@@ -16,13 +16,15 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/rosberry/GeneralKit.git", .branch("feature/xcode-independent")),
+        .package(url: "https://github.com/rosberry/GeneralIOs.git", .branch("feature/general-ios"))
         // {% PackageDependency %}
     ],
     targets: [
         .target(
             name: "General",
             dependencies: [
-                "GeneralKit"
+                "GeneralKit",
+                "GeneralIOs"
                 // {% TargetDependency %}
         ])
     ]

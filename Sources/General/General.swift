@@ -5,11 +5,21 @@
 import ArgumentParser
 import Foundation
 import GeneralKit
+import GeneralIOs
 // {% PluginImport %}
 
 final class General: ParsableCommand {
 
     static var configuration: CommandConfiguration {
+        ConfigFactory.default = .init(version: Constants.version,
+                                      installedPlugins: [.init(name: "GeneralIOs",
+                                                               commands: [.init(name: "Generate", executable: "gen"),
+                                                                          .init(name: "Setup", executable: "setup")],
+                                                               repo: "rosberry/GeneralIOs")],
+                                      defaultCommand: "gen",
+                                      commands: ["gen": "General.Generate",
+                                                 "setup": "General.Setup"])
+
         let config = ConfigFactory.shared
         var commands = [ParsableCommand.Type]()
         var defaultCommand: ParsableCommand.Type?

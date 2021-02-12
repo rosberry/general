@@ -66,11 +66,11 @@ final class Remove: ParsableCommand {
                 guard config.commands[command] != nil else {
                     return print(yellow("Command `\(command)` is not installed. Skipping."))
                 }
-                guard defaultConfig.commands[command] != nil ||
+                guard defaultConfig?.commands[command] != nil ||
                    askBool(question: "Command `\(command)` has not default alternative. Are youre sure you want to remove it?") else {
                     return
                 }
-                config.commands[command] = defaultConfig.commands[command]
+                config.commands[command] = defaultConfig?.commands[command]
             }
 
             if let pluginName = self.pluginName,

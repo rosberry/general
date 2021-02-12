@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "setup --repo &quot;rosberry/general-templates ios&quot;"
+            argument = "config"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

@@ -12,6 +12,7 @@ final class General: ParsableCommand {
 
     static var configuration: CommandConfiguration {
         ConfigFactory.default = .init(version: Constants.version,
+                                      templatesRepos: [:],
                                       installedPlugins: [.init(name: "GeneralIOs",
                                                                commands: [.init(name: "Generate", executable: "gen"),
                                                                           .init(name: "Setup", executable: "setup")],
@@ -42,7 +43,8 @@ final class General: ParsableCommand {
                                   List.self,
                                   Upgrade.self,
                                   Add.self,
-                                  Remove.self],
+                                  Remove.self,
+                                  Config.self],
                     defaultSubcommand: defaultCommand)
     }
 }

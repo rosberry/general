@@ -18,7 +18,8 @@ public final class Setup: ParsableCommand {
     @Option(name: [.customLong("repo"), .customShort("r")],
             help: .init(stringLiteral:
                 "Fetch templates from specified github repo." +
-                " Format: \"<github>\\ [branch]\"."))
+                            " Format: \"<github>\\ [branch]\"."),
+            completion: .templatesRepos)
     var githubPath: String
 
     @Option(name: [.customLong("global"), .customShort("g")],

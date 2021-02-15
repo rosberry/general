@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01DA34B125DA39D900EE469C /* RegEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA34B025DA39D900EE469C /* RegEx.swift */; };
 		OBJ_340 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_151 /* Document.swift */; };
 		OBJ_341 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_152 /* Element.swift */; };
 		OBJ_342 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_153 /* Error.swift */; };
@@ -540,6 +541,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01DA34B025DA39D900EE469C /* RegEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegEx.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"GeneralIOs::GeneralIOs::Product" /* GeneralIOs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeneralIOs.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1055,6 +1057,7 @@
 				OBJ_166 /* Models */,
 				OBJ_177 /* Services */,
 				OBJ_189 /* TmpFolder.swift */,
+				01DA34B025DA39D900EE469C /* RegEx.swift */,
 			);
 			name = GeneralKit;
 			path = .build/checkouts/GeneralKit/Sources/GeneralKit;
@@ -1521,7 +1524,7 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -1536,7 +1539,6 @@
 				OBJ_333 /* Makefile */,
 				OBJ_334 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_52 /* Objects */ = {
@@ -2090,7 +2092,7 @@
 			knownRegions = (
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_316 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -2276,6 +2278,7 @@
 				OBJ_507 /* Output.swift in Sources */,
 				OBJ_508 /* Plugin.swift in Sources */,
 				OBJ_509 /* PluginCommand.swift in Sources */,
+				01DA34B125DA39D900EE469C /* RegEx.swift in Sources */,
 				OBJ_510 /* TemplateSpec.swift in Sources */,
 				OBJ_511 /* Variable.swift in Sources */,
 				OBJ_512 /* XcodeprojSpec.swift in Sources */,

@@ -216,20 +216,7 @@ public final class Add: ParsableCommand {
         }
         let patterns = [":\\s*CommandConfiguration\\s*=.*\\s*\\(commandName:\\s*\"([a-zA-Z]+)\"",
                         "=\\s*CommandConfiguration\\s*\\(commandName:\\s*\"([a-zA-Z]+)\""]
-        let commands = patterns.compactMap { pattern in
-            parse(pattern: pattern, rangeIndex: 1, string: sourceCode)
-        }
-        return commands.first
-    }
-
-    private func parse(pattern: String, rangeIndex: Int, string: String) -> String? {
-        let fullRange = NSRange(location: 0, length: string.utf16.count)
-        guard let regex = try? NSRegularExpression(pattern: pattern),
-              let match = regex.firstMatch(in: string, options: [], range: fullRange),
-              let range = Range(match.range(at: rangeIndex), in: string) else {
-            return nil
-        }
-        return String(string[range])
+        return parseFirstRegexMatch(patterns: patterns, rangeIndex: 1, string: sourceCode)
     }
 
     private func mapValues(in packageSwift: [String: Any], arrayName: String, valueName: String) throws -> [String] {

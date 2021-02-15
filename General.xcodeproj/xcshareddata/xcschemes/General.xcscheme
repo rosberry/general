@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "setup -r ios"
+            argument = "-n Zoom -t ActionApplied Screen:Cropper"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

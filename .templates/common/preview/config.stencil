@@ -1,3 +1,5 @@
+{% include "header.stencil" %}
+
 #if DEBUG
 import SwiftUI
 
@@ -17,7 +19,7 @@ struct PreviewConfig: Hashable {
     static let device: [PreviewConfig] = [
         .init(name: "iPhone SE"),
         .init(name: "iPhone 8"),
-        .init(name: "iPhone 11", scheme: .dark),
+        .init(name: "iPhone 11", scheme: .dark)
     ]
 }
 
@@ -37,7 +39,7 @@ extension PreviewLayout: CustomStringConvertible, Hashable {
         }
     }
 
-    public static func ==(lsh: PreviewLayout, rhs: PreviewLayout) -> Bool {
+    public static func == (lsh: PreviewLayout, rhs: PreviewLayout) -> Bool {
         lsh.description == rhs.description
     }
 

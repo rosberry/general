@@ -118,7 +118,7 @@ final class Generate: ParsableCommand {
     private func add(_ templateSpec: TemplateSpec, to target: String?, isTestTarget: Bool, with environment: Environment) throws {
         for file in isTestTarget ? (templateSpec.testFiles ?? []) : templateSpec.files {
             // render template for the file based on common and template files
-            let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)
+            let rendered = try environment.renderTemplate(name: file.template, context: context)
             let module = name
             let fileName = file.fileName(in: module)
 

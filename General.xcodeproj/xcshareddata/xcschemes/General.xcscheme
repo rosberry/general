@@ -63,6 +63,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "gen -t rsb_button -n My --output Classes/Presentation/Common"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "setup -r rosberry/general\ develop"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

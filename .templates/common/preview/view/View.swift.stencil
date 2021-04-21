@@ -42,7 +42,7 @@ extension {% call class %}: UIViewRepresentable {
     }
 
     func updateUIView(_ uiViewController: {% call class %},
-      context: Context) {
+                      context: Context) {
     }
 }
 

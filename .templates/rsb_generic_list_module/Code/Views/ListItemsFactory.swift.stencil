@@ -3,7 +3,12 @@
 import GenericModule
 import CollectionViewTools
 
-final class {{ name | upperFirstLetter }}Factory: GenericSectionItemsFactory<{{ name | upperFirstLetter }}State, GeneralCollectionViewDiffSectionItem, {{ name | upperFirstLetter }}ModuleDependencies, {{ name | upperFirstLetter }}ViewOutput> {
+private typealias Factory = GenericSectionItemsFactory<{{ name | upperFirstLetter }}State,
+                                                       GeneralCollectionViewDiffSectionItem,
+                                                       {{ name | upperFirstLetter }}ModuleDependencies,
+                                                       {{ name | upperFirstLetter }}ViewOutput>
+
+final class {{ name | upperFirstLetter }}Factory: Factory {
 
     override func makeSectionItems(state: {{ name | upperFirstLetter }}State) -> [GeneralCollectionViewDiffSectionItem] {
         []

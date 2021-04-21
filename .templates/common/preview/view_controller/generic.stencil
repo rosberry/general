@@ -7,4 +7,5 @@ final class Preview{{ name | upperFirstLetter  }}ModuleOutput: {{ name | upperFi
 }
 {% endblock %}
 
-{% block viewController %}{{ name | upperFirstLetter  }}Module(state: .init(), output: Preview{{ name | upperFirstLetter  }}ModuleOutput()).viewController{% endblock %}
+{% block viewController %}let output = Preview{{ name | upperFirstLetter }}ModuleOutput()
+        return {{ name | upperFirstLetter  }}Module(state: .init(), output: output).viewController{% endblock %}

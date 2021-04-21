@@ -62,7 +62,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_button -n My --output Classes/Presentation/Common"
+            argument = "gen -t rsb_service -n HelloWorld --output Classes/Buisness\ Logic\Services"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

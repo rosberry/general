@@ -2,6 +2,6 @@
 
 import GenericModule
 
-final class {{ name | upperFirstLetter }}ViewModel: FactoryViewModel<{{ name | upperFirstLetter }}Factory> {
+final class {{ name | upperFirstLetter }}ViewModel: FactoryViewModel<{{ name | upperFirstLetter }}ListItemsFactory> {
 
 }

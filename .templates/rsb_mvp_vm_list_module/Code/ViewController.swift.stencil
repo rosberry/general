@@ -29,7 +29,7 @@ final class {{ name | upperFirstLetter }}ViewController: UIViewController {
         collectionView.alwaysBounceVertical = true
         collectionView.contentInsetAdjustmentBehavior = .never
         collectionView.isPrefetchingEnabled = false
-        return view
+        return collectionView
     }()
 
     // MARK: - Lifecycle

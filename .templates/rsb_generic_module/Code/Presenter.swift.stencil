@@ -2,6 +2,6 @@
 
 import GenericModule
 
-final class {{ name | upperFirstLetter }}Presenter: {{ name | upperFirstLetter }}Module.Presenter {
+final class {{ name | upperFirstLetter }}Presenter: {{ name | upperFirstLetter }}Namespace.Presenter {
 
 }

@@ -1,0 +1,19 @@
+{% include "header.stencil" %}
+
+import GenericModule
+import CollectionViewTools
+
+enum {{ name | upperFirstLetter }}Namespace {
+    typealias Dependencies = Any
+
+    typealias Factory = GenericSectionItemsFactory<{{ name | upperFirstLetter }}State,
+                                                   GeneralCollectionViewDiffSectionItem,
+                                                   Dependencies,
+                                                   {{ name | upperFirstLetter }}ViewOutput>
+
+    typealias Module = FactoryModule<{{ name | upperFirstLetter }}ListItemsFactory,
+                                     {{ name | upperFirstLetter }}ViewModel,
+                                     {{ name | upperFirstLetter }}ViewController>
+
+    typealias Presenter = Module.FactoryPresenter<MyModuleOutput> & MyModuleInput & MyViewOutput
+}

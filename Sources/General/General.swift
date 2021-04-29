@@ -8,43 +8,82 @@ import GeneralKit
 import GeneralIOs
 // {% PluginImport %}
 
+
 final class General: ParsableCommand {
 
-    static var configuration: CommandConfiguration {
-        ConfigFactory.default = .init(version: Constants.version,
-                                      templatesRepos: [:],
-                                      installedPlugins: [.init(name: "GeneralIOs",
-                                                               commands: [.init(name: "Generate", executable: "gen"),
-                                                                          .init(name: "Setup", executable: "setup")],
-                                                               repo: "rosberry/GeneralIOs")],
-                                      defaultCommand: "gen",
-                                      commands: ["gen": "General.Generate",
-                                                 "setup": "General.Setup"])
+    enum CodingKeys: CodingKey {
+         case template
+         case dynamic(String)
 
-        let config = ConfigFactory.shared
-        var commands = [ParsableCommand.Type]()
-        var defaultCommand: ParsableCommand.Type?
+         init?(stringValue: String) {
+             switch stringValue {
+             case "template":
+                 self = .template
+             case stringValue where General.attributes.contains(stringValue):
+                 self = .dynamic(stringValue)
+             default:
+                 return nil
+             }
+         }
 
-        let commandsMap = config?.commands.compactMapValues({ className in
-            NSClassFromString(className) as? ParsableCommand.Type
-        })
+         var stringValue: String {
+             switch self {
+             case .template:
+                 return "template"
+             case let .dynamic(name):
+                 return name
+             }
+         }
 
-        if let map = commandsMap {
-            commands = Array(map.values)
-            if let key = config?.defaultCommand {
-                defaultCommand = map[key]
-            }
+         // Not used
+         var intValue: Int? { nil }
+         init?(intValue _: Int) { nil }
+    }
+
+    @Argument()
+    var template: String
+
+    static var attributes: [String] = []
+
+    static func preprocess(_ arguments: [String]) throws {
+        let templateName = arguments[1]
+        // TODO: Load arguments for template name
+        let attributes: [String] = ["argument", "second_argument"]
+        General.attributes = attributes
+    }
+
+    static var configuration: CommandConfiguration = .init(commandName: "general", abstract: "Generates modules from templates.")
+
+    var attributes: [String: String] = [:]
+
+    init() {
+
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        template = try container.decode(String.self, forKey: .template)
+        try General.attributes.forEach { name in
+            attributes[name] = try container.decode(String.self, forKey: .dynamic(name))
         }
+    }
 
-        return .init(abstract: "Generates code from templates.",
-                     version: Constants.version,
-                    subcommands: commands +
-                                 [Create.self,
-                                  List.self,
-                                  Upgrade.self,
-                                  Add.self,
-                                  Remove.self,
-                                  Config.self],
-                    defaultSubcommand: defaultCommand)
+    func run() throws {
+        print(template)
+        print(attributes)
+    }
+}
+
+extension General: CustomReflectable {
+    var customMirror: Mirror {
+        let attributesChildren: [Mirror.Child] = General.attributes.map { name in
+            let option = Option<String>(name: .shortAndLong)
+            let child = Mirror.Child(label: name, value: option)
+            return child
+        }
+        let children = [
+            Mirror.Child(label: "template", value: _template)
+        ]
+        return Mirror(General(), children: children + attributesChildren)
     }
 }

@@ -53,6 +53,10 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-n Zoom -t ActionApplied Screen:Cropper"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "test -a some -s next"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

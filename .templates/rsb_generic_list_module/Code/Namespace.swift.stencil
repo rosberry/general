@@ -15,5 +15,5 @@ enum {{ name | upperFirstLetter }}Namespace {
                                      {{ name | upperFirstLetter }}ViewModel,
                                      {{ name | upperFirstLetter }}ViewController>
 
-    typealias Presenter = Module.FactoryPresenter<MyModuleOutput> & MyModuleInput & MyViewOutput
+    typealias Presenter = Module.FactoryPresenter<{{ name | upperFirstLetter }}ModuleOutput> & {{ name | upperFirstLetter }}ModuleInput & {{ name | upperFirstLetter }}ViewOutput
 }

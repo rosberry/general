@@ -7,11 +7,19 @@ protocol {{ name | upperFirstLetter }}ModuleInput: ModuleInput<{{ name | upperFi
 }
 
 protocol {{ name | upperFirstLetter }}ModuleOutput: class {
-
     func {{ name | lowerFirstLetter }}ModuleClosed(_ moduleInput: {{ name | upperFirstLetter }}ModuleInput)
 }
 
-final class {{ name | upperFirstLetter }}Module: {{ name | upperFirstLetter }}Namespace.Module {
+typealias {{ name | upperFirstLetter }}ModuleDependencies = Any
+
+{%align%}final class {{ name | upperFirstLetter }}Module: FactoryModule<{%anchor%}{{ name | upperFirstLetter }}ListItemsFactory,
+                                                                        {{ name | upperFirstLetter }}ViewModel,
+                                                                        {{ name | upperFirstLetter }}ViewController>{%endalign%} {
+
+{%align%}    typealias Presenter = {{ name | upperFirstLetter }}Module.FactoryPresenter<{%anchor%}{{ name | upperFirstLetter }}ModuleOutput> &
+                                                                                        {{ name | upperFirstLetter }}ModuleInput &
+                                                                                        {{ name | upperFirstLetter }}ViewOutput{%endalign%}
+
     override func makeInput() -> BasePresenter {
         {{ name | upperFirstLetter }}Presenter(state: state, dependencies: [])
     }

@@ -62,12 +62,8 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "gen -t rsb_service -n HelloWorld --output Classes/Buisness\ Logic\Services"
+            argument = "-n Hello -t rsb_generic_module"
             isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "setup -r rosberry/general\ develop"
-            isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>
    </LaunchAction>

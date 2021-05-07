@@ -4,7 +4,6 @@ _general_commandname=$words[1]
 typeset -A opt_args
 
 _general() {
-    zstyle ":completion:*" matcher-list ''
     integer ret=1
     local -a args
     args+=(

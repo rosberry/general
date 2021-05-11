@@ -4,10 +4,6 @@
 
 import ArgumentParser
 import Foundation
-import GeneralKit
-import GeneralIOs
-// {% PluginImport %}
-
 
 final class General: ParsableCommand {
 

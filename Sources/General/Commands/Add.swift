@@ -5,7 +5,6 @@
 import Foundation
 import ArgumentParser
 import Yams
-import GeneralKit
 
 public final class Add: ParsableCommand {
 

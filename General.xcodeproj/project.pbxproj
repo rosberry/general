@@ -7,6 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0109948A264A2DB900643FAE /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109946A264A2DB900643FAE /* Constants.swift */; };
+		0109948B264A2DB900643FAE /* TmpFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109946B264A2DB900643FAE /* TmpFolder.swift */; };
+		0109948C264A2DB900643FAE /* ColorString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109946C264A2DB900643FAE /* ColorString.swift */; };
+		0109948D264A2DB900643FAE /* Output.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109946E264A2DB900643FAE /* Output.swift */; };
+		0109948E264A2DB900643FAE /* FileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109946F264A2DB900643FAE /* FileInfo.swift */; };
+		0109948F264A2DB900643FAE /* XcodeprojSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099470264A2DB900643FAE /* XcodeprojSpec.swift */; };
+		01099490264A2DB900643FAE /* TemplateSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099471264A2DB900643FAE /* TemplateSpec.swift */; };
+		01099491264A2DB900643FAE /* PluginCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099472264A2DB900643FAE /* PluginCommand.swift */; };
+		01099492264A2DB900643FAE /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099473264A2DB900643FAE /* File.swift */; };
+		01099493264A2DB900643FAE /* GeneralSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099474264A2DB900643FAE /* GeneralSpec.swift */; };
+		01099494264A2DB900643FAE /* Variable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099475264A2DB900643FAE /* Variable.swift */; };
+		01099495264A2DB900643FAE /* GeneralConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099476264A2DB900643FAE /* GeneralConfig.swift */; };
+		01099496264A2DB900643FAE /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099477264A2DB900643FAE /* Plugin.swift */; };
+		01099497264A2DB900643FAE /* Ask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099478264A2DB900643FAE /* Ask.swift */; };
+		01099498264A2DB900643FAE /* ParsableCommand+Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109947A264A2DB900643FAE /* ParsableCommand+Config.swift */; };
+		01099499264A2DB900643FAE /* CustomStringConvertible+Mirror.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109947B264A2DB900643FAE /* CustomStringConvertible+Mirror.swift */; };
+		0109949A264A2DB900643FAE /* URL+Paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109947C264A2DB900643FAE /* URL+Paths.swift */; };
+		0109949B264A2DB900643FAE /* RegEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109947D264A2DB900643FAE /* RegEx.swift */; };
+		0109949C264A2DB900643FAE /* InsertStringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0109947F264A2DB900643FAE /* InsertStringService.swift */; };
+		0109949D264A2DB900643FAE /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099480264A2DB900643FAE /* FileHelper.swift */; };
+		0109949E264A2DB900643FAE /* GithubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099481264A2DB900643FAE /* GithubService.swift */; };
+		0109949F264A2DB900643FAE /* CompletionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099482264A2DB900643FAE /* CompletionsService.swift */; };
+		010994A0264A2DB900643FAE /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099484264A2DB900643FAE /* Shell.swift */; };
+		010994A1264A2DB900643FAE /* SpecFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099485264A2DB900643FAE /* SpecFactory.swift */; };
+		010994A2264A2DB900643FAE /* UpgradeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099486264A2DB900643FAE /* UpgradeService.swift */; };
+		010994A3264A2DB900643FAE /* SetupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099487264A2DB900643FAE /* SetupService.swift */; };
+		010994A4264A2DB900643FAE /* ConfigFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099488264A2DB900643FAE /* ConfigFactory.swift */; };
+		010994A5264A2DB900643FAE /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01099489264A2DB900643FAE /* Renderer.swift */; };
 		01DA34B125DA39D900EE469C /* RegEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01DA34B025DA39D900EE469C /* RegEx.swift */; };
 		OBJ_340 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_151 /* Document.swift */; };
 		OBJ_341 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_152 /* Element.swift */; };
@@ -541,6 +569,34 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0109946A264A2DB900643FAE /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		0109946B264A2DB900643FAE /* TmpFolder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TmpFolder.swift; sourceTree = "<group>"; };
+		0109946C264A2DB900643FAE /* ColorString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorString.swift; sourceTree = "<group>"; };
+		0109946E264A2DB900643FAE /* Output.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Output.swift; sourceTree = "<group>"; };
+		0109946F264A2DB900643FAE /* FileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileInfo.swift; sourceTree = "<group>"; };
+		01099470264A2DB900643FAE /* XcodeprojSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XcodeprojSpec.swift; sourceTree = "<group>"; };
+		01099471264A2DB900643FAE /* TemplateSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateSpec.swift; sourceTree = "<group>"; };
+		01099472264A2DB900643FAE /* PluginCommand.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PluginCommand.swift; sourceTree = "<group>"; };
+		01099473264A2DB900643FAE /* File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		01099474264A2DB900643FAE /* GeneralSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralSpec.swift; sourceTree = "<group>"; };
+		01099475264A2DB900643FAE /* Variable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Variable.swift; sourceTree = "<group>"; };
+		01099476264A2DB900643FAE /* GeneralConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralConfig.swift; sourceTree = "<group>"; };
+		01099477264A2DB900643FAE /* Plugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
+		01099478264A2DB900643FAE /* Ask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ask.swift; sourceTree = "<group>"; };
+		0109947A264A2DB900643FAE /* ParsableCommand+Config.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ParsableCommand+Config.swift"; sourceTree = "<group>"; };
+		0109947B264A2DB900643FAE /* CustomStringConvertible+Mirror.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CustomStringConvertible+Mirror.swift"; sourceTree = "<group>"; };
+		0109947C264A2DB900643FAE /* URL+Paths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+Paths.swift"; sourceTree = "<group>"; };
+		0109947D264A2DB900643FAE /* RegEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegEx.swift; sourceTree = "<group>"; };
+		0109947F264A2DB900643FAE /* InsertStringService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InsertStringService.swift; sourceTree = "<group>"; };
+		01099480264A2DB900643FAE /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		01099481264A2DB900643FAE /* GithubService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GithubService.swift; sourceTree = "<group>"; };
+		01099482264A2DB900643FAE /* CompletionsService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompletionsService.swift; sourceTree = "<group>"; };
+		01099484264A2DB900643FAE /* Shell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
+		01099485264A2DB900643FAE /* SpecFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecFactory.swift; sourceTree = "<group>"; };
+		01099486264A2DB900643FAE /* UpgradeService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpgradeService.swift; sourceTree = "<group>"; };
+		01099487264A2DB900643FAE /* SetupService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetupService.swift; sourceTree = "<group>"; };
+		01099488264A2DB900643FAE /* ConfigFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigFactory.swift; sourceTree = "<group>"; };
+		01099489264A2DB900643FAE /* Renderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
 		01DA34B025DA39D900EE469C /* RegEx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegEx.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -939,6 +995,73 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01099469264A2DB900643FAE /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				0109946A264A2DB900643FAE /* Constants.swift */,
+				0109946B264A2DB900643FAE /* TmpFolder.swift */,
+				0109946C264A2DB900643FAE /* ColorString.swift */,
+				0109946D264A2DB900643FAE /* Models */,
+				01099478264A2DB900643FAE /* Ask.swift */,
+				01099479264A2DB900643FAE /* Extensions */,
+				0109947D264A2DB900643FAE /* RegEx.swift */,
+				0109947E264A2DB900643FAE /* Services */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		0109946D264A2DB900643FAE /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0109946E264A2DB900643FAE /* Output.swift */,
+				0109946F264A2DB900643FAE /* FileInfo.swift */,
+				01099470264A2DB900643FAE /* XcodeprojSpec.swift */,
+				01099471264A2DB900643FAE /* TemplateSpec.swift */,
+				01099472264A2DB900643FAE /* PluginCommand.swift */,
+				01099473264A2DB900643FAE /* File.swift */,
+				01099474264A2DB900643FAE /* GeneralSpec.swift */,
+				01099475264A2DB900643FAE /* Variable.swift */,
+				01099476264A2DB900643FAE /* GeneralConfig.swift */,
+				01099477264A2DB900643FAE /* Plugin.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		01099479264A2DB900643FAE /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				0109947A264A2DB900643FAE /* ParsableCommand+Config.swift */,
+				0109947B264A2DB900643FAE /* CustomStringConvertible+Mirror.swift */,
+				0109947C264A2DB900643FAE /* URL+Paths.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0109947E264A2DB900643FAE /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0109947F264A2DB900643FAE /* InsertStringService.swift */,
+				01099480264A2DB900643FAE /* FileHelper.swift */,
+				01099481264A2DB900643FAE /* GithubService.swift */,
+				01099482264A2DB900643FAE /* CompletionsService.swift */,
+				01099483264A2DB900643FAE /* Shell */,
+				01099485264A2DB900643FAE /* SpecFactory.swift */,
+				01099486264A2DB900643FAE /* UpgradeService.swift */,
+				01099487264A2DB900643FAE /* SetupService.swift */,
+				01099488264A2DB900643FAE /* ConfigFactory.swift */,
+				01099489264A2DB900643FAE /* Renderer.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		01099483264A2DB900643FAE /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				01099484264A2DB900643FAE /* Shell.swift */,
+			);
+			path = Shell;
+			sourceTree = "<group>";
+		};
 		OBJ_101 /* Project */ = {
 			isa = PBXGroup;
 			children = (
@@ -1624,6 +1747,7 @@
 		OBJ_8 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				01099469264A2DB900643FAE /* Common */,
 				OBJ_9 /* Commands */,
 				OBJ_18 /* General.swift */,
 				OBJ_19 /* main.swift */,
@@ -2226,15 +2350,43 @@
 			buildActionMask = 0;
 			files = (
 				OBJ_413 /* Add.swift in Sources */,
+				010994A4264A2DB900643FAE /* ConfigFactory.swift in Sources */,
+				010994A1264A2DB900643FAE /* SpecFactory.swift in Sources */,
+				01099494264A2DB900643FAE /* Variable.swift in Sources */,
+				0109948A264A2DB900643FAE /* Constants.swift in Sources */,
 				OBJ_414 /* Config.swift in Sources */,
+				0109949A264A2DB900643FAE /* URL+Paths.swift in Sources */,
 				OBJ_415 /* Create.swift in Sources */,
+				01099496264A2DB900643FAE /* Plugin.swift in Sources */,
 				OBJ_416 /* Generate.swift in Sources */,
+				01099493264A2DB900643FAE /* GeneralSpec.swift in Sources */,
 				OBJ_417 /* List.swift in Sources */,
+				010994A5264A2DB900643FAE /* Renderer.swift in Sources */,
 				OBJ_418 /* Remove.swift in Sources */,
+				0109948F264A2DB900643FAE /* XcodeprojSpec.swift in Sources */,
+				01099497264A2DB900643FAE /* Ask.swift in Sources */,
+				0109949B264A2DB900643FAE /* RegEx.swift in Sources */,
+				010994A3264A2DB900643FAE /* SetupService.swift in Sources */,
+				0109948C264A2DB900643FAE /* ColorString.swift in Sources */,
+				0109948B264A2DB900643FAE /* TmpFolder.swift in Sources */,
+				010994A2264A2DB900643FAE /* UpgradeService.swift in Sources */,
+				01099495264A2DB900643FAE /* GeneralConfig.swift in Sources */,
+				0109949F264A2DB900643FAE /* CompletionsService.swift in Sources */,
+				010994A0264A2DB900643FAE /* Shell.swift in Sources */,
+				01099491264A2DB900643FAE /* PluginCommand.swift in Sources */,
+				0109949C264A2DB900643FAE /* InsertStringService.swift in Sources */,
+				0109948E264A2DB900643FAE /* FileInfo.swift in Sources */,
 				OBJ_419 /* Setup.swift in Sources */,
+				0109949E264A2DB900643FAE /* GithubService.swift in Sources */,
+				0109948D264A2DB900643FAE /* Output.swift in Sources */,
 				OBJ_420 /* Upgrade.swift in Sources */,
+				01099490264A2DB900643FAE /* TemplateSpec.swift in Sources */,
 				OBJ_421 /* General.swift in Sources */,
+				01099499264A2DB900643FAE /* CustomStringConvertible+Mirror.swift in Sources */,
+				01099498264A2DB900643FAE /* ParsableCommand+Config.swift in Sources */,
+				01099492264A2DB900643FAE /* File.swift in Sources */,
 				OBJ_422 /* main.swift in Sources */,
+				0109949D264A2DB900643FAE /* FileHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

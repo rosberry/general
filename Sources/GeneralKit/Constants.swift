@@ -5,7 +5,6 @@
 import Foundation
 
 public enum Constants {
-    public static let version = "3.0"
     public static let shell = "/bin/bash"
     public static let generalHomePath = "\(NSHomeDirectory())/.general"
     public static let configPath = "\(generalHomePath)/.config"

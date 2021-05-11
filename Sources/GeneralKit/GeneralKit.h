@@ -2,7 +2,7 @@
 //  GeneralKit.h
 //  GeneralKit
 //
-//  Created by Nick Tyunin on 05.02.2021.
+//  Created by Nick Tyunin on 11.05.2021.
 //
 
 #import <Foundation/Foundation.h>

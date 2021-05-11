@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "General::General"
-               BuildableName = "General"
-               BlueprintName = "General"
+               BlueprintIdentifier = "General::GeneralIOs"
+               BuildableName = "GeneralIOs"
+               BlueprintName = "GeneralIOs"
                ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -44,15 +44,15 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "General::General"
-            BuildableName = "General"
-            BlueprintName = "General"
+            BlueprintIdentifier = "General::GeneralIOs"
+            BuildableName = "GeneralIOs"
+            BlueprintName = "GeneralIOs"
             ReferencedContainer = "container:General.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "add GeneralIOs"
+            argument = "json-spec"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

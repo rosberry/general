@@ -4,6 +4,7 @@
 
 import Foundation
 import ArgumentParser
+import GeneralKit
 
 final class Remove: ParsableCommand {
 
@@ -45,66 +46,5 @@ final class Remove: ParsableCommand {
 
     public func run() throws {
 
-        let defaultConfig = ConfigFactory.default
-        try updateConfig { config in
-            var config = config
-
-            func isContainingCommand(withName name: String, in plugin: Plugin) -> Bool {
-                plugin.commands.contains { command in
-                    command.name == name || command.executable == name
-                }
-            }
-
-            func findPlugin(with name: String) -> Plugin? {
-                config.installedPlugins.first { plugin in
-                     plugin.name == name
-                }
-            }
-
-            func remove(command: String) {
-                guard config.commands[command] != nil else {
-                    return print(yellow("Command `\(command)` is not installed. Skipping."))
-                }
-                guard defaultConfig?.commands[command] != nil ||
-                   askBool(question: "Command `\(command)` has not default alternative. Are youre sure you want to remove it?") else {
-                    return
-                }
-                config.commands[command] = defaultConfig?.commands[command]
-            }
-
-            if let pluginName = self.pluginName,
-               let commands = self.commands {
-                guard let plugin = findPlugin(with: pluginName) else {
-                    throw Error.noPlugin(pluginName)
-                }
-                commands.forEach { command in
-                    guard isContainingCommand(withName: command, in: plugin) else {
-                        return print(yellow("Plugin `\(pluginName)` does not contains command `\(command)`"))
-                    }
-                    remove(command: command)
-                }
-                print(green("Specified plugin commands are successfully removed"))
-                return config
-            }
-
-            if let pluginName = self.pluginName {
-                guard let plugin = findPlugin(with: pluginName) else {
-                    throw Error.noPlugin(pluginName)
-                }
-                plugin.commands.forEach { command in
-                    remove(command: command.executable)
-                }
-                print(green("All plugin commands are successfully removed"))
-                return config
-            }
-
-            if let commands = self.commands {
-                commands.forEach(remove)
-                print(green("Specified commands are successfully removed"))
-                return config
-            }
-
-            throw Error.noSpecification
-        }
     }
 }

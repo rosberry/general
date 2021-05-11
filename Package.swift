@@ -9,21 +9,36 @@ import PackageDescription
 let package = Package(
     name: "General",
     platforms: [.macOS(.v10_12)],
-    products: [
-        .executable(
-            name: "General",
-            targets: ["General"]),
-    ],
     dependencies: [
-        .package(url: "https://github.com/rosberry/GeneralKit.git", .branch("feature/xcode-independent")),
-        .package(url: "https://github.com/rosberry/GeneralIOs.git", .branch("feature/general-ios"))
+        //with bumped PathKit version
+        .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),
+        .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.1.0")),
+        .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "0.0.0")),
+        .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0")),
+        .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0"))
     ],
     targets: [
+        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
+        // Targets can depend on other targets in this package, and on products in packages which this package depends on.
         .target(
             name: "General",
             dependencies: [
+                "GeneralKit"
+        ]),
+        .target(
+            name: "GeneralIOs",
+            dependencies: [
                 "GeneralKit",
-                "GeneralIOs"
+                "XcodeProj"
+        ]),
+        .target(
+            name: "GeneralKit",
+            dependencies: [
+                "StencilSwiftKit",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "Yams",
+                "ZIPFoundation"
         ])
     ]
 )
+

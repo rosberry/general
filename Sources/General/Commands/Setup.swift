@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import GeneralKit
 import ArgumentParser
 
 public final class Setup: ParsableCommand {

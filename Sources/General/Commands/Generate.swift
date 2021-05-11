@@ -4,6 +4,7 @@
 
 import Foundation
 import ArgumentParser
+import GeneralKit
 
 public final class Generate: ParsableCommand {
     
@@ -24,7 +25,7 @@ public final class Generate: ParsableCommand {
     var output: String?
 
     @Argument(help: "The additional variables for templates.")
-    var variables: [GeneralKit.Variable] = []
+    var variables: [Variable] = []
 
     // MARK: - Lifecycle
 

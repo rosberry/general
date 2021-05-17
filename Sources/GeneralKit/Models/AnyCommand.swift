@@ -21,6 +21,9 @@ public final class AnyCommand: ParsableCommand {
     }
 
     public final class AnyOption: Codable {
+
+        static let noValueOptions: [String] = ["version", "help"]
+
         public var long: String
         public var short: String?
 
@@ -30,8 +33,7 @@ public final class AnyCommand: ParsableCommand {
         }
 
         public func parse(arguments: [String]) -> (String, [String])? {
-            guard arguments.count > 1,
-                  var first = arguments.first else {
+            guard var first = arguments.first else {
                 return nil
             }
             if first.starts(with: "--") {
@@ -49,9 +51,20 @@ public final class AnyCommand: ParsableCommand {
             else {
                 return nil
             }
-            let value = arguments[1]
-            let slice = arguments.dropFirst(2)
-            let arguments = Array(slice)
+            var value: String = ""
+            var arguments = arguments
+            if AnyOption.noValueOptions.contains(long) {
+                let slice = arguments.dropFirst()
+                arguments = Array(slice)
+            }
+            else if arguments.count > 1 {
+                value = arguments[1]
+                let slice = arguments.dropFirst(2)
+                arguments = Array(slice)
+            }
+            else {
+                return nil
+            }
             return (value, arguments)
         }
     }
@@ -106,9 +119,6 @@ public final class AnyCommand: ParsableCommand {
 
         options.values.forEach { option in
             guard let parseResult = option.parse(arguments: arguments) else {
-                if (option.long == "template") {
-                    let result = option.parse(arguments: arguments)
-                }
                 return
             }
             result.options[option.long] = parseResult.0

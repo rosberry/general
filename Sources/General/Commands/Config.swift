@@ -76,9 +76,28 @@ final class Config: ParsableCommand {
         }
     }
 
+    private final class Use: ParsableCommand {
+        static let configuration: CommandConfiguration = .init(abstract: "Set default executable instance for specific command")
+
+        @Option(name: .shortAndLong, help: "The executable instance for the command", completion: .executables)
+        var executable: String
+
+        @Option(name: .customLong("for"), help: "The name on the commant")
+        var command: String
+
+        func run() throws {
+            try ConfigFactory.update { config in
+                var config = config
+                config.overrides[command] = executable
+                return config
+            }
+            print("`\(executable)` is choosen as default executable for the command `\(command)`")
+        }
+    }
+
     static var configuration: CommandConfiguration {
         return .init(abstract: "Provides an access to config file",
-                     subcommands: [Print.self, Reset.self, Repo.self],
+                     subcommands: [Print.self, Reset.self, Repo.self, Use.self],
                     defaultSubcommand: Print.self)
     }
 }

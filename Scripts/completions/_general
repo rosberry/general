@@ -20,7 +20,6 @@ _general() {
                 'create:Creates a new template.'
                 'list:List of available templates.'
                 'setup:Provides your environment with templates'
-                'plugin:Specifies onperations for plugins'
                 'config:Provides an access to config file'
                 'upgrade:Upgrades general to specified version'
                 'help:Show subcommand help information.'
@@ -40,9 +39,6 @@ _general() {
                     ;;
                 (setup)
                     _general_setup
-                    ;;
-                (plugin)
-                    _general_plugin
                     ;;
                 (config)
                     _general_config
@@ -113,63 +109,6 @@ _general_setup() {
     return ret
 }
 
-_general_plugin() {
-    integer ret=1
-    local -a args
-    args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
-        '(-): :->command'
-        '(-)*:: :->arg'
-    )
-    _arguments -w -s -S $args[@] && ret=0
-    case $state in
-        (command)
-            local subcommands
-            subcommands=(
-                'add:Adds plugin from repo'
-                'activate:Activates installed plugin'
-            )
-            _describe "subcommand" subcommands
-            ;;
-        (arg)
-            case ${words[1]} in
-                (add)
-                    _general_plugin_add
-                    ;;
-                (activate)
-                    _general_plugin_activate
-                    ;;
-            esac
-            ;;
-    esac
-
-    return ret
-}
-
-_general_plugin_add() {
-    integer ret=1
-    local -a args
-    args+=(
-        '(--path -p)'{--path,-p}'[The path to the plugin binary that should be installed]:path:_files -/'
-        '(-h --help)'{-h,--help}'[Print help information.]'
-    )
-    _arguments -w -s -S $args[@] && ret=0
-
-    return ret
-}
-
-_general_plugin_activate() {
-    integer ret=1
-    local -a args
-    args+=(
-        ':path:_files -/'
-        '(-h --help)'{-h,--help}'[Print help information.]'
-    )
-    _arguments -w -s -S $args[@] && ret=0
-
-    return ret
-}
-
 _general_config() {
     integer ret=1
     local -a args
@@ -186,6 +125,7 @@ _general_config() {
                 'print:Displays content of .config file'
                 'reset:Sets .config file to its default value'
                 'repo:Allows to add templates repo for easy setup'
+                'use:Set default executable instance for specific command'
             )
             _describe "subcommand" subcommands
             ;;
@@ -199,6 +139,9 @@ _general_config() {
                     ;;
                 (repo)
                     _general_config_repo
+                    ;;
+                (use)
+                    _general_config_use
                     ;;
             esac
             ;;
@@ -235,6 +178,19 @@ _general_config_repo() {
     args+=(
         ':github-path:'
         '--as[Specifies short repo alias]:as:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_config_use() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--executable -e)'{--executable,-e}'[The executable instance for the command]:executable:{_custom_completion $_general_commandname ---completion config use -- --executable $words}'
+        '--for[The name on the commant]:for:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0

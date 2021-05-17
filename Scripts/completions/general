@@ -4,7 +4,7 @@ _general() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     COMPREPLY=()
-    opts="gen create list setup plugin config upgrade help -h --help"
+    opts="gen create list setup config upgrade help -h --help"
     if [[ $COMP_CWORD == "1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -24,10 +24,6 @@ _general() {
             ;;
         (setup)
             _general_setup 2
-            return
-            ;;
-        (plugin)
-            _general_plugin 2
             return
             ;;
         (config)
@@ -115,48 +111,8 @@ _general_setup() {
     esac
     COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
 }
-_general_plugin() {
-    opts="add activate -h --help"
-    if [[ $COMP_CWORD == "$1" ]]; then
-        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-        return
-    fi
-    case ${COMP_WORDS[$1]} in
-        (add)
-            _general_plugin_add $(($1+1))
-            return
-            ;;
-        (activate)
-            _general_plugin_activate $(($1+1))
-            return
-            ;;
-    esac
-    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-}
-_general_plugin_add() {
-    opts="--path -p -h --help"
-    if [[ $COMP_CWORD == "$1" ]]; then
-        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-        return
-    fi
-    case $prev in
-        --path|-p)
-            COMPREPLY=( $(compgen -d -- "$cur") )
-            return
-        ;;
-    esac
-    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-}
-_general_plugin_activate() {
-    opts="-h --help"
-    if [[ $COMP_CWORD == "$1" ]]; then
-        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-        return
-    fi
-    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-}
 _general_config() {
-    opts="print reset repo -h --help"
+    opts="print reset repo use -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -172,6 +128,10 @@ _general_config() {
             ;;
         (repo)
             _general_config_repo $(($1+1))
+            return
+            ;;
+        (use)
+            _general_config_use $(($1+1))
             return
             ;;
     esac
@@ -201,6 +161,24 @@ _general_config_repo() {
     fi
     case $prev in
         --as)
+            
+            return
+        ;;
+    esac
+    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+}
+_general_config_use() {
+    opts="--executable -e --for -h --help"
+    if [[ $COMP_CWORD == "$1" ]]; then
+        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        return
+    fi
+    case $prev in
+        --executable|-e)
+            COMPREPLY=( $(compgen -W "$(general ---completion config use -- --executable "$COMP_WORDS")" -- "$cur") )
+            return
+        ;;
+        --for)
             
             return
         ;;

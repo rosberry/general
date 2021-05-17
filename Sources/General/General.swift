@@ -62,7 +62,7 @@ final class General: ParsableCommand {
         let parser: HelpParser = .init()
         let general = try parser.parse(command: General.self)
         let plugins = loadPlugins()
-        let overrides = ConfigFactory.default?.overrides ?? [:]
+        let overrides = ConfigFactory.shared?.overrides ?? [:]
         return .init(general: general, plugins: plugins, overrides: overrides)
     }
 }

@@ -34,14 +34,19 @@ func definePlugin(commands: [String: AnyCommand.ParseResult], runConfig: RunConf
           let command = commandsSet.first else {
         return nil
     }
-    if let overrided = runConfig.overrides[command] {
+    if let overrided = runConfig.overrides[command],
+       commands.keys.contains(overrided) {
         return overrided
     }
     guard let choice = askChoice("More then one executable instance provides the command `\(command)`", values: commands.map(\.key)) else {
         exit(0)
     }
     if askBool(question: "Do you want use `\(choice)` by default for command `\(command)`?") {
-        // TODO: save
+        try? ConfigFactory.update { config in
+            var config = config
+            config.overrides[command] = choice
+            return config
+        }
     }
     print("You can set a default executable instance with `general config use --executable <executable> --for <command>`")
     return choice
@@ -54,7 +59,8 @@ func run(plugin: String) throws {
 
 if let runConfig = General.runConfig,
    let plugin = definePlugin(commands: mapCommands(runConfig: runConfig),
-                             runConfig: runConfig) {
+                             runConfig: runConfig),
+   plugin != (General.configuration.commandName ?? String(describing: General.self).lowercased()) {
     try run(plugin: plugin)
 }
 else {

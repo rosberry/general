@@ -20,6 +20,10 @@ public final class CompletionsService {
         }
     }
 
+    static func executables() -> [String] {
+        ["general"] + installedPlugins()
+    }
+
     static func templatesRepos() -> [String] {
         guard let config = ConfigFactory.shared else {
             return []
@@ -27,15 +31,8 @@ public final class CompletionsService {
         return Array(config.templatesRepos.keys)
     }
 
-    static func pluginRepos() -> [String] {
-        guard let config = ConfigFactory.shared else {
-            return []
-        }
-        return Array(config.pluginRepos.keys)
-    }
-
     static func versions() -> [String] {
-        return ["master", "0.3", "0.2", "0.1.2", "0.1.1", "0.1.0"]
+        return ["master", "0.3", "0.3.2", "0.3.3"]
     }
 }
 
@@ -64,9 +61,9 @@ public extension CompletionKind {
         }
     }
 
-    static var pluginRepos: CompletionKind {
+    static var executables: CompletionKind {
         .custom { _ in
-            CompletionsService.pluginRepos()
+            CompletionsService.executables()
         }
     }
 }

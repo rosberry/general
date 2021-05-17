@@ -5,7 +5,6 @@
 public struct GeneralConfig: Codable, CustomStringConvertible {
     public var version: String
     public var templatesRepos: [String: String]
-    public var pluginRepos: [String: String]
     public var overrides: [String: String]
 
     public init(version: String,
@@ -14,7 +13,6 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
                 overrides: [String: String]) {
         self.version = version
         self.templatesRepos = templatesRepos
-        self.pluginRepos = pluginRepos
         self.overrides = overrides
     }
 
@@ -25,7 +23,7 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
     public var description: String {
         return """
                version: \(green(version))
-               templates repos: \(templatesReposDescription)
+               templates repos: \(green(templatesReposDescription))
                overrides: \(overssidesDescription)
                """
     }
@@ -35,16 +33,6 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
             return yellow("no repos specified")
         }
         let strings = templatesRepos.map { repo in
-            repo.key == repo.value ? "\"\(repo.key)\"" : "\"\(repo.value)\" as \"\(repo.key)\""
-        }
-        return green(strings.joined(separator: ", "))
-    }
-
-    private var pluginReposDescription: String {
-        guard !pluginRepos.isEmpty else {
-            return yellow("no repos specified")
-        }
-        let strings = pluginRepos.map { repo in
             repo.key == repo.value ? "\"\(repo.key)\"" : "\"\(repo.value)\" as \"\(repo.key)\""
         }
         return green(strings.joined(separator: ", "))

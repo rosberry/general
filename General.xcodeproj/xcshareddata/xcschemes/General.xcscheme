@@ -52,12 +52,20 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "--name My --template rsb_generic_module"
-            isEnabled = "NO">
+            argument = "-n My -t rsb_generic_module"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "setup"
-            isEnabled = "YES">
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "config"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "upgrade"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "--help"

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		01680AF2264E2F0A001DB4E6 /* PluginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01680AF1264E2F0A001DB4E6 /* PluginService.swift */; };
 		OBJ_349 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_192 /* Document.swift */; };
 		OBJ_350 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_193 /* Element.swift */; };
 		OBJ_351 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_194 /* Error.swift */; };
@@ -57,12 +56,10 @@
 		OBJ_412 /* writer.c in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_217 /* writer.c */; };
 		OBJ_414 /* CYaml.h in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_219 /* CYaml.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		OBJ_415 /* yaml.h in Headers */ = {isa = PBXBuildFile; fileRef = OBJ_220 /* yaml.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		OBJ_422 /* Add.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* Add.swift */; };
 		OBJ_423 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_11 /* Config.swift */; };
 		OBJ_424 /* Create.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_12 /* Create.swift */; };
 		OBJ_425 /* Generate.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_13 /* Generate.swift */; };
 		OBJ_426 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_14 /* List.swift */; };
-		OBJ_427 /* Remove.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_15 /* Remove.swift */; };
 		OBJ_428 /* Setup.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_16 /* Setup.swift */; };
 		OBJ_429 /* Upgrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_17 /* Upgrade.swift */; };
 		OBJ_430 /* General.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_18 /* General.swift */; };
@@ -520,12 +517,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		01680AF1264E2F0A001DB4E6 /* PluginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginService.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralIOs::Product" /* GeneralIOs */ = {isa = PBXFileReference; lastKnownFileType = text; path = GeneralIOs; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralKit::Product" /* GeneralKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GeneralKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		OBJ_10 /* Add.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Add.swift; sourceTree = "<group>"; };
 		OBJ_100 /* PBXFrameworksBuildPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXFrameworksBuildPhase.swift; sourceTree = "<group>"; };
 		OBJ_101 /* PBXHeadersBuildPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXHeadersBuildPhase.swift; sourceTree = "<group>"; };
 		OBJ_102 /* PBXResourcesBuildPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PBXResourcesBuildPhase.swift; sourceTree = "<group>"; };
@@ -572,7 +567,6 @@
 		OBJ_146 /* Xcode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Xcode.swift; sourceTree = "<group>"; };
 		OBJ_147 /* XcodeProj.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XcodeProj.swift; sourceTree = "<group>"; };
 		OBJ_149 /* Writable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Writable.swift; sourceTree = "<group>"; };
-		OBJ_15 /* Remove.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Remove.swift; sourceTree = "<group>"; };
 		OBJ_151 /* XCScheme+AditionalOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+AditionalOption.swift"; sourceTree = "<group>"; };
 		OBJ_152 /* XCScheme+AnalyzeAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+AnalyzeAction.swift"; sourceTree = "<group>"; };
 		OBJ_153 /* XCScheme+ArchiveAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "XCScheme+ArchiveAction.swift"; sourceTree = "<group>"; };
@@ -1496,7 +1490,6 @@
 				OBJ_71 /* Shell */,
 				OBJ_73 /* SpecFactory.swift */,
 				OBJ_74 /* UpgradeService.swift */,
-				01680AF1264E2F0A001DB4E6 /* PluginService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1605,12 +1598,10 @@
 		OBJ_9 /* Commands */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_10 /* Add.swift */,
 				OBJ_11 /* Config.swift */,
 				OBJ_12 /* Create.swift */,
 				OBJ_13 /* Generate.swift */,
 				OBJ_14 /* List.swift */,
-				OBJ_15 /* Remove.swift */,
 				OBJ_16 /* Setup.swift */,
 				OBJ_17 /* Upgrade.swift */,
 			);
@@ -2140,12 +2131,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				OBJ_422 /* Add.swift in Sources */,
 				OBJ_423 /* Config.swift in Sources */,
 				OBJ_424 /* Create.swift in Sources */,
 				OBJ_425 /* Generate.swift in Sources */,
 				OBJ_426 /* List.swift in Sources */,
-				OBJ_427 /* Remove.swift in Sources */,
 				OBJ_428 /* Setup.swift in Sources */,
 				OBJ_429 /* Upgrade.swift in Sources */,
 				OBJ_430 /* General.swift in Sources */,
@@ -2178,7 +2167,6 @@
 				OBJ_497 /* ColorString.swift in Sources */,
 				OBJ_498 /* Constants.swift in Sources */,
 				OBJ_499 /* CustomStringConvertible+Mirror.swift in Sources */,
-				01680AF2264E2F0A001DB4E6 /* PluginService.swift in Sources */,
 				OBJ_500 /* ParsableCommand+Config.swift in Sources */,
 				OBJ_501 /* URL+Paths.swift in Sources */,
 				OBJ_502 /* File.swift in Sources */,

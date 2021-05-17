@@ -9,11 +9,14 @@ import GeneralKit
 public final class Setup: ParsableCommand {
 
     enum Error: Swift.Error, CustomStringConvertible {
+        case github
         case loadSpec(URL)
         case noName
 
         var description: String {
             switch self {
+            case .github:
+                return "Templates repo was not specified"
             case let .loadSpec(url):
                 return "Could not load spec from url `\(url)`"
             case .noName:
@@ -30,7 +33,7 @@ public final class Setup: ParsableCommand {
                 "Fetch templates from specified github repo." +
                 " Format: \"<github>\\ [branch]\"."),
             completion: .templatesRepos)
-    var githubPath: String
+    var githubPath: String?
 
     @Option(name: [.customLong("global"), .customShort("g")],
             help: "If specified loads templates into user home directory")
@@ -58,6 +61,13 @@ public final class Setup: ParsableCommand {
     }
 
     public func run() throws {
+        if self.githubPath == nil {
+            self.githubPath = ask("Please provide a path to repo with templates")
+            print("You can use the command `general config repo <repo> --as <alias>` to use it later by the easiest way")
+        }
+        guard let githubPath = self.githubPath else {
+            throw Error.github
+        }
         try setupService.setup(githubPath: githubPath, shouldLoadGlobally: shouldLoadGlobally) { files in
             let specFile = files.first { file in
                 file.url.lastPathComponent == Constants.generalSpecName

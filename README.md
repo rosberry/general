@@ -35,10 +35,15 @@ OPTIONS:
 SUBCOMMANDS:
   gen (default)           Generates modules from templates.
   create                  Creates a new template.
-  spec                    Creates a new spec.
   list                    List of available templates.
   setup                   Provides your environment with templates
+  config                  Provides an access to config file
+  upgrade                 Upgrades general to specified version
 ```
+
+## Plugins
+
+Now you can create your own executable file and place it under `~/.general/plugins`. The only requirement - this file should provide `--help` option for it and each its public subcommands like swift `ArgumentParser` (see example above). General will find appropriate plugin by command line arguments semantic. 
 
 To learn more about the configuration file [see the dedicated documentation](/Documentation/GeneralSpec.md).
 

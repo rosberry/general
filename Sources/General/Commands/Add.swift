@@ -11,18 +11,12 @@ public final class Add: ParsableCommand {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case noPlugin
-        case noPackageSwift
-        case noSwiftPackageValue(String)
         case installation
 
         var description: String {
             switch self {
             case .noPlugin:
                 return "Could not find plugin to install"
-            case .noPackageSwift:
-                return "Could not locate Package.swift"
-            case let .noSwiftPackageValue(value):
-                return "Package.swift does not declares value \(value)"
             case .installation:
                 return "Could not install plugin"
             }
@@ -33,27 +27,16 @@ public final class Add: ParsableCommand {
 
     // MARK: - Parameters
 
-    @Argument(help: "Specifies the name of plugin that should be applied",
-              completion: .installedPlugins)
-    var pluginName: String?
-
-    @Option(name: [.customLong("commands"), .customShort("c")],
-            help: .init(stringLiteral: "Specifies concrere plugin commands that should be installed"))
-    var commands: String?
+    @Option(name: .shortAndLong, completion: .directory, help: "The path to the plugin binary that should be installed")
+    var path: String = FileManager.default.currentDirectoryPath
 
     @Option(name: [.customLong("repo"), .customShort("r")],
-            help: .init(stringLiteral: "Fetch plugin from specified github repo. Format: \"<github>\\ [branch]\"."))
+            help: .init(stringLiteral:
+                "Repo with plugin source code. Repo should provide `make build` option that places binary into repo folder root"),
+            completion: .templatesRepos)
     var githubPath: String?
 
-    @Option(name: [.customLong("force"), .customShort("f")],
-            help: .init(stringLiteral: "Rebuilds general completely event it is already complied with specified plugin"))
-    var shouldForceReuild: Bool = false
-
-    private lazy var upgradeService: UpgradeService = .init()
-    private lazy var insertStringService: InsertStringService = .init()
-    private lazy var githubService: GithubService = .init()
     private lazy var fileHelper: FileHelper = .default
-    private lazy var shell: Shell = .init()
     private lazy var helpParser: HelpParser = .init()
 
     // MARK: - Lifecycle
@@ -63,9 +46,41 @@ public final class Add: ParsableCommand {
     }
 
     public func run() throws {
-        let help = try helpParser.parse(command: "./\(pluginName!)")
-        print()
+        if let url = URL(string: path),
+           let file = try? fileHelper.fileInfo(with: url),
+           file.isDirectory == false {
+            return try add(localUrl: url)
+        }
+        if let repo = self.githubPath {
+            return try add(repo: repo)
+        }
+        throw Error.noPlugin
     }
 
     // MARK: - Private
+
+    private func add(repo: String) throws {
+        // TODO: install from repo
+    }
+
+    private func add(localUrl: URL) throws {
+        // TODO: Check for overrides
+        try copy(localUrl: localUrl)
+    }
+
+    private func copy(localUrl: URL) throws {
+        let localUrl = URL(fileURLWithPath: localUrl.path)
+        let installationDirectoryURL = URL(fileURLWithPath: Constants.pluginsPath)
+        let name = localUrl.lastPathComponent
+        let installationURL = installationDirectoryURL + name
+        do {
+            if fileHelper.fileManager.fileExists(atPath: installationDirectoryURL.path) == false {
+                try fileHelper.createDirectory(at: installationDirectoryURL)
+            }
+            try fileHelper.fileManager.copyItem(at: localUrl, to: installationURL)
+        }
+        catch {
+            throw Error.installation
+        }
+    }
 }

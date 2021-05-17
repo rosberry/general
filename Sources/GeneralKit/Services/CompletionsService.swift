@@ -12,7 +12,12 @@ public final class CompletionsService {
     }
 
     static func installedPlugins() -> [String] {
-        ConfigFactory.shared?.installedPlugins.map(\.name) ?? []
+        guard let files = try? FileHelper().contentsOfDirectory(at: Constants.pluginsPath) else {
+            return []
+        }
+        return files.map { file in
+            file.url.lastPathComponent
+        }
     }
 
     static func templatesRepos() -> [String] {
@@ -20,6 +25,13 @@ public final class CompletionsService {
             return []
         }
         return Array(config.templatesRepos.keys)
+    }
+
+    static func pluginRepos() -> [String] {
+        guard let config = ConfigFactory.shared else {
+            return []
+        }
+        return Array(config.pluginRepos.keys)
     }
 
     static func versions() -> [String] {
@@ -49,6 +61,12 @@ public extension CompletionKind {
     static var templatesRepos: CompletionKind {
         .custom { _ in
             CompletionsService.templatesRepos()
+        }
+    }
+
+    static var pluginRepos: CompletionKind {
+        .custom { _ in
+            CompletionsService.pluginRepos()
         }
     }
 }

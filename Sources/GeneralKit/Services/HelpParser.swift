@@ -1,11 +1,9 @@
 //
-//  HelpParser.swift
-//  GeneralIOs
-//
-//  Created by Nick Tyunin on 11.05.2021.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import Foundation
+import ArgumentParser
 
 public final class HelpParser {
 
@@ -21,6 +19,24 @@ public final class HelpParser {
     }
 
     private final class Context {
+        struct HelpArgument {
+            public let argument: String
+            public let description: String
+        }
+
+        struct HelpOption {
+            public let long: String
+            public let short: String?
+            public let argument: String?
+            public let description: String
+        }
+
+        struct HelpSubcommand {
+            public let command: String
+            public let description: String
+            public let isDefault: Bool
+        }
+
         var overview: String = ""
         var usage: String = ""
         var arguments: [HelpArgument] = []
@@ -36,7 +52,7 @@ public final class HelpParser {
     private lazy var parsers: [(Context) -> Void] = [
         makeSingleLineParser(start: "OVERVIEW:", keyPath: \.overview),
         makeSingleLineParser(start: "USAGE:", keyPath: \.usage),
-        makeBlockParser(start: "ARGUMENTS", parser: argumentParser),
+        makeBlockParser(start: "ARGUMENTS:", parser: argumentParser),
         makeBlockParser(start: "OPTIONS:", parser: optionParser),
         makeBlockParser(start: "SUBCOMMANDS:", parser: subcommandParser),
         emptyLineParser,
@@ -47,10 +63,11 @@ public final class HelpParser {
         //
     }
 
-    public func parse(command: String) throws -> Help {
-        let string = try shell(silent: "\(command) --help").stdOut
+    public func parse(path: String? = nil, command: String) throws -> AnyCommand {
+        let path = path ?? ""
+        let string = try shell(silent: "\(path)\(command) --help").stdOut.replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
-        context.lines = string.split(separator: "\n").map({String($0).trimmingCharacters(in: .whitespacesAndNewlines)})
+        context.lines = string.split(separator: "\n").map({String($0).trimmingCharacters(in: .whitespaces)})
 
         while context.index < context.lines.count {
             let currentIndex = context.index
@@ -64,13 +81,74 @@ public final class HelpParser {
                 throw Error.unparsed(context.lines[context.index])
             }
         }
-        return .init(overview: context.overview,
-                     usage: context.usage,
-                     arguments: context.arguments,
-                     options: context.options,
-                     subcommands: try context.subcommands.map({ subcommand in
-                        try parse(command: "\(command) \(subcommand)")
-                     }))
+
+        var options: [String: AnyCommand.AnyOption] = [:]
+        var arguments: [String: AnyCommand.AnyArgument] = [:]
+        var subcommands: [String: AnyCommand] = [:]
+
+        context.options.forEach { helpOption in
+            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)
+        }
+
+        context.arguments.forEach { helpArgument in
+            arguments[helpArgument.argument] = .init(name: helpArgument.argument)
+        }
+
+        try context.subcommands.forEach { helpSubcommand in
+            let command = try parse(path: "\(path)\(command) ", command: helpSubcommand.command)
+            command.isDefault = helpSubcommand.isDefault
+            subcommands[helpSubcommand.command] = command
+        }
+
+        return .init(name: command,
+                     options: options,
+                     arguments: arguments,
+                     subcommands: subcommands)
+    }
+
+    public func parse(command: ParsableCommand.Type) throws -> AnyCommand {
+        let name = command.configuration.commandName ?? String(describing: command).lowercased()
+        let string = command.helpMessage().replacingOccurrences(of: "\n", with: " \n")
+        let context = Context()
+        context.lines = string.split(separator: "\n").map({String($0).trimmingCharacters(in: .whitespaces)})
+
+        while context.index < context.lines.count {
+            let currentIndex = context.index
+            parsers.forEach { parser in
+                guard context.index == currentIndex else {
+                    return
+                }
+                parser(context)
+            }
+            guard context.index > currentIndex else {
+                throw Error.unparsed(context.lines[context.index])
+            }
+        }
+        var options: [String: AnyCommand.AnyOption] = [:]
+        var arguments: [String: AnyCommand.AnyArgument] = [:]
+        var subcommands: [String: AnyCommand] = [:]
+
+        context.options.forEach { helpOption in
+            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)
+        }
+
+        context.arguments.forEach { helpArgument in
+            arguments[helpArgument.argument] = .init(name: helpArgument.argument)
+        }
+
+        var defaultCommandName: String? = nil
+        if let defaultSubcommand = command.configuration.defaultSubcommand {
+            defaultCommandName = defaultSubcommand.configuration.commandName ?? String(describing: type(of: defaultSubcommand)).lowercased()
+        }
+        try command.configuration.subcommands.map(parse).forEach { command in
+            subcommands[command.name] = command
+            command.isDefault = command.name == defaultCommandName
+        }
+
+        return .init(name: name,
+                     options: options,
+                     arguments: arguments,
+                     subcommands: subcommands)
     }
 
     // MARK: Private
@@ -89,7 +167,7 @@ public final class HelpParser {
 
     // MARK: Private
 
-    private func makeBlockParser(start: String, parser: @escaping ((Context) -> Void)) -> ((Context) -> Void) {
+    private func makeBlockParser(start: String, parser: @escaping ((Context) -> Bool)) -> ((Context) -> Void) {
         return { context in
             let line = context.lines[context.index]
             guard line.starts(with: start) else {
@@ -101,7 +179,9 @@ public final class HelpParser {
                 guard line.isEmpty == false else {
                     return
                 }
-                parser(context)
+                if parser(context) == false {
+                    return
+                }
             }
         }
     }
@@ -114,24 +194,119 @@ public final class HelpParser {
         context.index += 1
     }
 
-    private func argumentParser(context: Context) {
-        let line = context.lines[context.index]
-        context.arguments.append(.init(argument: "", description: line))
+    private func argumentParser(context: Context) -> Bool {
+        var line = context.lines[context.index]
+        var argument = ""
+        var parsed = false
+
+        func parse(pattern: String) -> String? {
+            guard let match = parseFirstRegexMatch(pattern: pattern, rangeIndex: 0, string: line),
+                  line.starts(with: match) else {
+                return nil
+            }
+            line.removeFirst(match.count)
+            line = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            parsed = true
+            return match
+        }
+
+        if let match = parse(pattern: "<[a-zA-Z]+>") {
+            argument = match
+            argument.removeFirst()
+            argument.removeLast()
+        }
+
+        if parsed {
+            context.arguments.append(.init(argument: argument, description: line))
+        }
+        return parsed
     }
 
-    private func optionParser(context: Context) {
-        let line = context.lines[context.index]
-        context.options.append(.init(long: "", short: nil, argument: nil, description: line))
+    private func optionParser(context: Context) -> Bool {
+        var short: String?
+        var long: String = ""
+        var argument: String?
+        var line = context.lines[context.index]
+        while context.index + 1 < context.lines.count &&
+              context.lines[context.index + 1].starts(with: "-") == false &&
+              context.lines[context.index + 1].isEmpty == false {
+            line += " " + context.lines[context.index + 1]
+            context.index += 1
+        }
+        var parsed = false
+
+        func parse(pattern: String) -> String? {
+            guard let match = parseFirstRegexMatch(pattern: pattern, rangeIndex: 0, string: line),
+                  line.starts(with: match) else {
+                return nil
+            }
+            line.removeFirst(match.count)
+            line = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            parsed = true
+            return match
+        }
+
+        while true {
+            if let match = parse(pattern: "--[a-zA-Z]+") {
+                long = match
+                long.removeFirst(2)
+            }
+            else if let match = parse(pattern: "-[a-zA-Z]") {
+                short = match
+                short?.removeFirst(1)
+            }
+            else if let match = parse(pattern: "<[a-zA-Z]+>") {
+                argument = match
+            }
+            else if parse(pattern: ",") != nil {
+                continue
+            }
+            else {
+                break
+            }
+        }
+        if parsed {
+            context.options.append(.init(long: long, short: short, argument: argument, description: line))
+        }
+        return parsed
     }
 
-    private func subcommandParser(context: Context) {
-        let line = context.lines[context.index]
-        context.subcommands.append(.init(command: "", description: line, isDefault: false))
+    private func subcommandParser(context: Context) -> Bool {
+        var line = context.lines[context.index]
+        var command = ""
+        var isDefault = false
+        var parsed = false
+
+        func parse(pattern: String) -> String? {
+            guard let match = parseFirstRegexMatch(pattern: pattern, rangeIndex: 0, string: line),
+                  line.starts(with: match) else {
+                return nil
+            }
+            line.removeFirst(match.count)
+            line = line.trimmingCharacters(in: .whitespacesAndNewlines)
+            parsed = true
+            return match
+        }
+
+        if let match = parse(pattern: "[a-zA-Z]+\\s\\(default\\)"),
+           let commandMatch = parseFirstRegexMatch(pattern: "[a-zA-Z]+\\s", rangeIndex: 0, string: match) {
+            isDefault = true
+            command = commandMatch.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        else if let match = parse(pattern: "[a-zA-Z]+\\s") {
+            command = match.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        if parsed {
+            context.subcommands.append(.init(command: command, description: line, isDefault: isDefault))
+        }
+        return parsed
     }
 
-    private func unexpectedStringParser(context: Context) {
+    private func unexpectedStringParser(context: Context) -> Void {
         let line = context.lines[context.index]
         context.unexpectedStrings.append(line)
         context.index += 1
     }
+    
 }

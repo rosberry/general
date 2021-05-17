@@ -11,6 +11,7 @@ final class GeneralIOS: ParsableCommand {
 
         return .init(abstract: "Generates code from templates.",
                      version: "0.0.1",
-                     subcommands: [Generate.self, Setup.self])
+                     subcommands: [Generate.self, Setup.self],
+                     defaultSubcommand: Generate.self)
     }
 }

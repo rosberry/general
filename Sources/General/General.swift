@@ -4,87 +4,65 @@
 
 import ArgumentParser
 import Foundation
+import GeneralKit
+
+public final class RunConfig {
+    let general: AnyCommand
+    let plugins: [AnyCommand]
+    let overrides: [String: String]
+
+    init(general: AnyCommand, plugins: [AnyCommand], overrides: [String: String]) {
+        self.general = general
+        self.plugins = plugins
+        self.overrides = overrides
+    }
+}
 
 final class General: ParsableCommand {
 
-//    enum CodingKeys: CodingKey {
-//         case template
-//         case dynamic(String)
-//
-//         init?(stringValue: String) {
-//             switch stringValue {
-//             case "template":
-//                 self = .template
-//             case stringValue where General.attributes.contains(stringValue):
-//                 self = .dynamic(stringValue)
-//             default:
-//                 return nil
-//             }
-//         }
-//
-//         var stringValue: String {
-//             switch self {
-//             case .template:
-//                 return "template"
-//             case let .dynamic(name):
-//                 return name
-//             }
-//         }
-//
-//         // Not used
-//         var intValue: Int? { nil }
-//         init?(intValue _: Int) { nil }
-//    }
-
-//    @Argument()
-//    var template: String
-
-//    static var attributes: [String] = []
-
-//    static func preprocess(_ arguments: [String]) throws {
-//        let templateName = arguments[1]
-//        // TODO: Load arguments for template name
-//        let attributes: [String] = ["argument", "second_argument"]
-//        General.attributes = attributes
-//    }
+    public static var runConfig: RunConfig? = try? buildRunConfig()
 
     static var configuration: CommandConfiguration {
-
+        let version = "0.3.2"
+        ConfigFactory.default = .init(version: version, templatesRepos: [:], pluginRepos: [:], overrides: [:])
         return .init(abstract: "Generates code from templates.",
-                     version: "0.0.1",
-                     subcommands: [Generate.self, Setup.self, Add.self])
+                     version: "0.3.2",
+                     subcommands: [Generate.self,
+                                   Create.self,
+                                   List.self,
+                                   Setup.self,
+                                   Config.self,
+                                   Upgrade.self],
+                     defaultSubcommand: Generate.self)
     }
-
-//    var attributes: [String: String] = [:]
 
     init() {
 
     }
 
-//    init(from decoder: Decoder) throws {
-//        let container = try decoder.container(keyedBy: CodingKeys.self)
-//        template = try container.decode(String.self, forKey: .template)
-//        try General.attributes.forEach { name in
-//            attributes[name] = try container.decode(String.self, forKey: .dynamic(name))
-//        }
-//    }
+    private static func loadPlugins() -> [AnyCommand] {
+        let fileHelper = FileHelper.default
+        let parser: HelpParser = .init()
+        guard let pluginFiles = try? fileHelper.contentsOfDirectory(at: Constants.pluginsPath) else {
+            return []
+        }
+        return pluginFiles.compactMap { file in
+            let url = file.url
+            let name = url.lastPathComponent
+            var path = url.deletingLastPathComponent().path
+            if path.last != "/" {
+                path += "/"
+            }
+            let plugin = try? parser.parse(path: path, command: name)
+            return plugin
+        }
+    }
 
-//    func run() throws {
-//        print(template)
-//        print(attributes)
-//    }
+    private static func buildRunConfig() throws -> RunConfig {
+        let parser: HelpParser = .init()
+        let general = try parser.parse(command: General.self)
+        let plugins = loadPlugins()
+        let overrides = ConfigFactory.default?.overrides ?? [:]
+        return .init(general: general, plugins: plugins, overrides: overrides)
+    }
 }
-//
-//extension General: CustomReflectable {
-//    var customMirror: Mirror {
-//        let attributesChildren: [Mirror.Child] = General.attributes.map { name in
-//            let option = Option<String>(name: .shortAndLong)
-//            let child = Mirror.Child(label: name, value: option)
-//            return child
-//        }
-//        let children = [
-//            Mirror.Child(label: "template", value: _template)
-//        ]
-//        return Mirror(General(), children: children + attributesChildren)
-//    }
-//}

@@ -34,11 +34,11 @@ public func askChoice<Value: CustomStringConvertible>(_ question: String, values
     guard values.count > 1 else {
         return values.first
     }
-    print("\(question):", terminator: " ")
+    print("\(question):")
     values.enumerated().forEach { number, value in
         print("\(number + 1): \(value.description)")
     }
-    print("0: cancel > ")
+    print("0: cancel\n> ", terminator: " ")
     guard let answer = readLine(),
         let number = Int(answer) else {
         print("Invalid value entered")

@@ -28,9 +28,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "General::GeneralKit"
-               BuildableName = "GeneralKit.framework"
-               BlueprintName = "GeneralKit"
+               BlueprintIdentifier = "General::GeneralIOs"
+               BuildableName = "GeneralIOs"
+               BlueprintName = "GeneralIOs"
                ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,9 +42,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "General::GeneralIOs"
-               BuildableName = "GeneralIOs"
-               BlueprintName = "GeneralIOs"
+               BlueprintIdentifier = "General::GeneralKit"
+               BuildableName = "GeneralKit.framework"
+               BlueprintName = "GeneralKit"
                ReferencedContainer = "container:General.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

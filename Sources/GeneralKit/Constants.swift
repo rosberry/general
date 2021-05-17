@@ -8,7 +8,7 @@ public enum Constants {
     public static let shell = "/bin/bash"
     public static let generalHomePath = "\(NSHomeDirectory())/.general"
     public static let configPath = "\(generalHomePath)/.config"
-    public static let pluginsPath = "\(generalHomePath)//plugins"
+    public static let pluginsPath = "\(generalHomePath)/plugins"
     public static let downloadedSourcePath = "\(generalHomePath)/source"
     public static let specFilename = "spec.yml"
     public static let templatesFolderName = ".templates"

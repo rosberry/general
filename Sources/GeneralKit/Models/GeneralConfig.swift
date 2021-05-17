@@ -5,16 +5,17 @@
 public struct GeneralConfig: Codable, CustomStringConvertible {
     public var version: String
     public var templatesRepos: [String: String]
-    public var installedPlugins: [Plugin]
-    public var defaultCommand: String?
-    public var commands: [String: String]
+    public var pluginRepos: [String: String]
+    public var overrides: [String: String]
 
-    public init(version: String, templatesRepos: [String: String], installedPlugins: [Plugin], defaultCommand: String?, commands: [String: String]) {
+    public init(version: String,
+                templatesRepos: [String: String],
+                pluginRepos: [String: String],
+                overrides: [String: String]) {
         self.version = version
         self.templatesRepos = templatesRepos
-        self.installedPlugins = installedPlugins
-        self.defaultCommand = defaultCommand
-        self.commands = commands
+        self.pluginRepos = pluginRepos
+        self.overrides = overrides
     }
 
     public func addingUnique<Value: Hashable>(_ value: Value, by keyPath: KeyPath<GeneralConfig, [Value]>) -> [Value] {
@@ -25,9 +26,7 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
         return """
                version: \(green(version))
                templates repos: \(templatesReposDescription)
-               installed plugins: \(installedPluginsDescription)
-               default command: \(defaultCommandDescription)
-               commands: \(commandsDescripntion)
+               overrides: \(overssidesDescription)
                """
     }
 
@@ -41,26 +40,23 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
         return green(strings.joined(separator: ", "))
     }
 
-    private var installedPluginsDescription: String {
-        guard !installedPlugins.isEmpty else {
-            return yellow("no plugins installed")
+    private var pluginReposDescription: String {
+        guard !pluginRepos.isEmpty else {
+            return yellow("no repos specified")
         }
-        return green(installedPlugins.map(\.name).joined(separator: ", "))
+        let strings = pluginRepos.map { repo in
+            repo.key == repo.value ? "\"\(repo.key)\"" : "\"\(repo.value)\" as \"\(repo.key)\""
+        }
+        return green(strings.joined(separator: ", "))
     }
 
-    private var defaultCommandDescription: String {
-        if let command = defaultCommand {
-            return green(command)
+    private var overssidesDescription: String {
+        guard !overrides.isEmpty else {
+            return yellow("no overrides specified")
         }
-        else {
-            return yellow("not configured")
+        let strings = overrides.map { override in
+            "\"\(override.key)\" : \"\(override.value)\""
         }
-    }
-
-    private var commandsDescripntion: String {
-        guard !commands.isEmpty else {
-            return yellow("no custom commands specified")
-        }
-        return green(commands.keys.joined(separator: ", "))
+        return green(strings.joined(separator: ", "))
     }
 }

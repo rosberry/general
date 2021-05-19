@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01ECEA93265516EC00B275B9 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ECEA92265516EC00B275B9 /* Parser.swift */; };
+		01ECEAAA2655174800B275B9 /* CommandArguments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ECEAA92655174800B275B9 /* CommandArguments.swift */; };
 		OBJ_349 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_192 /* Document.swift */; };
 		OBJ_350 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_193 /* Element.swift */; };
 		OBJ_351 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_194 /* Error.swift */; };
@@ -111,7 +113,7 @@
 		OBJ_517 /* ConfigFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_62 /* ConfigFactory.swift */; };
 		OBJ_518 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_63 /* FileHelper.swift */; };
 		OBJ_519 /* GithubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_64 /* GithubService.swift */; };
-		OBJ_520 /* AnyCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* AnyCommand.swift */; };
+		OBJ_520 /* AnyCommandParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_65 /* AnyCommandParser.swift */; };
 		OBJ_521 /* HelpParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_66 /* HelpParser.swift */; };
 		OBJ_522 /* InsertStringService.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_67 /* InsertStringService.swift */; };
 		OBJ_524 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_69 /* Renderer.swift */; };
@@ -517,6 +519,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		01ECEA92265516EC00B275B9 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
+		01ECEAA92655174800B275B9 /* CommandArguments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandArguments.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralIOs::Product" /* GeneralIOs */ = {isa = PBXFileReference; lastKnownFileType = text; path = GeneralIOs; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -760,7 +764,7 @@
 		OBJ_62 /* ConfigFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigFactory.swift; sourceTree = "<group>"; };
 		OBJ_63 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		OBJ_64 /* GithubService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubService.swift; sourceTree = "<group>"; };
-		OBJ_65 /* AnyCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCommand.swift; sourceTree = "<group>"; };
+		OBJ_65 /* AnyCommandParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCommandParser.swift; sourceTree = "<group>"; };
 		OBJ_66 /* HelpParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpParser.swift; sourceTree = "<group>"; };
 		OBJ_67 /* InsertStringService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsertStringService.swift; sourceTree = "<group>"; };
 		OBJ_69 /* Renderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Renderer.swift; sourceTree = "<group>"; };
@@ -1446,7 +1450,6 @@
 		OBJ_45 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				OBJ_65 /* AnyCommand.swift */,
 				OBJ_46 /* File.swift */,
 				OBJ_47 /* FileInfo.swift */,
 				OBJ_48 /* GeneralConfig.swift */,
@@ -1455,6 +1458,8 @@
 				OBJ_56 /* TemplateSpec.swift */,
 				OBJ_57 /* Variable.swift */,
 				OBJ_58 /* XcodeprojSpec.swift */,
+				01ECEA92265516EC00B275B9 /* Parser.swift */,
+				01ECEAA92655174800B275B9 /* CommandArguments.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1479,6 +1484,7 @@
 		OBJ_60 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				OBJ_65 /* AnyCommandParser.swift */,
 				OBJ_61 /* CompletionsService.swift */,
 				OBJ_62 /* ConfigFactory.swift */,
 				OBJ_63 /* FileHelper.swift */,
@@ -2179,11 +2185,13 @@
 				OBJ_514 /* XcodeprojSpec.swift in Sources */,
 				OBJ_515 /* RegEx.swift in Sources */,
 				OBJ_516 /* CompletionsService.swift in Sources */,
+				01ECEA93265516EC00B275B9 /* Parser.swift in Sources */,
 				OBJ_517 /* ConfigFactory.swift in Sources */,
 				OBJ_518 /* FileHelper.swift in Sources */,
 				OBJ_519 /* GithubService.swift in Sources */,
-				OBJ_520 /* AnyCommand.swift in Sources */,
+				OBJ_520 /* AnyCommandParser.swift in Sources */,
 				OBJ_521 /* HelpParser.swift in Sources */,
+				01ECEAAA2655174800B275B9 /* CommandArguments.swift in Sources */,
 				OBJ_522 /* InsertStringService.swift in Sources */,
 				OBJ_524 /* Renderer.swift in Sources */,
 				OBJ_525 /* SetupService.swift in Sources */,

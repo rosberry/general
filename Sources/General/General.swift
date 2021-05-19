@@ -7,11 +7,11 @@ import Foundation
 import GeneralKit
 
 public final class RunConfig {
-    let general: AnyCommand
-    let plugins: [AnyCommand]
+    let general: AnyCommandParser
+    let plugins: [AnyCommandParser]
     let overrides: [String: String]
 
-    init(general: AnyCommand, plugins: [AnyCommand], overrides: [String: String]) {
+    init(general: AnyCommandParser, plugins: [AnyCommandParser], overrides: [String: String]) {
         self.general = general
         self.plugins = plugins
         self.overrides = overrides
@@ -40,7 +40,7 @@ final class General: ParsableCommand {
 
     }
 
-    private static func loadPlugins() -> [AnyCommand] {
+    private static func loadPlugins() -> [AnyCommandParser] {
         let fileHelper = FileHelper.default
         let parser: HelpParser = .init()
         guard let pluginFiles = try? fileHelper.contentsOfDirectory(at: Constants.pluginsPath) else {

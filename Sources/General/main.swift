@@ -5,8 +5,8 @@
 import GeneralKit
 import Foundation
 
-func mapCommands(runConfig: RunConfig) -> [String: AnyCommand.ParseResult] {
-    var result: [String: AnyCommand.ParseResult] = [:]
+func mapCommands(runConfig: RunConfig) -> [String: CommandArguments] {
+    var result: [String: CommandArguments] = [:]
     let arguments = Array(CommandLine.arguments.dropFirst())
     ([runConfig.general] + runConfig.plugins).forEach { command in
         guard let parseResult = command.parse(arguments: [command.name] + arguments),
@@ -19,7 +19,7 @@ func mapCommands(runConfig: RunConfig) -> [String: AnyCommand.ParseResult] {
     return result
 }
 
-func definePlugin(commands: [String: AnyCommand.ParseResult], runConfig: RunConfig) -> String? {
+func definePlugin(commands: [String: CommandArguments], runConfig: RunConfig) -> String? {
     guard commands.isEmpty == false else {
         return nil
     }

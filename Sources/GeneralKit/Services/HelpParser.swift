@@ -63,7 +63,7 @@ public final class HelpParser {
         //
     }
 
-    public func parse(path: String? = nil, command: String) throws -> AnyCommand {
+    public func parse(path: String? = nil, command: String) throws -> AnyCommandParser {
         let path = path ?? ""
         let string = try shell(silent: "\(path)\(command) --help").stdOut.replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
@@ -82,9 +82,9 @@ public final class HelpParser {
             }
         }
 
-        var options: [String: AnyCommand.AnyOption] = [:]
-        var arguments: [String: AnyCommand.AnyArgument] = [:]
-        var subcommands: [String: AnyCommand] = [:]
+        var options: [String: AnyCommandParser.AnyOptionParser] = [:]
+        var arguments: [String: AnyCommandParser.AnyArgumentParser] = [:]
+        var subcommands: [String: AnyCommandParser] = [:]
 
         context.options.forEach { helpOption in
             options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)
@@ -106,7 +106,7 @@ public final class HelpParser {
                      subcommands: subcommands)
     }
 
-    public func parse(command: ParsableCommand.Type) throws -> AnyCommand {
+    public func parse(command: ParsableCommand.Type) throws -> AnyCommandParser {
         let name = command.configuration.commandName ?? String(describing: command).lowercased()
         let string = command.helpMessage().replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
@@ -124,9 +124,9 @@ public final class HelpParser {
                 throw Error.unparsed(context.lines[context.index])
             }
         }
-        var options: [String: AnyCommand.AnyOption] = [:]
-        var arguments: [String: AnyCommand.AnyArgument] = [:]
-        var subcommands: [String: AnyCommand] = [:]
+        var options: [String: AnyCommandParser.AnyOptionParser] = [:]
+        var arguments: [String: AnyCommandParser.AnyArgumentParser] = [:]
+        var subcommands: [String: AnyCommandParser] = [:]
 
         context.options.forEach { helpOption in
             options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)

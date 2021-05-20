@@ -19,7 +19,6 @@ public final class List: ParsableCommand {
         try printContentOfDirectory(at: url)
     }
 
-
     public init() {
     }
 

@@ -5,7 +5,9 @@
 import Foundation
 import ArgumentParser
 
-public final class HelpParser {
+public final class HelpParserImpl: HelpParser {
+
+    public typealias Dependencies = HasShell
 
     public enum Error: Swift.Error, LocalizedError {
         case unparsed(String)
@@ -19,11 +21,14 @@ public final class HelpParser {
     }
 
     private final class Context {
+
+        // swiftlint:disable:next nesting
         struct HelpArgument {
             public let argument: String
             public let description: String
         }
 
+        // swiftlint:disable:next nesting
         struct HelpOption {
             public let long: String
             public let short: String?
@@ -31,6 +36,7 @@ public final class HelpParser {
             public let description: String
         }
 
+        // swiftlint:disable:next nesting
         struct HelpSubcommand {
             public let command: String
             public let description: String
@@ -47,8 +53,6 @@ public final class HelpParser {
         var lines: [String] = []
     }
 
-    private lazy var shell: Shell = .init()
-
     private lazy var parsers: [(Context) -> Void] = [
         makeSingleLineParser(start: "OVERVIEW:", keyPath: \.overview),
         makeSingleLineParser(start: "USAGE:", keyPath: \.usage),
@@ -59,15 +63,20 @@ public final class HelpParser {
         unexpectedStringParser
     ]
 
-    public init() {
-        //
+    private let dependencies: Dependencies
+
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
     public func parse(path: String? = nil, command: String) throws -> AnyCommandParser {
         let path = path ?? ""
-        let string = try shell(silent: "\(path)\(command) --help").stdOut.replacingOccurrences(of: "\n", with: " \n")
+        var string = try dependencies.shell(silent: "\(path)\(command) --help").stdOut
+        string = string.replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
-        context.lines = string.split(separator: "\n").map({String($0).trimmingCharacters(in: .whitespaces)})
+        context.lines = string.split(separator: "\n").map { string in
+            String(string).trimmingCharacters(in: .whitespaces)
+        }
 
         while context.index < context.lines.count {
             let currentIndex = context.index
@@ -110,7 +119,9 @@ public final class HelpParser {
         let name = command.configuration.commandName ?? String(describing: command).lowercased()
         let string = command.helpMessage().replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
-        context.lines = string.split(separator: "\n").map({String($0).trimmingCharacters(in: .whitespaces)})
+        context.lines = string.split(separator: "\n").map { string in
+            String(string).trimmingCharacters(in: .whitespaces)
+        }
 
         while context.index < context.lines.count {
             let currentIndex = context.index
@@ -136,7 +147,7 @@ public final class HelpParser {
             arguments[helpArgument.argument] = .init(name: helpArgument.argument)
         }
 
-        var defaultCommandName: String? = nil
+        var defaultCommandName: String?
         if let defaultSubcommand = command.configuration.defaultSubcommand {
             defaultCommandName = defaultSubcommand.configuration.commandName ?? String(describing: type(of: defaultSubcommand)).lowercased()
         }
@@ -303,10 +314,9 @@ public final class HelpParser {
         return parsed
     }
 
-    private func unexpectedStringParser(context: Context) -> Void {
+    private func unexpectedStringParser(context: Context) {
         let line = context.lines[context.index]
         context.unexpectedStrings.append(line)
         context.index += 1
     }
-    
 }

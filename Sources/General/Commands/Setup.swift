@@ -19,10 +19,16 @@ public final class Setup: ParsableCommand {
         }
     }
 
+    public typealias Dependencies = HasSetupService
+
     public static let configuration: CommandConfiguration = .init(commandName: "setup",
                                                            abstract: "Provides your environment with templates")
 
-    private lazy var setupService: SetupService = .init()
+    private lazy var setupService: SetupService = dependencies.setupService
+
+    private var dependencies: Dependencies {
+        Services
+    }
 
     // MARK: - Parameters
 

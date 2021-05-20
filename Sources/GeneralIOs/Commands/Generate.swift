@@ -24,10 +24,16 @@ public final class Generate: ParsableCommand {
         }
     }
 
+    typealias Dependencies = HasSpecFactory & HasProjectServiceFactory
+
     public static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
-    private lazy var specFactory: SpecFactory = .init()
-    private lazy var projectService: ProjectService = .init(path: Path(path))
+    private lazy var specFactory: SpecFactory = dependencies.specFactory
+    private lazy var projectService: ProjectService = dependencies.projectServiceFactory.makeProjectService(path: Path(path))
+
+    private var dependencies: Dependencies {
+        Services
+    }
 
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
@@ -61,7 +67,12 @@ public final class Generate: ParsableCommand {
     }
 
     public func run() throws {
-        let renderer = Renderer(name: name, template: template, path: path, variables: variables, output: output)
+        let renderer = Renderer(name: name,
+                                template: template,
+                                path: path,
+                                variables: variables,
+                                output: output,
+                                dependencies: Services)
         if let xcodeSpec = generalSpec?.xcode {
             guard let projectName = xcodeSpec.name ?? askProject() else {
                 throw Error.projectName

@@ -2,7 +2,6 @@
 //  Copyright © 2021 Rosberry. All rights reserved.
 //
 
-
 import Foundation
 
 public func parseFirstRegexMatch(pattern: String, rangeIndex: Int, string: String) -> String? {

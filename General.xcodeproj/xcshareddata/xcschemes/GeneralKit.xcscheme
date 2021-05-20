@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "016B1AD9264A323800977611"
+               BlueprintIdentifier = "General::GeneralKit"
                BuildableName = "GeneralKit.framework"
                BlueprintName = "GeneralKit"
                ReferencedContainer = "container:General.xcodeproj">
@@ -50,7 +50,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "016B1AD9264A323800977611"
+            BlueprintIdentifier = "General::GeneralKit"
             BuildableName = "GeneralKit.framework"
             BlueprintName = "GeneralKit"
             ReferencedContainer = "container:General.xcodeproj">
@@ -58,7 +58,7 @@
       </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "Debug">
+      buildConfiguration = "Analyze">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"

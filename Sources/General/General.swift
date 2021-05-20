@@ -24,7 +24,7 @@ final class General: ParsableCommand {
 
     static var configuration: CommandConfiguration {
         let version = "0.3.2"
-        ConfigFactory.default = .init(version: version, templatesRepos: [:], pluginRepos: [:], overrides: [:])
+        Services.configFactory.default = .init(version: version, templatesRepos: [:], pluginRepos: [:], overrides: [:])
         return .init(abstract: "Generates code from templates.",
                      version: "0.3.2",
                      subcommands: [Generate.self,
@@ -41,8 +41,8 @@ final class General: ParsableCommand {
     }
 
     private static func loadPlugins() -> [AnyCommandParser] {
-        let fileHelper = FileHelper.default
-        let parser: HelpParser = .init()
+        let fileHelper = Services.fileHelper
+        let parser: HelpParser = Services.helpParser
         guard let pluginFiles = try? fileHelper.contentsOfDirectory(at: Constants.pluginsPath) else {
             return []
         }
@@ -59,10 +59,10 @@ final class General: ParsableCommand {
     }
 
     private static func buildRunConfig() throws -> RunConfig {
-        let parser: HelpParser = .init()
+        let parser: HelpParser = Services.helpParser
         let general = try parser.parse(command: General.self)
         let plugins = loadPlugins()
-        let overrides = ConfigFactory.shared?.overrides ?? [:]
+        let overrides = Services.configFactory.shared?.overrides ?? [:]
         return .init(general: general, plugins: plugins, overrides: overrides)
     }
 }

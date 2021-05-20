@@ -8,8 +8,14 @@ import GeneralKit
 
 public final class Create: ParsableCommand {
 
-    private lazy var fileManager: FileManager = .default
-    private lazy var specFactory: SpecFactory = .init()
+    typealias Dependencies = HasFileHelper & HasSpecFactory
+
+    private lazy var fileManager: FileManager = dependencies.fileHelper.fileManager
+    private lazy var specFactory: SpecFactory = dependencies.specFactory
+
+    var dependencies: Dependencies {
+        Services
+    }
 
     // MARK: - Parameters
 

@@ -1,17 +1,11 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import PathKit
 import Foundation
 
-public final class UpgradeService {
-
-    public enum Version {
-        case current
-        case latest
-        case concrete(String)
-    }
+public final class UpgradeServiceImpl: UpgradeService {
 
     public enum Error: Swift.Error, CustomStringConvertible {
         case build
@@ -27,40 +21,41 @@ public final class UpgradeService {
         }
     }
 
-    private lazy var githubService: GithubService = .init()
-    private lazy var shell: Shell = .init()
+    public typealias Dependencies = HasGithubService & HasShell & HasConfigFactory
 
-    public init() {
-        //
+    private let dependencies: Dependencies
+
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
-    public func upgrade(to version: Version, customizationHandler: (() throws -> Void)? = nil) throws {
+    public func upgrade(to version: UpgradeVersion, customizationHandler: (() throws -> Void)?) throws {
         try cloneGeneralIfNeeded(version: version)
         try customizationHandler?()
         try buildGeneral()
     }
 
-    public func fetchConcreteVersion(from version: Version) -> String {
+    public func fetchConcreteVersion(from version: UpgradeVersion) -> String {
         switch version {
         case let .concrete(version):
             return version
         case .latest:
             return Constants.defaultGithubBranch
         case .current:
-            return ConfigFactory.shared?.version ?? Constants.defaultGithubBranch
+            return dependencies.configFactory.shared?.version ?? Constants.defaultGithubBranch
         }
     }
 
     // MARK: - Private
 
-    private func cloneGeneralIfNeeded(version: Version) throws {
+    private func cloneGeneralIfNeeded(version: UpgradeVersion) throws {
         let version = fetchConcreteVersion(from: version)
         let repo = Constants.githubRepo
         let destination = Constants.downloadedSourcePath
-        try githubService.downloadFiles(at: "\(repo) \(version)", to: destination)
+        try dependencies.githubService.downloadFiles(at: "\(repo) \(version)", to: destination)
     }
 
     private func buildGeneral() throws {
-        try shell(loud: "cd \(Constants.downloadedSourcePath); make install")
+        try dependencies.shell(loud: "cd \(Constants.downloadedSourcePath); make install")
     }
 }

@@ -5,14 +5,19 @@
 import ArgumentParser
 
 public extension ParsableCommand {
+
+    var configFactory: ConfigFactory {
+        Services.configFactory
+    }
+
     func config() throws -> GeneralConfig {
-        guard let config = ConfigFactory.shared else {
-            throw ConfigFactory.Error.invalidConfig
+        guard let config = configFactory.shared else {
+            throw ConfigFactoryImpl.Error.invalidConfig
         }
         return config
     }
 
     func updateConfig(handler: (GeneralConfig) throws -> GeneralConfig) throws {
-        try ConfigFactory.update(handler)
+        try configFactory.update(handler)
     }
 }

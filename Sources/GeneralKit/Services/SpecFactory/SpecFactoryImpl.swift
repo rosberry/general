@@ -1,11 +1,11 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import Foundation
 import Yams
 
-public final class SpecFactory {
+public final class SpecFactoryImpl: SpecFactory {
 
     let decoder: YAMLDecoder
     let encoder: YAMLEncoder

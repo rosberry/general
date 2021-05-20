@@ -10,6 +10,7 @@ final class Config: ParsableCommand {
 
     private class Print: ParsableCommand {
 
+        // swiftlint:disable:next nesting
         enum Error: Swift.Error, CustomStringConvertible {
             case config
 
@@ -35,13 +36,19 @@ final class Config: ParsableCommand {
 
     private class Reset: ParsableCommand {
         static let configuration: CommandConfiguration = .init(abstract: "Sets .config file to its default value")
+        // swiftlint:disable:next nesting
+        typealias Dependencies = HasFileHelper
+
+        private var dependencies: Dependencies {
+            Services
+        }
 
         required init() {
             //
         }
 
         func run() throws {
-            try FileHelper.default.removeFile(at: .init(fileURLWithPath: Constants.configPath))
+            try dependencies.fileHelper.removeFile(at: URL(fileURLWithPath: Constants.configPath))
             print(green(".config file is set to default value"))
         }
     }
@@ -77,6 +84,13 @@ final class Config: ParsableCommand {
     }
 
     private final class Use: ParsableCommand {
+        // swiftlint:disable:next nesting
+        typealias Dependencies = HasConfigFactory
+
+        private var dependencies: Dependencies {
+            Services
+        }
+
         static let configuration: CommandConfiguration = .init(abstract: "Set default executable instance for specific command")
 
         @Option(name: .shortAndLong, help: "The executable instance for the command", completion: .executables)
@@ -86,7 +100,7 @@ final class Config: ParsableCommand {
         var command: String
 
         func run() throws {
-            try ConfigFactory.update { config in
+            try dependencies.configFactory.update { config in
                 var config = config
                 config.overrides[command] = executable
                 return config
@@ -98,6 +112,6 @@ final class Config: ParsableCommand {
     static var configuration: CommandConfiguration {
         return .init(abstract: "Provides an access to config file",
                      subcommands: [Print.self, Reset.self, Repo.self, Use.self],
-                    defaultSubcommand: Print.self)
+                     defaultSubcommand: Print.self)
     }
 }

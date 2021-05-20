@@ -8,8 +8,14 @@ import GeneralKit
 
 public final class Upgrade: ParsableCommand {
 
-    private lazy var upgradeService: UpgradeService = .init()
+    typealias Dependencies = HasUpgradeService
+
+    private lazy var upgradeService: UpgradeService = dependencies.upgradeService
     public static let configuration: CommandConfiguration = .init(abstract: "Upgrades general to specified version")
+
+    private var dependencies: Dependencies {
+        Services
+    }
 
     // MARK: - Parameters
 
@@ -34,7 +40,7 @@ public final class Upgrade: ParsableCommand {
 
     // MARK: - Private
 
-    private func parseVersion() -> UpgradeService.Version {
+    private func parseVersion() -> UpgradeVersion {
         if let string = self.version {
             return .concrete(string)
         }

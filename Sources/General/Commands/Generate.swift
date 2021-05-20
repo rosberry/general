@@ -7,7 +7,7 @@ import ArgumentParser
 import GeneralKit
 
 public final class Generate: ParsableCommand {
-    
+
     public static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
 
     // MARK: - Parameters
@@ -33,7 +33,12 @@ public final class Generate: ParsableCommand {
     }
 
     public func run() throws {
-        let renderer = Renderer(name: name, template: template, path: path, variables: variables, output: output)
+        let renderer = Renderer(name: name,
+                                template: template,
+                                path: path,
+                                variables: variables,
+                                output: output,
+                                dependencies: Services)
         try renderer.render()
     }
 }

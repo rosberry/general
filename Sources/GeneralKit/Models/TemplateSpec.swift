@@ -11,5 +11,5 @@ public struct TemplateSpec: Codable, CustomStringConvertible {
     public init(files: [File], suffix: String? = nil) {
         self.files = files
         self.suffix = suffix
-    } 
+    }
 }

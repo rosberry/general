@@ -42,7 +42,7 @@ func definePlugin(commands: [String: CommandArguments], runConfig: RunConfig) ->
         exit(0)
     }
     if askBool(question: "Do you want use `\(choice)` by default for command `\(command)`?") {
-        try? ConfigFactory.update { config in
+        try? Services.configFactory.update { config in
             var config = config
             config.overrides[command] = choice
             return config
@@ -53,7 +53,7 @@ func definePlugin(commands: [String: CommandArguments], runConfig: RunConfig) ->
 }
 
 func run(plugin: String) throws {
-    let shell = Shell()
+    let shell = Services.shell
     try shell(loud: "\(Constants.pluginsPath)/\(plugin) \(CommandLine.arguments[1...].joined(separator: " "))")
 }
 

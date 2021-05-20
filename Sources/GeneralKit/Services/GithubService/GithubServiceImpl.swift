@@ -1,11 +1,11 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import PathKit
 import Foundation
 
-public final class GithubService {
+public final class GithubServiceImpl: GithubService {
 
     enum Error: Swift.Error {
         case url(_ url: String)
@@ -32,11 +32,12 @@ public final class GithubService {
         }
     }
 
-    private lazy var fileHelper: FileHelper = .default
-    private lazy var shell: Shell = .init()
+    public typealias Dependencies = HasShell & HasFileHelper
 
-    public init() {
-        //
+    private let dependencies: Dependencies
+
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
     public func getGitRepoPath(repo: String) throws -> String {
@@ -55,20 +56,20 @@ public final class GithubService {
     public func downloadFiles(at repo: String, filesHandler: ([FileInfo]) throws -> Void) throws {
         let gitRepoPath = try getGitRepoPath(repo: repo)
         let archiveURL = try downloadArchive(at: gitRepoPath)
-        let folderURL = try fileHelper.unzipArchive(at: archiveURL)
-        let firstDirectory = try fileHelper.contentsOfDirectory(at: folderURL).first(where: \.isDirectory)
+        let folderURL = try dependencies.fileHelper.unzipArchive(at: archiveURL)
+        let firstDirectory = try dependencies.fileHelper.contentsOfDirectory(at: folderURL).first(where: \.isDirectory)
         guard let directory = firstDirectory else {
             throw Error.write(folderURL)
         }
-        let files = try fileHelper.contentsOfDirectory(at: directory.url)
+        let files = try dependencies.fileHelper.contentsOfDirectory(at: directory.url)
         do {
             try filesHandler(files)
         }
         catch {
-            try fileHelper.removeFile(at: folderURL)
+            try dependencies.fileHelper.removeFile(at: folderURL)
             throw error
         }
-        try fileHelper.removeFile(at: folderURL)
+        try dependencies.fileHelper.removeFile(at: folderURL)
     }
 
     @discardableResult
@@ -111,7 +112,7 @@ public final class GithubService {
 
     private func fetchFiles(in url: URL, matchHandler: (FileInfo) -> Bool) throws -> [FileInfo] {
         var files = [FileInfo]()
-        try fileHelper.contentsOfDirectory(at: url).forEach { file in
+        try dependencies.fileHelper.contentsOfDirectory(at: url).forEach { file in
             if matchHandler(file) {
                 files.append(file)
             }
@@ -121,14 +122,14 @@ public final class GithubService {
 
     private func move(_ files: [FileInfo], to destination: URL) throws -> [FileInfo] {
         var moved = [FileInfo]()
-        try fileHelper.createDirectory(at: destination)
+        try dependencies.fileHelper.createDirectory(at: destination)
 
         for file in files {
-            let destination = try fileHelper.fileInfo(with: destination + file.url.lastPathComponent)
+            let destination = try dependencies.fileHelper.fileInfo(with: destination + file.url.lastPathComponent)
             if destination.isExists {
-                try fileHelper.removeFile(at: destination.url)
+                try dependencies.fileHelper.removeFile(at: destination.url)
             }
-            try fileHelper.moveFile(at: file.url, to: destination.url)
+            try dependencies.fileHelper.moveFile(at: file.url, to: destination.url)
             moved.append(destination)
         }
         return moved

@@ -1,11 +1,11 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import Foundation
 import ZIPFoundation
 
-public final class FileHelper {
+public final class FileHelperImpl: FileHelper {
 
     public enum Error: Swift.Error, CustomStringConvertible {
         case createDirectory(_ url: URL, error: Swift.Error)
@@ -39,8 +39,6 @@ public final class FileHelper {
             }
         }
     }
-
-    public static var `default` = FileHelper()
 
     private lazy var keys: Set<URLResourceKey> = [.isDirectoryKey, .contentModificationDateKey]
     public lazy var fileManager: FileManager = .default

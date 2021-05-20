@@ -1,19 +1,20 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
 import Foundation
 
-public final class SetupService {
+public final class SetupServiceImpl: SetupService {
 
-    private lazy var githubService: GithubService = .init()
-    private lazy var fileHelper: FileHelper = .default
+    public typealias Dependencies = HasFileHelper & HasGithubService & HasConfigFactory
 
-    public init() {
-        //
+    private let dependencies: Dependencies
+
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
 
-    public func setup(githubPath: String, shouldLoadGlobally: Bool, customizationHandler: (([FileInfo]) throws -> Void)? = nil) throws {
+    public func setup(githubPath: String, shouldLoadGlobally: Bool, customizationHandler: (([FileInfo]) throws -> Void)?) throws {
         let destination = getTemplatesDestination(shouldLoadGlobally: shouldLoadGlobally)
         let files = try downloadFiles(from: githubPath, destination: destination)
         try customizationHandler?(files)
@@ -24,12 +25,12 @@ public final class SetupService {
 
     private func downloadFiles(from path: String, destination: URL) throws -> [FileInfo] {
         var path = path
-        if let linkedPath = ConfigFactory.shared?.templatesRepos[path] {
+        if let linkedPath = dependencies.configFactory.shared?.templatesRepos[path] {
             path = linkedPath
         }
         print("Loading setup files from \(path)...")
         var downloadedFiles = [FileInfo]()
-        try githubService.downloadFiles(at: path) { files in
+        try dependencies.githubService.downloadFiles(at: path) { files in
             if let file = try updatedSpec(with: files) {
                 downloadedFiles.append(file)
             }
@@ -43,36 +44,37 @@ public final class SetupService {
             return nil
         }
         let destination = Constants.relativeCurrentPath + file.url.lastPathComponent
-        let destinationFile = try fileHelper.fileInfo(with: .init(fileURLWithPath: destination))
+        let destinationFile = try dependencies.fileHelper.fileInfo(with: .init(fileURLWithPath: destination))
         guard !destinationFile.isExists ||
                askBool(question: "General spec already exists. Do you want to replace it? (Yes, No)") else {
             return nil
         }
         if destinationFile.isExists {
-            try fileHelper.removeFile(at: destinationFile.url)
+            try dependencies.fileHelper.removeFile(at: destinationFile.url)
         }
-        try fileHelper.moveFile(at: file.url, to: destinationFile.url)
+        try dependencies.fileHelper.moveFile(at: file.url, to: destinationFile.url)
         return destinationFile
     }
 
     private func updatedTemplates(with files: [FileInfo]) throws -> [FileInfo] {
         var downloadedFiles = [FileInfo]()
         guard let folder = files.first(where: isTemplatesFolder),
-              let templates = try? fileHelper.contentsOfDirectory(at: folder.url) else {
+              let templates = try? dependencies.fileHelper.contentsOfDirectory(at: folder.url) else {
             return downloadedFiles
         }
-        let destination = try fileHelper.fileInfo(with: .init(fileURLWithPath: Constants.relativeCurrentPath + Constants.templatesFolderName))
+        let path = Constants.relativeCurrentPath + Constants.templatesFolderName
+        let destination = try dependencies.fileHelper.fileInfo(with: .init(fileURLWithPath: path))
         try templates.forEach { template in
             let templateURL = template.url
             let templateDestination = destination.url + template.url.lastPathComponent
-            let destinationFile = try fileHelper.fileInfo(with: templateDestination)
+            let destinationFile = try dependencies.fileHelper.fileInfo(with: templateDestination)
             if destinationFile.isExists {
                 guard shouldUpdateTemplate(destinationFile, with: template) else {
                     return
                 }
-                try fileHelper.removeFile(at: destinationFile.url)
+                try dependencies.fileHelper.removeFile(at: destinationFile.url)
             }
-            try fileHelper.moveFile(at: templateURL, to: destinationFile.url)
+            try dependencies.fileHelper.moveFile(at: templateURL, to: destinationFile.url)
             downloadedFiles.append(destinationFile)
         }
         return downloadedFiles
@@ -93,7 +95,7 @@ public final class SetupService {
 
     private func getTemplatesDestination(shouldLoadGlobally: Bool) -> URL {
         if shouldLoadGlobally {
-            return fileHelper.fileManager.homeDirectoryForCurrentUser
+            return dependencies.fileHelper.fileManager.homeDirectoryForCurrentUser
         }
         else {
             return URL(fileURLWithPath: Constants.relativeCurrentPath)
@@ -122,7 +124,7 @@ public final class SetupService {
         guard file.isDirectory else {
             return file.contentModificationDate
         }
-        let files = try fileHelper.contentsOfDirectory(at: file.url)
+        let files = try dependencies.fileHelper.contentsOfDirectory(at: file.url)
         var date: Date?
         for file in files {
             guard let fileDate = try modificationDateOfFile(file) else {

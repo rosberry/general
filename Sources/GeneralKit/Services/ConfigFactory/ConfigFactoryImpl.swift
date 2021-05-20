@@ -6,7 +6,7 @@ import Foundation
 import Yams
 import PathKit
 
-public final class ConfigFactory {
+public final class ConfigFactoryImpl: ConfigFactory {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case defaultConfig
@@ -33,13 +33,12 @@ public final class ConfigFactory {
         self.encoder = encoder
     }
 
-    public static var shared: GeneralConfig?  = try? ConfigFactory().makeConfig(url: .init(fileURLWithPath: Constants.configPath))
-
-    public static var `default`: GeneralConfig?
+    public lazy var shared: GeneralConfig?  = try? makeConfig(url: .init(fileURLWithPath: Constants.configPath))
+    public var `default`: GeneralConfig?
 
     func makeConfig(url: URL) throws -> GeneralConfig {
         guard let string = try? String(contentsOf: url) else {
-            guard let `default` = ConfigFactory.default else {
+            guard let `default` = self.default else {
                 throw Error.defaultConfig
             }
             return `default`
@@ -53,21 +52,17 @@ public final class ConfigFactory {
     }
 
     public func update( _ handler: (GeneralConfig) throws -> GeneralConfig) throws {
-        guard var config = ConfigFactory.shared else {
+        guard var config = shared else {
             throw Error.invalidConfig
         }
         config = try handler(config)
         do {
-            ConfigFactory.shared = config
+            shared = config
             let data = try makeData(config: config)
             try data?.write(to: .init(fileURLWithPath: Constants.configPath))
         }
         catch {
             throw Error.write
         }
-    }
-
-    public static func update( _ handler: (GeneralConfig) throws -> GeneralConfig) throws {
-        try ConfigFactory().update(handler)
     }
 }

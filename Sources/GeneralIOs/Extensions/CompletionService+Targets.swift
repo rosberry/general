@@ -7,7 +7,7 @@ import XcodeProj
 import ArgumentParser
 
 public extension CompletionsService {
-    static func targets() -> [String] {
+    func targets() -> [String] {
         guard let projectPath = try? ProjectService.findProject() else {
             return []
         }
@@ -18,7 +18,7 @@ public extension CompletionsService {
 public extension CompletionKind {
     static var targets: CompletionKind {
         .custom { _ in
-            CompletionsService.targets()
+            dependencies.completionsService.targets()
         }
     }
 }

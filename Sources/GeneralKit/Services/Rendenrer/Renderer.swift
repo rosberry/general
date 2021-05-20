@@ -21,23 +21,22 @@ public final class Renderer {
         }
     }
 
-
     private class VariablesTemplate: Template {
         var variables: [String]
         required init(templateString: String, environment: Environment? = nil, name: String? = nil) {
-            self.variables = parseAllRegexMatches(pattern: "\\{\\{\\s*([a-zA-Z][a-zA-Z0-9]*)\\s*\\}\\}", rangeIndex: 1, string: templateString)
+            let pattern = "\\{\\{\\s*([a-zA-Z][a-zA-Z0-9]*)\\s*\\}\\}"
+            self.variables = parseAllRegexMatches(pattern: pattern, rangeIndex: 1, string: templateString)
             super.init(templateString: templateString, environment: environment, name: name)
         }
     }
+
+    public typealias Dependencies = HasFileHelper & HasSpecFactory
 
     let name: String
     let template: String
     let path: String
     let variables: [Variable]
     var output: String?
-
-    private lazy var fileManager: FileManager = .default
-    private lazy var specFactory: SpecFactory = .init()
 
     private lazy var context: [String: Any] = {
         let year = Calendar.current.component(.year, from: .init())
@@ -49,23 +48,27 @@ public final class Renderer {
         return context
     }()
 
+    private let dependencies: Dependencies
+
     public init(name: String,
                 template: String,
                 path: String,
                 variables: [Variable],
-                output: String?) {
+                output: String?,
+                dependencies: Dependencies) {
         self.name = name
         self.template = template
         self.path = path
         self.variables = variables
         self.output = output
+        self.dependencies = dependencies
     }
 
     public func render(completion: ((URL) throws -> Void)? = nil) throws {
         let templatesURL = defineTemplatesURL()
         let templateURL = templatesURL + template
         let specURL = templateURL + Constants.specFilename
-        let templateSpec: TemplateSpec = try specFactory.makeSpec(url: specURL)
+        let templateSpec: TemplateSpec = try dependencies.specFactory.makeSpec(url: specURL)
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
         try add(templateSpec, environment: environment, completion: completion)
@@ -111,6 +114,7 @@ public final class Renderer {
         // write rendered template to file
         let fileURL = outputURL
         outputURL.deleteLastPathComponent()
+        let fileManager = dependencies.fileHelper.fileManager
         guard !fileManager.fileExists(atPath: fileURL.path) else {
             print(yellow("File already exists: \(fileURL.path)"))
             return nil
@@ -129,7 +133,7 @@ public final class Renderer {
 
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
         let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)
-        let generalSpec: GeneralSpec? = try? specFactory.makeSpec(url: specURL)
+        let generalSpec: GeneralSpec? = try? dependencies.specFactory.makeSpec(url: specURL)
         guard let output = generalSpec?.output(forTemplateName: template) else {
             return nil
         }
@@ -137,6 +141,7 @@ public final class Renderer {
     }
 
     private func defineTemplatesURL() -> URL {
+        let fileManager = dependencies.fileHelper.fileManager
         let folderName = Constants.templatesFolderName
         let localPath = "./\(folderName)/"
         if fileManager.fileExists(atPath: localPath + template) {
@@ -146,6 +151,7 @@ public final class Renderer {
     }
 
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {
+        let fileManager = dependencies.fileHelper.fileManager
         let commonTemplatesURL = templatesURL + Constants.commonTemplatesFolderName
         let contents = try fileManager.contentsOfDirectory(at: templateURL,
                                                            includingPropertiesForKeys: [.isDirectoryKey],

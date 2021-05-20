@@ -136,8 +136,8 @@ public final class AnyCommandParser: Parser<CommandArguments> {
     }
 
     private func parse<Value>(arguments: [String],
-                              parsers: [String: Parser<Value>]) -> ([String: Value], [String])?  {
-        var result = [String:Value]()
+                              parsers: [String: Parser<Value>]) -> ([String: Value], [String])? {
+        var result = [String: Value]()
         var arguments = arguments
 
         parsers.forEach { key, parser in

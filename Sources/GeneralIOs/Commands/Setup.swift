@@ -25,6 +25,8 @@ public final class Setup: ParsableCommand {
         }
     }
 
+    public typealias Dependencies = HasSetupService & HasSpecFactory
+
     public static let configuration: CommandConfiguration = .init(commandName: "setup",
                                                                   abstract: "Provides your environment with templates")
 
@@ -51,8 +53,9 @@ public final class Setup: ParsableCommand {
             help: "Configures company name that will be placed in file headers")
     var company: String?
 
-    private lazy var setupService: SetupService = .init()
-    private lazy var specFactory: SpecFactory = .init()
+    private var dependencies: Dependencies {
+        Services
+    }
 
     // MARK: - Lifecycle
 
@@ -68,7 +71,7 @@ public final class Setup: ParsableCommand {
         guard let githubPath = self.githubPath else {
             throw Error.github
         }
-        try setupService.setup(githubPath: githubPath, shouldLoadGlobally: shouldLoadGlobally) { files in
+        try dependencies.setupService.setup(githubPath: githubPath, shouldLoadGlobally: shouldLoadGlobally) { files in
             let specFile = files.first { file in
                 file.url.lastPathComponent == Constants.generalSpecName
             }
@@ -81,7 +84,7 @@ public final class Setup: ParsableCommand {
     // MARK: - Private
 
     private func updateSpec(_ file: FileInfo) throws {
-        guard var spec: GeneralSpec = try? specFactory.makeSpec(url: file.url) else {
+        guard var spec: GeneralSpec = try? dependencies.specFactory.makeSpec(url: file.url) else {
             throw Error.loadSpec(file.url)
         }
         guard let name = xcodeProject ?? askProject() else {
@@ -90,7 +93,7 @@ public final class Setup: ParsableCommand {
         let target = self.target ?? ask("Target (optional)")
         let company = self.company ?? ask("Company (optional)", default: spec.xcode.company)
         spec.xcode = .init(name: name, target: target, company: company)
-        guard let data = try? specFactory.makeData(spec: spec) else {
+        guard let data = try? dependencies.specFactory.makeData(spec: spec) else {
             throw Error.loadSpec(file.url)
         }
         try data.write(to: file.url)

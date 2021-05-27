@@ -4,20 +4,10 @@
 
 import Foundation
 
-public struct ShellIO {
-    public let stdOut: String
-    public let stdErr: String
-    public let stdIn: String
-    public let status: Int32
-    public let command: [String]
+public protocol ProgressObservable {
+    associatedtype State
 
-    public init(stdOut: String, stdErr: String, stdIn: String, status: Int32, command: [String]) {
-        self.stdOut = stdOut
-        self.stdErr = stdErr
-        self.stdIn = stdIn
-        self.status = status
-        self.command = command
-    }
+    func subscribe(_ observer: @escaping (State) -> Void) -> Self
 }
 
 public protocol HasShell {
@@ -27,6 +17,6 @@ public protocol HasShell {
 public protocol Shell {
     @discardableResult
     func callAsFunction(loud command: String) throws -> Int32
-    func callAsFunction(throw command: String) throws
-    func callAsFunction(silent command: String) throws -> ShellIO
+    @discardableResult
+    func callAsFunction(silent command: String) throws -> String
 }

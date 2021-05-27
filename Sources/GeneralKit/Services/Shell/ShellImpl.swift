@@ -1,14 +1,20 @@
 //
-//  Copyright © 2021 Rosberry. All rights reserved.
+// Copyright © 2021 Rosberry. All rights reserved.
 //
-
 import Foundation
 
 public final class ShellImpl: Shell {
 
-    public enum Error: Swift.Error {
-        case failure(ShellIO)
-        case badStatusCode(String, Int32)
+    public struct Error: Swift.Error {
+        public let terminationStatus: Int32
+        public let errorData: Data?
+        public let outputData: Data?
+        public var message: String? {
+            errorData?.shellOutput()
+        }
+        public var output: String? {
+            outputData?.shellOutput()
+        }
     }
 
     public enum CallKind {
@@ -27,63 +33,75 @@ public final class ShellImpl: Shell {
         observer?(.start(command: command, kind: .loud))
         let process = Process()
         Self.processCreationHandler?(process)
-        process.launchPath = Constants.shell
+        process.launchPath = "/bin/zsh"
         process.arguments = ["-c", command]
-        process.launch()
+        if #available(OSX 10.13, *) {
+            try process.run()
+        } else {
+            process.launch()
+        }
         process.waitUntilExit()
         let statusCode = process.terminationStatus
         if statusCode == 0 {
             return statusCode
         }
         else {
-            throw Error.badStatusCode(command, statusCode)
+            throw Error(terminationStatus: statusCode, errorData: nil, outputData: nil)
         }
     }
 
-    public func callAsFunction(throw command: String) throws {
-        observer?(.start(command: command, kind: .loud))
-        let process = Process()
-        Self.processCreationHandler?(process)
-        process.launchPath = Constants.shell
-        process.arguments = ["-c", command]
-        process.launch()
-    }
-
-    public func callAsFunction(silent command: String) throws -> ShellIO {
+    public func callAsFunction(silent command: String) throws -> String {
         observer?(.start(command: command, kind: .silent))
         let process = Process()
         Self.processCreationHandler?(process)
-        process.launchPath = Constants.shell
+        process.launchPath = "/bin/zsh"
         process.arguments = ["-c", command]
-        let shellIO = try output(of: process, command: [command])
-        if shellIO.status == 0 {
-            return shellIO
-        }
-        else {
-            throw Error.failure(shellIO)
-        }
+        return try output(of: process, command: [command])
     }
 
-    private func output(of process: Process, command: [String]) throws -> ShellIO {
+    private func output(of process: Process, command: [String]) throws -> String {
         let stdOutPipe = Pipe()
         let stdErrPipe = Pipe()
-        let stdInFileHandle = Pipe().fileHandleForReading
         process.standardOutput = stdOutPipe
         process.standardError = stdErrPipe
-        process.standardInput = stdInFileHandle
-        process.launch()
-        process.waitUntilExit()
-        let handlersStrings = [stdOutPipe.fileHandleForReading,
-                               stdErrPipe.fileHandleForReading,
-                               stdInFileHandle].map { handler -> String in
-            let outputData = handler.readDataToEndOfFile()
-            return String(data: outputData, encoding: .utf8) ?? ""
+
+        var outputData = Data()
+        let outputQueue = DispatchQueue(label: "zsh-output-queue")
+        stdOutPipe.fileHandleForReading.readabilityHandler = { handler in
+            let data = handler.availableData
+            outputQueue.async {
+                outputData.append(data)
+            }
         }
-        return ShellIO(stdOut: handlersStrings[0],
-                       stdErr: handlersStrings[1],
-                       stdIn: handlersStrings[2],
-                       status: process.terminationStatus,
-                       command: command)
+
+        var errorData = Data()
+        stdErrPipe.fileHandleForReading.readabilityHandler = { handler in
+            let data = handler.availableData
+            outputQueue.async {
+                errorData.append(data)
+            }
+        }
+
+        if #available(OSX 10.13, *) {
+            try process.run()
+        } else {
+            process.launch()
+        }
+        process.waitUntilExit()
+
+        stdOutPipe.fileHandleForReading.readabilityHandler = nil
+        stdErrPipe.fileHandleForReading.readabilityHandler = nil
+
+        return try outputQueue.sync {
+            if process.terminationStatus != 0 {
+                throw Error(terminationStatus: process.terminationStatus,
+                            errorData: errorData,
+                            outputData: outputData)
+            }
+            else {
+                return outputData.shellOutput()
+            }
+        }
     }
 
     private func terminationStatus(of process: Process) -> Int32 {
@@ -93,7 +111,8 @@ public final class ShellImpl: Shell {
     }
 }
 
-extension ShellImpl {
+extension ShellImpl: ProgressObservable {
+
     public enum State {
         case start(command: String, kind: CallKind)
     }
@@ -102,5 +121,29 @@ extension ShellImpl {
     public func subscribe(_ observer: @escaping (State) -> Void) -> Self {
         self.observer = observer
         return self
+    }
+}
+
+extension ShellImpl: Codable {
+    public convenience init(from decoder: Decoder) throws {
+        self.init()
+    }
+
+    public func encode(to encoder: Encoder) throws {
+    }
+}
+
+private extension Data {
+    func shellOutput() -> String {
+        guard let output = String(data: self, encoding: .utf8) else {
+            return ""
+        }
+
+        guard !output.hasSuffix("\n") else {
+            let endIndex = output.index(before: output.endIndex)
+            return String(output[..<endIndex])
+        }
+
+        return output
     }
 }

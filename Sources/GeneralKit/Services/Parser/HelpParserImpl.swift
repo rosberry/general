@@ -71,7 +71,7 @@ public final class HelpParserImpl: HelpParser {
 
     public func parse(path: String? = nil, command: String) throws -> AnyCommandParser {
         let path = path ?? ""
-        var string = try dependencies.shell(silent: "\(path)\(command) --help").stdOut
+        var string = try dependencies.shell(silent: "\(path)\(command) --help")
         string = string.replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
         context.lines = string.split(separator: "\n").map { string in

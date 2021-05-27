@@ -132,7 +132,6 @@
 		OBJ_526 /* ShellImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_72 /* ShellImpl.swift */; };
 		OBJ_527 /* SpecFactoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_73 /* SpecFactoryImpl.swift */; };
 		OBJ_528 /* UpgradeServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_74 /* UpgradeServiceImpl.swift */; };
-		OBJ_529 /* TmpFolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_75 /* TmpFolder.swift */; };
 		OBJ_531 /* ZIPFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "ZIPFoundation::ZIPFoundation::Product" /* ZIPFoundation.framework */; };
 		OBJ_532 /* Yams.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Yams::Yams::Product" /* Yams.framework */; };
 		OBJ_533 /* CYaml.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "Yams::CYaml::Product" /* CYaml.framework */; };
@@ -794,7 +793,6 @@
 		OBJ_72 /* ShellImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShellImpl.swift; sourceTree = "<group>"; };
 		OBJ_73 /* SpecFactoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecFactoryImpl.swift; sourceTree = "<group>"; };
 		OBJ_74 /* UpgradeServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpgradeServiceImpl.swift; sourceTree = "<group>"; };
-		OBJ_75 /* TmpFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TmpFolder.swift; sourceTree = "<group>"; };
 		OBJ_81 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		OBJ_83 /* AEXML+XcodeFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AEXML+XcodeFormat.swift"; sourceTree = "<group>"; };
 		OBJ_84 /* Array+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extras.swift"; sourceTree = "<group>"; };
@@ -1556,7 +1554,6 @@
 				OBJ_38 /* Ask.swift */,
 				OBJ_39 /* ColorString.swift */,
 				OBJ_40 /* Constants.swift */,
-				OBJ_75 /* TmpFolder.swift */,
 				OBJ_59 /* RegEx.swift */,
 				OBJ_41 /* Extensions */,
 				OBJ_45 /* Models */,
@@ -2398,7 +2395,6 @@
 				OBJ_527 /* SpecFactoryImpl.swift in Sources */,
 				01C4B97326561D4800708604 /* ConfigFactory.swift in Sources */,
 				OBJ_528 /* UpgradeServiceImpl.swift in Sources */,
-				OBJ_529 /* TmpFolder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

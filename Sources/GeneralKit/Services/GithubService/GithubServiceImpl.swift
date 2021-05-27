@@ -90,7 +90,7 @@ public final class GithubServiceImpl: GithubService {
             throw Error.url(path)
         }
         let data = try self.data(at: url)
-        let tmpFolderURL = try tempFolderWithRandomName()
+        let tmpFolderURL = try URL.tempFolderWithRandomName()
         let fileURL = tmpFolderURL + url.lastPathComponent
         do {
             try data.write(to: fileURL)

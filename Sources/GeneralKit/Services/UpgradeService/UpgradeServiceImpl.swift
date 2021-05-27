@@ -56,6 +56,6 @@ public final class UpgradeServiceImpl: UpgradeService {
     }
 
     private func buildGeneral() throws {
-        try dependencies.shell(loud: "cd \(Constants.downloadedSourcePath); make install")
+        try dependencies.shell(loud: "cd \(Constants.downloadedSourcePath) && make install")
     }
 }

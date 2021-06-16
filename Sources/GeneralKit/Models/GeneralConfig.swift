@@ -8,9 +8,9 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
     public var overrides: [String: String]
 
     public init(version: String,
-                templatesRepos: [String: String],
-                pluginRepos: [String: String],
-                overrides: [String: String]) {
+                templatesRepos: [String: String] = [:],
+                pluginRepos: [String: String] = [:],
+                overrides: [String: String] = [:]) {
         self.version = version
         self.templatesRepos = templatesRepos
         self.overrides = overrides

@@ -105,19 +105,19 @@ public final class AnyCommandParser: Parser<CommandArguments> {
         var isParsed = false
         repeat {
             isParsed = false
-            if let optionsParseResult = parse(arguments: arguments, parsers: self.optionParsers) {
-                result.options = optionsParseResult.0
-                arguments = optionsParseResult.1
+            if let (matchedOptions, remainingArguments) = parse(arguments: arguments, parsers: self.optionParsers) {
+                result.options = matchedOptions
+                arguments = remainingArguments
                 isParsed = true
             }
-            if let subcommandsParseResult = parse(arguments: arguments, parsers: self.subcommandParsers) {
-                result.subcommands = subcommandsParseResult.0
-                arguments = subcommandsParseResult.1
+            if let (matchedSubcommands, remainingArguments) = parse(arguments: arguments, parsers: self.subcommandParsers) {
+                result.subcommands = matchedSubcommands
+                arguments = remainingArguments
                 isParsed = true
             }
-            if let argumentsParseResult = parse(arguments: arguments, parsers: self.argumentParsers) {
-                result.arguments = argumentsParseResult.0
-                arguments = argumentsParseResult.1
+            if let (matchedArguments, remainingArguments) = parse(arguments: arguments, parsers: self.argumentParsers) {
+                result.arguments = matchedArguments
+                arguments = remainingArguments
                 isParsed = true
             }
         } while isParsed && arguments.isEmpty == false
@@ -141,11 +141,11 @@ public final class AnyCommandParser: Parser<CommandArguments> {
         var arguments = arguments
 
         parsers.forEach { key, parser in
-            guard let parseResult = parser.parse(arguments: arguments) else {
+            guard let (matchedValue, remainingArguments) = parser.parse(arguments: arguments) else {
                 return
             }
-            result[key] = parseResult.0
-            arguments = parseResult.1
+            result[key] = matchedValue
+            arguments = remainingArguments
         }
 
         guard result.isEmpty == false else {

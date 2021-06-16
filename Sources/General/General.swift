@@ -9,10 +9,8 @@ import GeneralKit
 final class General: ParsableCommand {
 
     static var configuration: CommandConfiguration {
-        let version = "0.3.2"
-        Services.configFactory.default = .init(version: version, templatesRepos: [:], pluginRepos: [:], overrides: [:])
         return .init(abstract: "Generates code from templates.",
-                     version: "0.3.2",
+                     version: version,
                      subcommands: [Generate.self,
                                    Create.self,
                                    List.self,

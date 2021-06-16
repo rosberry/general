@@ -111,13 +111,9 @@ public final class GithubServiceImpl: GithubService {
     }
 
     private func fetchFiles(in url: URL, matchHandler: (FileInfo) -> Bool) throws -> [FileInfo] {
-        var files = [FileInfo]()
-        try dependencies.fileHelper.contentsOfDirectory(at: url).forEach { file in
-            if matchHandler(file) {
-                files.append(file)
-            }
+        try dependencies.fileHelper.contentsOfDirectory(at: url).compactMap { file in
+            matchHandler(file) ? file : nil
         }
-        return files
     }
 
     private func move(_ files: [FileInfo], to destination: URL) throws -> [FileInfo] {

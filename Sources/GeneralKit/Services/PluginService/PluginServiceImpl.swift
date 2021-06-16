@@ -85,16 +85,16 @@ final class PluginServiceImpl: PluginService {
         }
     }
 
-    func mapCommands(runConfig: RunConfig) -> [String: CommandArguments] {
+    private func mapCommands(runConfig: RunConfig) -> [String: CommandArguments] {
         var result: [String: CommandArguments] = [:]
         let arguments = CommandLine.arguments.dropFirst()
         ([runConfig.general] + runConfig.plugins).forEach { command in
-            guard let parseResult = command.parse(arguments: [command.name] + arguments),
-                  parseResult.1.isEmpty else {
+            guard let (matchedCommandArguments, remainingArguments) = command.parse(arguments: [command.name] + arguments),
+                  remainingArguments.isEmpty else {
                 return
             }
 
-            result[command.name] = parseResult.0
+            result[command.name] = matchedCommandArguments
         }
         return result
     }

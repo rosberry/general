@@ -149,7 +149,7 @@ public final class HelpParserImpl: HelpParser {
 
         var defaultCommandName: String?
         if let defaultSubcommand = command.configuration.defaultSubcommand {
-            defaultCommandName = defaultSubcommand.configuration.commandName ?? String(describing: type(of: defaultSubcommand)).lowercased()
+            defaultCommandName = defaultSubcommand.configuration.commandName ?? String(describing: defaultSubcommand).lowercased()
         }
         try command.configuration.subcommands.map(parse).forEach { command in
             subcommands[command.name] = command

@@ -3,7 +3,7 @@
 //
 
 public class Parser<Value> {
-    func parse(arguments: [String]) -> (Value, [String])? {
+    public func parse(arguments: [String]) -> (Value, [String])? {
         return nil
     }
 }

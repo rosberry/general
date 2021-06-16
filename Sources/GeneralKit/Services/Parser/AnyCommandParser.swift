@@ -18,7 +18,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             self.short = short
         }
 
-        override func parse(arguments: [String]) -> (String, [String])? {
+        public override func parse(arguments: [String]) -> (String, [String])? {
             guard var first = arguments.first else {
                 return nil
             }
@@ -62,7 +62,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             self.name = name
         }
 
-        override func parse(arguments: [String]) -> (String, [String])? {
+        public override func parse(arguments: [String]) -> (String, [String])? {
             guard let first = arguments.first else {
                 return nil
             }
@@ -96,7 +96,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
         self.isDefault = isDefault
     }
 
-    public func parse(arguments: [String]) -> (CommandArguments?, [String])? {
+    public override func parse(arguments: [String]) -> (CommandArguments, [String])? {
         guard let first = arguments.first, first == name else {
             return nil
         }

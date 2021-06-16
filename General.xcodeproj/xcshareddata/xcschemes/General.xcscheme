@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-n My -t rsb_generic_module"
+            argument = "-n Some -t rsb_generic_module"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument

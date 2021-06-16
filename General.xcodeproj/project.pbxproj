@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0113EA05267A074000E5A399 /* PluginServiceImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0113EA04267A073F00E5A399 /* PluginServiceImpl.swift */; };
+		0113EA30267A074600E5A399 /* PluginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0113E9ED267A06B300E5A399 /* PluginService.swift */; };
+		0113EA47267A07C700E5A399 /* RunConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0113EA46267A07C700E5A399 /* RunConfig.swift */; };
 		0154899B2656289200DA3102 /* ServiceFactory+GeneralIOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0154899A2656289200DA3102 /* ServiceFactory+GeneralIOs.swift */; };
 		015489B226562A5500DA3102 /* ProjectServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015489B126562A5500DA3102 /* ProjectServiceFactory.swift */; };
 		015CE1B5265625370061EBE2 /* SpecFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015CE1B4265625370061EBE2 /* SpecFactory.swift */; };
@@ -529,6 +532,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0113E9ED267A06B300E5A399 /* PluginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginService.swift; sourceTree = "<group>"; };
+		0113EA04267A073F00E5A399 /* PluginServiceImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginServiceImpl.swift; sourceTree = "<group>"; };
+		0113EA46267A07C700E5A399 /* RunConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunConfig.swift; sourceTree = "<group>"; };
 		0154899A2656289200DA3102 /* ServiceFactory+GeneralIOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ServiceFactory+GeneralIOs.swift"; sourceTree = "<group>"; };
 		015489B126562A5500DA3102 /* ProjectServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectServiceFactory.swift; sourceTree = "<group>"; };
 		015CE1B4265625370061EBE2 /* SpecFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecFactory.swift; sourceTree = "<group>"; };
@@ -938,6 +944,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0113E9EC267A062A00E5A399 /* PluginService */ = {
+			isa = PBXGroup;
+			children = (
+				0113E9ED267A06B300E5A399 /* PluginService.swift */,
+				0113EA04267A073F00E5A399 /* PluginServiceImpl.swift */,
+			);
+			path = PluginService;
+			sourceTree = "<group>";
+		};
 		015489032656279D00DA3102 /* ProjectService */ = {
 			isa = PBXGroup;
 			children = (
@@ -1585,6 +1600,7 @@
 				OBJ_57 /* Variable.swift */,
 				OBJ_58 /* XcodeprojSpec.swift */,
 				01ECEAA92655174800B275B9 /* CommandArguments.swift */,
+				0113EA46267A07C700E5A399 /* RunConfig.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1610,6 +1626,7 @@
 			isa = PBXGroup;
 			children = (
 				01ECEB4E26560F7100B275B9 /* ServiceFactory */,
+				0113E9EC267A062A00E5A399 /* PluginService */,
 				01ECEBA82656117100B275B9 /* FileHelper */,
 				01ECEB7B2656109A00B275B9 /* GithubService */,
 				01ECEB2126560E3E00B275B9 /* SetupService */,
@@ -2371,9 +2388,12 @@
 				OBJ_505 /* GeneralSpec.swift in Sources */,
 				OBJ_509 /* Output.swift in Sources */,
 				01ECEBAA2656118C00B275B9 /* FileHelper.swift in Sources */,
+				0113EA47267A07C700E5A399 /* RunConfig.swift in Sources */,
+				0113EA30267A074600E5A399 /* PluginService.swift in Sources */,
 				OBJ_512 /* TemplateSpec.swift in Sources */,
 				OBJ_513 /* Variable.swift in Sources */,
 				OBJ_514 /* XcodeprojSpec.swift in Sources */,
+				0113EA05267A074000E5A399 /* PluginServiceImpl.swift in Sources */,
 				OBJ_515 /* RegEx.swift in Sources */,
 				OBJ_516 /* CompletionsServiceImpl.swift in Sources */,
 				01ECEA93265516EC00B275B9 /* Parser.swift in Sources */,

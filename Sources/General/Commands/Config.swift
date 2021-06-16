@@ -22,7 +22,7 @@ final class Config: ParsableCommand {
             }
         }
 
-        static let configuration: CommandConfiguration = .init(abstract: "Displays content of .config file")
+        static let configuration: CommandConfiguration = .init(abstract: "Displays general config")
 
         required init() {
             //
@@ -35,7 +35,7 @@ final class Config: ParsableCommand {
     }
 
     private class Reset: ParsableCommand {
-        static let configuration: CommandConfiguration = .init(abstract: "Sets .config file to its default value")
+        static let configuration: CommandConfiguration = .init(abstract: "Resets general config")
         // swiftlint:disable:next nesting
         typealias Dependencies = HasFileHelper
 
@@ -49,7 +49,7 @@ final class Config: ParsableCommand {
 
         func run() throws {
             try dependencies.fileHelper.removeFile(at: URL(fileURLWithPath: Constants.configPath))
-            print(green(".config file is set to default value"))
+            print(green("General config is reset"))
         }
     }
 
@@ -96,7 +96,7 @@ final class Config: ParsableCommand {
         @Option(name: .shortAndLong, help: "The executable instance for the command", completion: .executables)
         var executable: String
 
-        @Option(name: .customLong("for"), help: "The name on the commant")
+        @Option(name: .customLong("for"), help: "The name on the command")
         var command: String
 
         func run() throws {
@@ -110,7 +110,7 @@ final class Config: ParsableCommand {
     }
 
     static var configuration: CommandConfiguration {
-        return .init(abstract: "Provides an access to config file",
+        return .init(abstract: "Provides an access to general config",
                      subcommands: [Print.self, Reset.self, Repo.self, Use.self],
                      defaultSubcommand: Print.self)
     }

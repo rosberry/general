@@ -25,6 +25,10 @@
 		01ECEB5026560F8900B275B9 /* ServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ECEB4F26560F8900B275B9 /* ServiceFactory.swift */; };
 		01ECEB92265610D800B275B9 /* GithubService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ECEB91265610D800B275B9 /* GithubService.swift */; };
 		01ECEBAA2656118C00B275B9 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ECEBA92656118C00B275B9 /* FileHelper.swift */; };
+		01EF3843267C445F0037323B /* CompletionConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EF3842267C445F0037323B /* CompletionConfig.swift */; };
+		01EF385A267C460A0037323B /* CompletionScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EF3859267C460A0037323B /* CompletionScript.swift */; };
+		01EF3872267C47580037323B /* CompletionScriptParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EF3871267C47580037323B /* CompletionScriptParser.swift */; };
+		01EF389E267C47670037323B /* CompletionScriptParserImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EF389D267C47670037323B /* CompletionScriptParserImpl.swift */; };
 		OBJ_349 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_192 /* Document.swift */; };
 		OBJ_350 /* Element.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_193 /* Element.swift */; };
 		OBJ_351 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_194 /* Error.swift */; };
@@ -550,6 +554,10 @@
 		01ECEB4F26560F8900B275B9 /* ServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceFactory.swift; sourceTree = "<group>"; };
 		01ECEB91265610D800B275B9 /* GithubService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubService.swift; sourceTree = "<group>"; };
 		01ECEBA92656118C00B275B9 /* FileHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
+		01EF3842267C445F0037323B /* CompletionConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionConfig.swift; sourceTree = "<group>"; };
+		01EF3859267C460A0037323B /* CompletionScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionScript.swift; sourceTree = "<group>"; };
+		01EF3871267C47580037323B /* CompletionScriptParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionScriptParser.swift; sourceTree = "<group>"; };
+		01EF389D267C47670037323B /* CompletionScriptParserImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompletionScriptParserImpl.swift; sourceTree = "<group>"; };
 		"AEXML::AEXML::Product" /* AEXML.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AEXML.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::General::Product" /* General */ = {isa = PBXFileReference; lastKnownFileType = text; path = General; sourceTree = BUILT_PRODUCTS_DIR; };
 		"General::GeneralIOs::Product" /* GeneralIOs */ = {isa = PBXFileReference; lastKnownFileType = text; path = GeneralIOs; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1057,6 +1065,15 @@
 				01ECEBA92656118C00B275B9 /* FileHelper.swift */,
 			);
 			path = FileHelper;
+			sourceTree = "<group>";
+		};
+		01EF3870267C47340037323B /* CompletionScriptParser */ = {
+			isa = PBXGroup;
+			children = (
+				01EF3871267C47580037323B /* CompletionScriptParser.swift */,
+				01EF389D267C47670037323B /* CompletionScriptParserImpl.swift */,
+			);
+			path = CompletionScriptParser;
 			sourceTree = "<group>";
 		};
 		OBJ_106 /* Configuration */ = {
@@ -1601,6 +1618,8 @@
 				OBJ_58 /* XcodeprojSpec.swift */,
 				01ECEAA92655174800B275B9 /* CommandArguments.swift */,
 				0113EA46267A07C700E5A399 /* RunConfig.swift */,
+				01EF3842267C445F0037323B /* CompletionConfig.swift */,
+				01EF3859267C460A0037323B /* CompletionScript.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1631,6 +1650,7 @@
 				01ECEB7B2656109A00B275B9 /* GithubService */,
 				01ECEB2126560E3E00B275B9 /* SetupService */,
 				01C4B8A8265613AE00708604 /* CompletionService */,
+				01EF3870267C47340037323B /* CompletionScriptParser */,
 				OBJ_71 /* Shell */,
 				01C4B9022656193B00708604 /* UpgradeService */,
 				01C4B94426561AA900708604 /* Parser */,
@@ -2378,6 +2398,7 @@
 				OBJ_497 /* ColorString.swift in Sources */,
 				OBJ_498 /* Constants.swift in Sources */,
 				01C4B9192656195E00708604 /* UpgradeService.swift in Sources */,
+				01EF389E267C47670037323B /* CompletionScriptParserImpl.swift in Sources */,
 				OBJ_499 /* CustomStringConvertible+Mirror.swift in Sources */,
 				OBJ_500 /* ParsableCommand+Config.swift in Sources */,
 				OBJ_501 /* URL+Paths.swift in Sources */,
@@ -2395,8 +2416,11 @@
 				OBJ_514 /* XcodeprojSpec.swift in Sources */,
 				0113EA05267A074000E5A399 /* PluginServiceImpl.swift in Sources */,
 				OBJ_515 /* RegEx.swift in Sources */,
+				01EF3843267C445F0037323B /* CompletionConfig.swift in Sources */,
 				OBJ_516 /* CompletionsServiceImpl.swift in Sources */,
+				01EF3872267C47580037323B /* CompletionScriptParser.swift in Sources */,
 				01ECEA93265516EC00B275B9 /* Parser.swift in Sources */,
+				01EF385A267C460A0037323B /* CompletionScript.swift in Sources */,
 				01C4B8EC2656172500708604 /* Shell.swift in Sources */,
 				OBJ_517 /* ConfigFactoryImpl.swift in Sources */,
 				OBJ_518 /* FileHelperImpl.swift in Sources */,

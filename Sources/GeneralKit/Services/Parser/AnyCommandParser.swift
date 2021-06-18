@@ -9,6 +9,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
     public final class AnyOptionParser: Parser<String>, Codable {
 
         static let noValueOptions: [String] = ["version", "help"]
+        static let optionalValueOptions: [String] = ["generate-completion-script"]
 
         public var long: String
         public var short: String?
@@ -40,6 +41,10 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             var value: String = ""
             var arguments = arguments
             if AnyOptionParser.noValueOptions.contains(long) {
+                let slice = arguments.dropFirst()
+                arguments = Array(slice)
+            }
+            else if arguments.count == 1 && AnyOptionParser.optionalValueOptions.contains(long) {
                 let slice = arguments.dropFirst()
                 arguments = Array(slice)
             }
@@ -94,6 +99,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
         self.argumentParsers = arguments
         self.subcommandParsers = subcommands
         self.isDefault = isDefault
+        self.optionParsers["generate-completion-script"] = AnyOptionParser(long: "generate-completion-script")
     }
 
     public override func parse(arguments: [String]) -> (CommandArguments, [String])? {

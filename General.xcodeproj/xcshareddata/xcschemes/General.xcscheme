@@ -56,8 +56,12 @@
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "setup"
+            argument = "--generate-completion-script zsh"
             isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "setup"
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "config"

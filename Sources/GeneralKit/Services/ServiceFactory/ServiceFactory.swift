@@ -14,12 +14,14 @@ public class ServiceFactory: HasGithubService,
                              HasConfigFactory,
                              HasSpecFactory,
                              HasUpgradeService,
-                             HasPluginService {
+                             HasPluginService,
+                             HasCompletionScriptParser {
 
-    public lazy var pluginService: PluginService = PluginServiceImpl()
+    public lazy var pluginService: PluginService = PluginServiceImpl(dependencies: self)
     public lazy var githubService: GithubService = GithubServiceImpl(dependencies: self)
     public lazy var fileHelper: FileHelper = FileHelperImpl()
     public lazy var setupService: SetupService = SetupServiceImpl(dependencies: self)
+    public lazy var completionScriptParser: CompletionScriptParser = CompletionScriptParserImpl()
     public lazy var completionsService: CompletionsService = CompletionsServiceImpl(dependencies: self)
     public lazy var shell: Shell = ShellImpl()
     public lazy var upgradeService: UpgradeService = UpgradeServiceImpl(dependencies: self)

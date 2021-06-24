@@ -4,6 +4,6 @@
 
 import GeneralKit
 
-let version = "0.3.2"
+let version = "0.4"
 Services.configFactory.default = .init(version: version)
 try Services.pluginService.main(command: General.self)

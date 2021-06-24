@@ -20,9 +20,17 @@ public final class CompletionScript {
 
 extension CompletionScript: CustomStringConvertible {
     public var description: String {
-        let casesString = cases.map { key, value in
-            "\(key) \(value)"
-        }.joined(separator: "\n\n")
-        return "\(start)\n\n\(casesString)\n\n\(end)"
+        if shell == .fish {
+            let casesString = cases.map { key, value in
+                value
+            }.joined(separator: "\n")
+            return "\(start)\(casesString)\(end)"
+        }
+        else {
+            let casesString = cases.map { key, value in
+                "\(key) \(value)"
+            }.joined(separator: "\n\n")
+            return "\(start)\n\n\(casesString)\n\n\(end)"
+        }
     }
 }

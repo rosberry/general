@@ -12,4 +12,5 @@ public protocol CompletionScriptParser {
     func parse(script: String, shell: CompletionShell) -> CompletionScript?
     func parseCaseName(name: String, shell: CompletionShell) -> (name: String, commands: [String])?
     func makeCaseName(name: String, script: CompletionScript) -> String?
+    func overridePluginConent(_ content: String, script: CompletionScript, pluginScript: CompletionScript) -> String?
 }

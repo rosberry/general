@@ -100,6 +100,40 @@ public class CompletionScriptParserImpl: CompletionScriptParser {
         }
     }
 
+    private final class LineParser: Parser {
+        override func parse(_ string: String) -> (String, String)? {
+            var string = string.trimmingCharacters(in: .whitespacesAndNewlines)
+            while true {
+                guard let index = string.firstIndex(of: "\n") else {
+                    return nil
+                }
+                let line = String(string[string.startIndex...index]).trimmingCharacters(in: .whitespaces)
+                string = String(string.dropFirst(line.count))
+                return (line, string)
+            }
+        }
+    }
+
+    private final class FishStartParser: Parser {
+
+        override func parse(_ string: String) -> (String, String)? {
+            var string = string.trimmingCharacters(in: .whitespacesAndNewlines)
+            var result = ""
+            while true {
+                guard let index = string.firstIndex(of: "\n") else {
+                    return nil
+                }
+                let line = String(string[string.startIndex...index])
+                guard line.starts(with: "complete -c ") else {
+                    result += line
+                    string = String(string.dropFirst(line.count))
+                    continue
+                }
+                return (result, string)
+            }
+        }
+    }
+
     public func parse(script: String, shell: CompletionShell) -> CompletionScript? {
         switch shell {
         case .bash:
@@ -116,9 +150,9 @@ public class CompletionScriptParserImpl: CompletionScriptParser {
     public func parseCaseName(name: String, shell: CompletionShell) -> (name: String, commands: [String])? {
         switch shell {
         case .bash, .zsh:
-            return parseSnakeCaseParenthesesName(name: name)
+            return parseSnakeCaseParenthesesName(name: name, commandSeparator: "_")
         case .fish:
-            return parseFishCaseName(name: name)
+            return parseSnakeCaseParenthesesName(name: name, commandSeparator: " ")
         default:
             return nil
         }
@@ -196,18 +230,134 @@ public class CompletionScriptParserImpl: CompletionScriptParser {
     }
 
     private func parseFishScript(script: String) -> CompletionScript? {
-        var start = ""
-        var end = ""
-        var cases = [(String, String)]()
-        return .init(shell: .fish, start: start, cases: cases, end: end)
+        let startParser = FishStartParser()
+        let nameParser = SnakeCaseParser()
+        let completeCParser = TokenParser(token: "complete -c ")
+        let lineParser = LineParser()
+        let singleQuoteParser = TokenParser(token: "'")
+        let minusParser = TokenParser(token: "-")
+        var string = script
+
+        func parse(parser: Parser) -> String? {
+            guard let (result, remaining) = parser.parse(string) else {
+                return nil
+            }
+            string = remaining
+            return result
+        }
+
+        func parseMainCaseName() -> String? {
+            guard let (_, remaining) = completeCParser.parse(string),
+                  let (name, _) = nameParser.parse(remaining)
+                  else {
+                return nil
+            }
+            return name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+
+        func parseCaseName(startCaseParser: Parser) -> String? {
+            guard let (line, _) = lineParser.parse(string),
+                  var (_, lineRemaining) = startCaseParser.parse(line) else {
+                return nil
+            }
+
+            var names = [String]()
+
+            while let (name, remaining) = nameParser.parse(lineRemaining) {
+                names.append(name)
+                lineRemaining = remaining
+            }
+
+            return names.joined(separator: " ")
+        }
+
+        func parseOptionsRemaining(string: String) -> String? {
+            var string = string
+            while string.count > 0 {
+                if let _ = singleQuoteParser.parse(string) {
+                    return string
+                }
+                guard let (_, minusRemaining) = minusParser.parse(string) else {
+                    return nil
+                }
+                string = minusRemaining
+                if let (_, secondMinusRemaining) = minusParser.parse(string) {
+                    string = secondMinusRemaining
+                }
+                guard let _ = nameParser.parse(string) else {
+                    return nil
+                }
+                return string
+            }
+            return nil
+        }
+
+        func parseCase(startCaseParser: Parser, name: String) -> (key: String, value: String)? {
+            let nameTokenParser = TokenParser(token: name)
+            var result = ""
+            while let (line, lineRemaining) = lineParser.parse(string),
+                  let (_, startRemaining) = startCaseParser.parse(line),
+                  let (_, remaining) = nameTokenParser.parse(startRemaining),
+                  let _ = parseOptionsRemaining(string: remaining){
+                result += line
+                string = lineRemaining
+            }
+            guard result.isEmpty == false else {
+                return nil
+            }
+            return (name, result)
+        }
+
+        func parseCases() -> [(String,String)]? {
+            guard let mainCaseName = parseMainCaseName() else {
+                return nil
+            }
+            let startCaseToken = "complete -c \(mainCaseName) -n '__fish_\(mainCaseName)_using_command \(mainCaseName)"
+            let startCaseParser = TokenParser(token: startCaseToken)
+            var cases = [(String,String)]()
+            while let name = parseCaseName(startCaseParser: startCaseParser),
+                  let result = parseCase(startCaseParser: startCaseParser, name: name) {
+                cases.append(result)
+            }
+            var groupedCases = [(String,String)]()
+            cases.forEach { name, conent in
+                let componets = name.split(separator: " ")
+                guard let first = componets.first?.trimmingCharacters(in: .whitespaces),
+                      componets.count > 1 else {
+                    groupedCases.append(("\(mainCaseName) \(name)", conent))
+                    return
+                }
+                let groupedCasesIndex = groupedCases.firstIndex { name, _ in
+                    name == first
+                }
+                if let index = groupedCasesIndex {
+                    var groupedContent = groupedCases.last?.1 ?? ""
+                    groupedContent += conent
+                    groupedCases[index] = ("\(mainCaseName) \(first)", groupedContent)
+                }
+                else {
+                    groupedCases.append(("\(mainCaseName) \(first)", conent))
+                }
+            }
+            guard groupedCases.isEmpty == false else {
+                return nil
+            }
+            return groupedCases
+        }
+
+        guard let start = parse(parser: startParser),
+              let cases = parseCases() else {
+            return nil
+        }
+        return .init(shell: .fish, start: start, cases: cases, end: "")
     }
 
-    private func parseSnakeCaseParenthesesName(name: String) -> (name: String, commands: [String])? {
+    private func parseSnakeCaseParenthesesName(name: String, commandSeparator: Character) -> (name: String, commands: [String])? {
         var string = name.trimmingCharacters(in: .whitespaces)
         if string.hasSuffix("()") {
             string = String(string.dropLast(2))
         }
-        var components = Array(string.split(separator: "_"))
+        var components = Array(string.split(separator: commandSeparator))
         while components.first == "" {
             components = Array(components.dropFirst())
         }
@@ -224,10 +374,6 @@ public class CompletionScriptParserImpl: CompletionScriptParser {
         return (name, commands)
     }
 
-    private func parseFishCaseName(name: String) -> (name: String, commands: [String])? {
-        return nil
-    }
-
     private func makeSnakeCaseParenthesesName(name: String, script: CompletionScript) -> String? {
         guard var string = script.cases.first?.0 else {
             return nil
@@ -240,6 +386,24 @@ public class CompletionScriptParserImpl: CompletionScriptParser {
     }
 
     private func makeFishCaseName(name: String, script: CompletionScript) -> String? {
-        return nil
+        guard let string = script.cases.first?.0.trimmingCharacters(in: .whitespaces) else {
+            return nil
+        }
+        return "\(string) \(name)"
+    }
+
+    public func overridePluginConent(_ content: String, script: CompletionScript, pluginScript: CompletionScript) -> String? {
+        switch script.shell {
+        case .bash, .zsh:
+            guard var scriptPrefix = script.cases.first?.0.trimmingCharacters(in: .whitespaces),
+                  var pluginPrefix = pluginScript.cases.first?.0.trimmingCharacters(in: .whitespaces) else {
+                return nil
+            }
+            scriptPrefix = scriptPrefix.replacingOccurrences(of: "()", with: "")
+            pluginPrefix = pluginPrefix.replacingOccurrences(of: "()", with: "")
+            return content.replacingOccurrences(of: pluginPrefix, with: scriptPrefix)
+        default:
+            return nil
+        }
     }
 }

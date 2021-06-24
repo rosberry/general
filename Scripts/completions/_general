@@ -3,6 +3,8 @@ local context state state_descr line
 _general_commandname=$words[1]
 typeset -A opt_args
 
+
+
 _general() {
     integer ret=1
     local -a args
@@ -20,7 +22,7 @@ _general() {
                 'create:Creates a new template.'
                 'list:List of available templates.'
                 'setup:Provides your environment with templates'
-                'config:Provides an access to config file'
+                'config:Provides an access to general config'
                 'upgrade:Upgrades general to specified version'
                 'help:Show subcommand help information.'
             )
@@ -64,6 +66,7 @@ _general_gen() {
         '(--name -n)'{--name,-n}'[The name of the module.]:name:'
         '(--template -t)'{--template,-t}'[The name of the template.]:template:{_custom_completion $_general_commandname ---completion gen -- --template $words}'
         '(--output -o)'{--output,-o}'[The output for the template.]:output:_files -/'
+        '--target[The target to which add files.]:target:{_custom_completion $_general_commandname ---completion gen -- --target $words}'
         ':variables:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
@@ -102,6 +105,9 @@ _general_setup() {
     args+=(
         '(--repo -r)'{--repo,-r}'[Fetch templates from specified github repo. Format: "<github>\\ \[branch\]".]:repo:{_custom_completion $_general_commandname ---completion setup -- --repo $words}'
         '(--global -g)'{--global,-g}'[If specified loads templates into user home directory]:global:'
+        '(--xcodeproj -x)'{--xcodeproj,-x}'[Configures name of .xcdoeproj file where files should be plased]:xcodeproj:'
+        '(--target -t)'{--target,-t}'[Configures xcode project target where generated files should be placed]:target:'
+        '(--company -c)'{--company,-c}'[Configures company name that will be placed in file headers]:company:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
@@ -122,8 +128,8 @@ _general_config() {
         (command)
             local subcommands
             subcommands=(
-                'print:Displays content of .config file'
-                'reset:Sets .config file to its default value'
+                'print:Displays general config'
+                'reset:Resets general config'
                 'repo:Allows to add templates repo for easy setup'
                 'use:Set default executable instance for specific command'
             )
@@ -190,7 +196,7 @@ _general_config_use() {
     local -a args
     args+=(
         '(--executable -e)'{--executable,-e}'[The executable instance for the command]:executable:{_custom_completion $_general_commandname ---completion config use -- --executable $words}'
-        '--for[The name on the commant]:for:'
+        '--for[The name on the command]:for:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
@@ -222,10 +228,20 @@ _general_help() {
     return ret
 }
 
-
 _custom_completion() {
     local completions=("${(@f)$($*)}")
     _describe '' completions
 }
 
-_general
+_general_test() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+

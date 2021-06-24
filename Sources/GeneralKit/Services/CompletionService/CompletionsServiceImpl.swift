@@ -55,12 +55,12 @@ public final class CompletionsServiceImpl: CompletionsService {
             argument == option
         }
         switch arguments.first {
-        case "zsh":
-            return .zsh
+        case "bash":
+            return .bash
         case "fish":
             return .fish
         default:
-            return .bash
+            return .zsh
         }
     }
 
@@ -105,39 +105,51 @@ public final class CompletionsServiceImpl: CompletionsService {
                                             pluginName: String,
                                             pluginScript: CompletionScript,
                                             config: CompletionConfig) {
-        filterPluginCases(script: pluginScript, config: config).forEach { commandName, content in
-            guard let caseIndex = caseIndex(of: commandName, script: script) else {
+        let scriptCaseNames = mapCaseNames(script: script)
+        let pluginCaseNames = mapCaseNames(script: pluginScript)
+
+        func findMainCaseIndex(of subcommand: String) -> Int? {
+            scriptCaseNames.firstIndex { name, subcommands in
+                guard subcommands.count == 1,
+                      let mainSubcommand = subcommands.first else {
+                    return false
+                }
+                return subcommand == mainSubcommand
+            }
+        }
+
+        pluginCaseNames.enumerated().forEach { index, caseName in
+            let pluginName = caseName.0
+            let subcommands = caseName.1
+            let pluginCase = pluginScript.cases[index]
+
+            guard subcommands.count == 1,
+                  let subcommand = subcommands.first,
+                  let pluginCaseContent = dependencies.completionScriptParser.overridePluginConent(pluginCase.1, script: script, pluginScript: pluginScript)  else {
                 return
             }
-            let caseName = script.cases[caseIndex].0
-            script.cases[caseIndex] = (caseName, content)
+            if let index = findMainCaseIndex(of: subcommand) {
+                if isOverriden(subcommand: subcommand, pluginName: pluginName, config: config) {
+                    let mainCaseName = script.cases[index].0
+                    script.cases[index] = (mainCaseName, pluginCaseContent)
+                }
+            }
+            else if let name = dependencies.completionScriptParser.makeCaseName(name: subcommand, script: script) {
+                script.cases.append((name, pluginCaseContent))
+            }
         }
     }
 
-    private func filterPluginCases(script: CompletionScript, config: CompletionConfig) -> [(String, String)] {
-        var result = [(String, String)]()
-        script.cases.forEach { name, content in
-            guard let (pluginName, commands) = dependencies.completionScriptParser.parseCaseName(name: name, shell: config.shell),
-                  let command = commands.first else {
-                return
-            }
-            let isOverridenCommand = config.overrides.contains { overridenCommand, overridenPluginName in
-                overridenCommand.lowercased() == command.lowercased() &&
-                    overridenPluginName.lowercased() == pluginName.lowercased()
-            }
-            if isOverridenCommand {
-                result.append((command, content))
-            }
+    private func isOverriden(subcommand: String, pluginName: String, config: CompletionConfig) -> Bool {
+        config.overrides.contains { overridenCommand, overridenPluginName in
+            overridenCommand.lowercased() == subcommand.lowercased() &&
+                overridenPluginName.lowercased() == pluginName.lowercased()
         }
-        return result
     }
 
-    private func caseIndex(of commandName: String, script: CompletionScript) -> Int? {
-        guard let name = dependencies.completionScriptParser.makeCaseName(name: commandName, script: script) else {
-            return nil
-        }
-        return script.cases.firstIndex { caseName, _ in
-            caseName == name
+    private func mapCaseNames(script: CompletionScript) -> [(String, [String])] {
+        script.cases.compactMap { name, _ in
+            dependencies.completionScriptParser.parseCaseName(name: name, shell: script.shell)
         }
     }
 }

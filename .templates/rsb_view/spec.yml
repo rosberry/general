@@ -1,5 +1,0 @@
-files:
- - template: preview/view/View.swift.stencil
- - template: preview/config.stencil
-   output: Classes/Core/PreviewConfig.swift
-suffix: View

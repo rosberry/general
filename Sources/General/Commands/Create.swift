@@ -4,15 +4,22 @@
 
 import Foundation
 import ArgumentParser
+import GeneralKit
 
-final class Create: ParsableCommand {
+public final class Create: ParsableCommand {
 
-    private lazy var fileManager: FileManager = .default
-    private lazy var specFactory: SpecFactory = .init()
+    typealias Dependencies = HasFileHelper & HasSpecFactory
+
+    private lazy var fileManager: FileManager = dependencies.fileHelper.fileManager
+    private lazy var specFactory: SpecFactory = dependencies.specFactory
+
+    var dependencies: Dependencies {
+        Services
+    }
 
     // MARK: - Parameters
 
-    static let configuration: CommandConfiguration = .init(abstract: "Creates a new template.")
+    public static let configuration: CommandConfiguration = .init(abstract: "Creates a new template.")
 
     @Option(name: .shortAndLong, help: "The name of the template.")
     var template: String
@@ -20,7 +27,12 @@ final class Create: ParsableCommand {
     @Option(name: .shortAndLong, help: "The path for the template.", completion: .directory)
     var path: String?
 
-    func run() throws {
+    // MARK: - Lifecycle
+
+    public init() {
+    }
+
+    public func run() throws {
         //folder url for a new template
         let url: URL
         if let path = path {
@@ -35,7 +47,8 @@ final class Create: ParsableCommand {
         try fileManager.createDirectory(at: moduleURL, withIntermediateDirectories: true, attributes: nil)
 
         // create a spec for a new template
-        let spec = TemplateSpec(files: [.init(template: Constants.filesFolderName + "/" + Constants.templateFilename, name: nil, output: nil, folder: nil)], testFiles: nil, suffix: nil)
+        let spec = TemplateSpec(files: [.init(template: Constants.filesFolderName + "/" + Constants.templateFileName)],
+                                suffix: nil)
         if let specData = try? specFactory.makeData(spec: spec) {
             let specURL = moduleURL + Constants.specFilename
             fileManager.createFile(atPath: specURL.path, contents: specData, attributes: nil)
@@ -47,7 +60,7 @@ final class Create: ParsableCommand {
 
         // create a template in files folder
         if let templateData = Constants.template.data(using: .utf8) {
-            let templateURL = codeURL + Constants.templateFilename
+            let templateURL = codeURL + Constants.templateFileName
             fileManager.createFile(atPath: templateURL.path, contents: templateData, attributes: nil)
             print("🎉 \(template) template was successfully created.")
         }

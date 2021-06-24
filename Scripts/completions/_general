@@ -18,9 +18,10 @@ _general() {
             subcommands=(
                 'gen:Generates modules from templates.'
                 'create:Creates a new template.'
-                'spec:Creates a new spec.'
                 'list:List of available templates.'
                 'setup:Provides your environment with templates'
+                'config:Provides an access to config file'
+                'upgrade:Upgrades general to specified version'
                 'help:Show subcommand help information.'
             )
             _describe "subcommand" subcommands
@@ -33,14 +34,17 @@ _general() {
                 (create)
                     _general_create
                     ;;
-                (spec)
-                    _general_spec
-                    ;;
                 (list)
                     _general_list
                     ;;
                 (setup)
                     _general_setup
+                    ;;
+                (config)
+                    _general_config
+                    ;;
+                (upgrade)
+                    _general_upgrade
                     ;;
                 (help)
                     _general_help
@@ -60,8 +64,6 @@ _general_gen() {
         '(--name -n)'{--name,-n}'[The name of the module.]:name:'
         '(--template -t)'{--template,-t}'[The name of the template.]:template:{_custom_completion $_general_commandname ---completion gen -- --template $words}'
         '(--output -o)'{--output,-o}'[The output for the template.]:output:_files -/'
-        '--target[The target to which add files.]:target:{_custom_completion $_general_commandname ---completion gen -- --target $words}'
-        '--test-target[The test target to which add test files.]:test-target:{_custom_completion $_general_commandname ---completion gen -- --test-target $words}'
         ':variables:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
@@ -75,18 +77,6 @@ _general_create() {
     local -a args
     args+=(
         '(--template -t)'{--template,-t}'[The name of the template.]:template:'
-        '(--path -p)'{--path,-p}'[The path for the template.]:path:_files -/'
-        '(-h --help)'{-h,--help}'[Print help information.]'
-    )
-    _arguments -w -s -S $args[@] && ret=0
-
-    return ret
-}
-
-_general_spec() {
-    integer ret=1
-    local -a args
-    args+=(
         '(--path -p)'{--path,-p}'[The path for the template.]:path:_files -/'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
@@ -110,8 +100,109 @@ _general_setup() {
     integer ret=1
     local -a args
     args+=(
-        '(--repo -r)'{--repo,-r}'[Fetch templates from specified github repo. Format: "<github>\\ \[branch\]".]:repo:'
+        '(--repo -r)'{--repo,-r}'[Fetch templates from specified github repo. Format: "<github>\\ \[branch\]".]:repo:{_custom_completion $_general_commandname ---completion setup -- --repo $words}'
         '(--global -g)'{--global,-g}'[If specified loads templates into user home directory]:global:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_config() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'print:Displays content of .config file'
+                'reset:Sets .config file to its default value'
+                'repo:Allows to add templates repo for easy setup'
+                'use:Set default executable instance for specific command'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (print)
+                    _general_config_print
+                    ;;
+                (reset)
+                    _general_config_reset
+                    ;;
+                (repo)
+                    _general_config_repo
+                    ;;
+                (use)
+                    _general_config_use
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
+_general_config_print() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_config_reset() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_config_repo() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':github-path:'
+        '--as[Specifies short repo alias]:as:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_config_use() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--executable -e)'{--executable,-e}'[The executable instance for the command]:executable:{_custom_completion $_general_commandname ---completion config use -- --executable $words}'
+        '--for[The name on the commant]:for:'
+        '(-h --help)'{-h,--help}'[Print help information.]'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+
+    return ret
+}
+
+_general_upgrade() {
+    integer ret=1
+    local -a args
+    args+=(
+        ':version:{_custom_completion $_general_commandname ---completion upgrade -- version $words}'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0

@@ -1,5 +1,9 @@
 //
-//  Copyright © 2020 Rosberry. All rights reserved.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
 
-General.main()
+import GeneralKit
+
+let version = "0.3.2"
+Services.configFactory.default = .init(version: version)
+try Services.pluginService.main(command: General.self)

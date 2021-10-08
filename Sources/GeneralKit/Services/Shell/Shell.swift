@@ -19,4 +19,6 @@ public protocol Shell {
     func callAsFunction(loud command: String) throws -> Int32
     @discardableResult
     func callAsFunction(silent command: String) throws -> String
+    @discardableResult
+    func callAsFunction(path: String, arguments: [String]) throws -> Int32
 }

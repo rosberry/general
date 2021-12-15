@@ -21,7 +21,7 @@ public class ServiceFactory: HasGithubService,
     public lazy var fileHelper: FileHelper = FileHelperImpl()
     public lazy var setupService: SetupService = SetupServiceImpl(dependencies: self)
     public lazy var completionsService: CompletionsService = CompletionsServiceImpl(dependencies: self)
-    public lazy var shell: Shell = ShellImpl()
+    public lazy var shell: Shell = ShellImpl(dependencies: self)
     public lazy var upgradeService: UpgradeService = UpgradeServiceImpl(dependencies: self)
     public lazy var helpParser: HelpParser = HelpParserImpl(dependencies: self)
     public lazy var configFactory: ConfigFactory = ConfigFactoryImpl()

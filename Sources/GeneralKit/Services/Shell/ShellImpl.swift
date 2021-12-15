@@ -25,7 +25,9 @@ public final class ShellImpl: Shell {
     public static var processCreationHandler: ((Process) -> Void)?
     private var observer: ((State) -> Void)?
 
-    public init() {
+    let dependencies: HasConfigFactory?
+    public init(dependencies: HasConfigFactory?) {
+        self.dependencies = dependencies
     }
 
     @discardableResult
@@ -41,6 +43,41 @@ public final class ShellImpl: Shell {
             process.launch()
         }
         process.waitUntilExit()
+        let statusCode = process.terminationStatus
+        if statusCode == 0 {
+            return statusCode
+        }
+        else {
+            throw Error(terminationStatus: statusCode, errorData: nil, outputData: nil)
+        }
+    }
+
+    @discardableResult
+    public func callAsFunction(path: String, arguments: [String]) throws -> Int32 {
+        observer?(.start(command: path, kind: .loud))
+        let process = Process()
+        Self.processCreationHandler?(process)
+        process.launchPath = path
+        process.arguments = arguments
+        let inputPipe = Pipe()
+        process.standardInput = inputPipe
+        if #available(OSX 10.13, *) {
+            try process.run()
+        } else {
+            process.launch()
+        }
+        if dependencies?.configFactory.shared?.overridePluginInput == true {
+            let readabilityHandler = FileHandle.standardInput.readabilityHandler
+            FileHandle.standardInput.readabilityHandler = { handle in
+                inputPipe.fileHandleForWriting.write(handle.availableData)
+                readabilityHandler?(handle)
+            }
+            process.waitUntilExit()
+            FileHandle.standardInput.readabilityHandler = readabilityHandler
+        }
+        else {
+            process.waitUntilExit()
+        }
         let statusCode = process.terminationStatus
         if statusCode == 0 {
             return statusCode
@@ -126,7 +163,7 @@ extension ShellImpl: ProgressObservable {
 
 extension ShellImpl: Codable {
     public convenience init(from decoder: Decoder) throws {
-        self.init()
+        self.init(dependencies: nil)
     }
 
     public func encode(to encoder: Encoder) throws {

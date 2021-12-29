@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/stencilproject/Stencil",
         "state": {
           "branch": "master",
-          "revision": "a72441947467a9ed6c90941c02abc78aa330dcd3",
+          "revision": "c7e1c890f83a2d847c5d3dfc9a737a8e7fd4c641",
           "version": null
         }
       },
@@ -51,7 +51,7 @@
         "repositoryURL": "https://github.com/rosberry/StencilSwiftKit.git",
         "state": {
           "branch": "stable",
-          "revision": "647fd0ed072bb14d1a3d84e31a0e444dbf103026",
+          "revision": "552dbaaf41f14b6de10918a0a626ef4966b713fa",
           "version": null
         }
       },
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/weichsel/ZIPFoundation.git",
         "state": {
           "branch": null,
-          "revision": "cf10bbff6ac3b873e97b36b9784c79866a051a8e",
-          "version": "0.9.12"
+          "revision": "7254c74b49cec2cb81520523ba993c671f71b066",
+          "version": "0.9.14"
         }
       }
     ]

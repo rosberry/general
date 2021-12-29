@@ -86,41 +86,6 @@ public final class ShellImpl: Shell {
         }
     }
 
-    @discardableResult
-    public func callAsFunction(path: String, arguments: [String]) throws -> Int32 {
-        observer?(.start(command: path, kind: .loud))
-        let process = Process()
-        Self.processCreationHandler?(process)
-        process.launchPath = path
-        process.arguments = arguments
-        let inputPipe = Pipe()
-        process.standardInput = inputPipe
-        if #available(OSX 10.13, *) {
-            try process.run()
-        } else {
-            process.launch()
-        }
-        if dependencies?.configFactory.shared?.overridePluginInput == true {
-            let readabilityHandler = FileHandle.standardInput.readabilityHandler
-            FileHandle.standardInput.readabilityHandler = { handle in
-                inputPipe.fileHandleForWriting.write(handle.availableData)
-                readabilityHandler?(handle)
-            }
-            process.waitUntilExit()
-            FileHandle.standardInput.readabilityHandler = readabilityHandler
-        }
-        else {
-            process.waitUntilExit()
-        }
-        let statusCode = process.terminationStatus
-        if statusCode == 0 {
-            return statusCode
-        }
-        else {
-            throw Error(terminationStatus: statusCode, errorData: nil, outputData: nil)
-        }
-    }
-
     public func callAsFunction(silent command: String) throws -> String {
         observer?(.start(command: command, kind: .silent))
         let process = Process()

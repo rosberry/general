@@ -10,7 +10,7 @@ public final class BootstrapServiceImpl: BootstrapService {
 
     private lazy var configPath: String = "\(Constants.generalHomePath)/.bootstrap"
 
-    typealias Dependencies = HasFileHelper
+    typealias Dependencies = HasFileHelper & HasProjectServiceFactory
 
     private var dependencies: Dependencies
 

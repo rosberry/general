@@ -53,8 +53,20 @@ final class UMLBootstraper {
     private lazy var architectureParser = ArchitectureUMLParser()
     private lazy var diagramsParser = PlantUMLParser()
     private lazy var plantuml = Plantuml()
+    private lazy var projectService: ProjectService = {
+        let service: ProjectService
+        if let projectContext = context["project"] as? [String: Any],
+           let projectName = projectContext["name"] as? String,
+           let path = try? ProjectService.findProject(in: .current + projectName) {
+            service = dependencies.projectServiceFactory.makeProjectService(path: path.parent())
+            try? service.createProject(projectName: path.lastComponent)
+        } else {
+            service = dependencies.projectServiceFactory.makeProjectService(path: .current)
+        }
+        return service
+    }()
 
-    typealias Dependencies = HasFileHelper
+    typealias Dependencies = HasFileHelper & HasProjectServiceFactory
 
     private var dependencies: Dependencies
 
@@ -80,6 +92,7 @@ final class UMLBootstraper {
         }
         try bootstrap(item: architecture, destination: ".")
         try dependencies.fileHelper.removeFile(at: .init(fileURLWithPath: "./.boot"))
+        try projectService.write()
     }
 
     private func initContext(with config: BootstrapConfig) {
@@ -180,12 +193,12 @@ final class UMLBootstraper {
               let string = String(data: data, encoding: .utf8) else {
             return .renderFailure
         }
-        let template = VariablesTemplate(templateString: string)
+        let template = VariablesTemplate(templateString: string, environment: environment)
         let unresolvedVariables = self.unresolvedVariables(in: template)
         guard unresolvedVariables.isEmpty else {
             return .unresolvedFile
         }
-        guard let content = try? environment.renderTemplate(string: string, context: context) else {
+        guard let content = try? template.render(context) else {
             return .renderFailure
         }
         return .resolvedFile(fileName, content)
@@ -197,7 +210,7 @@ final class UMLBootstraper {
     }
 
     private func resolveVariables(string: String) -> StringResolve {
-        let template = VariablesTemplate(templateString: string)
+        let template = VariablesTemplate(templateString: string, environment: environment)
         let unresolvedVariables = self.unresolvedVariables(in: template)
         guard unresolvedVariables.isEmpty else {
             return .unresolved(tokenize(string: string, variables: unresolvedVariables, template: template))
@@ -232,7 +245,7 @@ final class UMLBootstraper {
             if let name = unresolved(match: match) {
                 tokens.append(.variable(name))
             }
-            else if let name = try? VariablesTemplate(templateString: match).render(context) {
+            else if let name = try? VariablesTemplate(templateString: match, environment: environment).render(context) {
                 tokens.append(.concrete(name))
             } else {
                 tokens.append(.any)
@@ -288,16 +301,18 @@ final class UMLBootstraper {
         }).first
     }
 
-    private func bootstrap(item: ArchitectureItem, destination: String) throws {
+    @discardableResult
+    private func bootstrap(item: ArchitectureItem, destination: String) throws -> Resolve {
         switch item {
         case let .folder(folder):
-            try bootstrap(folder: folder, destination: destination)
+            return try bootstrap(folder: folder, destination: destination)
         case let .object(object):
-            try bootstrap(object: object, destination: destination)
+            return try bootstrap(object: object, destination: destination)
         }
     }
 
-    private func bootstrap(folder: ArchitectureItem.Folder, destination: String) throws {
+    @discardableResult
+    private func bootstrap(folder: ArchitectureItem.Folder, destination: String) throws -> Resolve {
         let path = "\(destination)/\(folder.name)"
         try dependencies.fileHelper.createDirectory(at: path)
         guard let template = self.template(for: destination, name: folder.name),
@@ -305,7 +320,7 @@ final class UMLBootstraper {
             try folder.items.forEach { item in
                 try bootstrap(item: item, destination: path)
             }
-            return
+            return .resolvedDirectory(folder.name)
         }
 
         func item(for file: FileInfo) -> ArchitectureItem? {
@@ -321,8 +336,7 @@ final class UMLBootstraper {
             }
             switch resolve(file) {
             case let .resolvedFile(name, content):
-                let path = "\(destination)/\(name)"
-                try content.write(toFile: path, atomically: true, encoding: .utf8)
+                try addFile(name: name, destination: destination, content: content)
             case let .resolvedDirectory(name):
                 let path = "\(destination)/\(name)"
                 try dependencies.fileHelper.createDirectory(at: path)
@@ -337,34 +351,55 @@ final class UMLBootstraper {
         let fileName = fileNameBase(from: template)
         let variables = resolveContext(pattern: fileName, using: folder.name)
 
-        try folder.items.forEach { item in
-            try bootstrap(item: item, destination: path)
+        func renderFiles() throws {
+            try folder.items.forEach { item in
+                try bootstrap(item: item, destination: path)
+            }
+
+            try files.forEach { file in
+                try bootstrapMissingFile(file, destination: path)
+            }
         }
 
-        try files.forEach { file in
-            guard item(for: file) == nil else {
-                return
-            }
-            try bootstrapMissingFile(file, destination: path)
-        }
+        // First try generate basic implementation and compose specific context
+        try renderFiles()
+        // Second try regenerate specific files implementations using modified context
+        try renderFiles()
 
         variables.forEach { name in
             context = clean(context: context, name: name) ?? context
         }
+        return .resolvedDirectory(folder.name)
     }
-    private func bootstrap(object: ArchitectureItem.Object, destination: String) throws {
+
+    @discardableResult
+    private func bootstrap(object: ArchitectureItem.Object, destination: String) throws -> Resolve {
         guard let template = self.template(for: destination, name: object.name) else {
-            return
+            return .renderFailure
         }
+        var methods = [[String: Any]]()
+        object.methods.forEach { method in
+            var methodContext = [String:Any]()
+            methodContext["name"] = method.name
+            methodContext["calls"] = method.calls.map{ call -> [String: Any] in
+                var callContext = [String: Any]()
+                callContext["name"] = call.name
+                callContext["called"] = call.called
+                return callContext
+            }
+            methods.append(methodContext)
+        }
+        context[object.name] = ["methods": methods]
         let fileName = fileNameBase(from: template)
         resolveContext(pattern: fileName, using: object.name)
-        switch resolve(template) {
+        let resolve = self.resolve(template)
+        switch resolve {
         case let .resolvedFile(name, content):
-            let path = "\(destination)/\(name)"
-            try content.write(toFile: path, atomically: true, encoding: .utf8)
+            try addFile(name: name, destination: destination, content: content)
         default:
             break
         }
+        return resolve
     }
 
     private func template(for destination: String, name: String?) -> FileInfo? {
@@ -539,5 +574,11 @@ final class UMLBootstraper {
         case let .object(object):
             return object.name
         }
+    }
+
+    private func addFile(name: String, destination: String, content: String) throws {
+        let path = "\(destination)/\(name)"
+        try content.write(toFile: path, atomically: true, encoding: .utf8)
+        try projectService.addFile(targetName: nil, filePath: .current + .init(path))
     }
 }

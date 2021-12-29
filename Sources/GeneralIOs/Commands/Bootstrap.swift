@@ -169,21 +169,6 @@ final class Bootstrap: ParsableCommand {
         func run() throws {
             let config = try composeConfig()
             try dependencies.bootstrapService.bootstrap(with: config)
-    //        if self.githubPath == nil {
-    //            self.githubPath = ask("Please provide a path to repo with templates")
-    //            print("You can use the command `general config repo <repo> --as <alias>` to use it later by the easiest way")
-    //        }
-    //        guard let githubPath = self.githubPath else {
-    //            throw Error.github
-    //        }
-
-    //        let plantuml: Plantuml = .init()
-    //        let parser: PlantUMLParser = .init()
-    //        let architectureParser = ArchitectureUMLParser()
-    //        let preprocessedPath = try plantuml.preprocessed(path: uml, mode: "ios")
-    //        let diagrams = try parser.parse(path: preprocessedPath)
-    //        let architecture = try architectureParser.parse(diagrams: diagrams, using: arhitectureTemplate)
-    //        try codeGenerator.generate(using: architecture)
         }
 
         private func composeConfig() throws -> BootstrapConfig {
@@ -203,6 +188,7 @@ final class Bootstrap: ParsableCommand {
             }
             projectConfig["name"] = name
             projectConfig["year"] = "\(Calendar.current.component(.year, from: Date()))"
+            projectConfig["licenseplist"] = true
             if let bundleId = self.bundleId {
                 projectConfig["bundle_identifier"] = bundleId
             } else if let company = self.company ?? projectConfig[Config.Constants.company] as? String {

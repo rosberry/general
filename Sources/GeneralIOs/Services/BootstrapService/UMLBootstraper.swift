@@ -17,11 +17,14 @@ final class UMLBootstraper {
 
     enum Error: LocalizedError {
         case architecture(String)
+        case noDiagrams
 
         var errorDescription: String? {
             switch self {
             case let .architecture(path):
                 return "Could not parse architecture using specified uml path \(path)"
+            case .noDiagrams:
+                return "No diagrams were specified"
             }
         }
     }
@@ -79,7 +82,10 @@ final class UMLBootstraper {
         guard let template = try createProjectFiles(template: config.template, destination: ".") else {
             return
         }
-        let diagrams = try parseDiagrams(path: config.diagrams)
+        guard let diagramsPath = config.diagrams else {
+            throw Error.noDiagrams
+        }
+        let diagrams = try parseDiagrams(path: diagramsPath)
         guard let architecture = try parseArchitecture(
                 diagrams: diagrams,
                 template: template,
@@ -88,7 +94,7 @@ final class UMLBootstraper {
                     "failure",
                     "finish"
                 ]) else {
-            throw Error.architecture(config.diagrams)
+            throw Error.architecture(diagramsPath)
         }
         try bootstrap(item: architecture, destination: ".")
         try dependencies.fileHelper.removeFile(at: .init(fileURLWithPath: "./.boot"))

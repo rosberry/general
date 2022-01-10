@@ -96,6 +96,9 @@ final class UMLBootstraper {
                 ]) else {
             throw Error.architecture(diagramsPath)
         }
+        // First try generate basic implementation and compose specific context
+        try bootstrap(item: architecture, destination: ".")
+        // Second try regenerate specific files implementations using modified context
         try bootstrap(item: architecture, destination: ".")
         try dependencies.fileHelper.removeFile(at: .init(fileURLWithPath: "./.boot"))
         try projectService.write()
@@ -367,9 +370,6 @@ final class UMLBootstraper {
             }
         }
 
-        // First try generate basic implementation and compose specific context
-        try renderFiles()
-        // Second try regenerate specific files implementations using modified context
         try renderFiles()
 
         variables.forEach { name in

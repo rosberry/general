@@ -24,7 +24,7 @@ public final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The output for the template.", completion: .directory)
     var output: String?
 
-    @Argument(help: "The additional variables for templates.")
+    @Argument(help: "The additional variables for templates.", completion: .empty)
     var variables: [Variable] = []
 
     // MARK: - Lifecycle

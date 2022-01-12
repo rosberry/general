@@ -21,15 +21,6 @@ public final class Renderer {
         }
     }
 
-    private class VariablesTemplate: Template {
-        var variables: [String]
-        required init(templateString: String, environment: Environment? = nil, name: String? = nil) {
-            let pattern = "\\{\\{\\s*([a-zA-Z][a-zA-Z0-9]*)\\s*\\}\\}"
-            self.variables = parseAllRegexMatches(pattern: pattern, rangeIndex: 1, string: templateString)
-            super.init(templateString: templateString, environment: environment, name: name)
-        }
-    }
-
     public typealias Dependencies = HasFileHelper & HasSpecFactory
 
     let name: String

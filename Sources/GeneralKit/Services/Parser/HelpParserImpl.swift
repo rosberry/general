@@ -116,7 +116,7 @@ public final class HelpParserImpl: HelpParser {
     }
 
     public func parse(command: ParsableCommand.Type) throws -> AnyCommandParser {
-        let name = command.configuration.commandName ?? String(describing: command).lowercased()
+        let name = makeCommandName(command)
         let string = command.helpMessage().replacingOccurrences(of: "\n", with: " \n")
         let context = Context()
         context.lines = string.split(separator: "\n").map { string in
@@ -140,7 +140,9 @@ public final class HelpParserImpl: HelpParser {
         var subcommands: [String: AnyCommandParser] = [:]
 
         context.options.forEach { helpOption in
-            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)
+            let isRequired = context.usage.contains("\(helpOption.long)") &&
+                             !context.usage.contains("[--\(helpOption.long) <\(helpOption.long)>]")
+            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short, isRequired: isRequired)
         }
 
         context.arguments.forEach { helpArgument in
@@ -221,14 +223,14 @@ public final class HelpParserImpl: HelpParser {
             return match
         }
 
-        if let match = parse(pattern: "<[a-zA-Z]+>") {
+        if let match = parse(pattern: "<[a-zA-Z\\-]+>") {
             argument = match
             argument.removeFirst()
             argument.removeLast()
         }
 
         if parsed {
-            context.arguments.append(.init(argument: argument, description: line))
+            context.arguments.append(.init(argument: makeArgumentName(argument), description: line))
         }
         return parsed
     }
@@ -318,5 +320,24 @@ public final class HelpParserImpl: HelpParser {
         let line = context.lines[context.index]
         context.unexpectedStrings.append(line)
         context.index += 1
+    }
+
+    private func makeCommandName(_ command: ParsableCommand.Type) -> String {
+        if let name = command.configuration.commandName {
+            return name
+        }
+        let string = String(describing: command)
+        let pattern = "([a-z0-9])([A-Z])"
+
+        let regex = try? NSRegularExpression(pattern: pattern, options: [])
+        let range = NSRange(location: 0, length: string.count)
+        let result = regex?.stringByReplacingMatches(in: string, options: [], range: range, withTemplate: "$1-$2")
+        return result?.lowercased() ?? string
+    }
+
+    private func makeArgumentName(_ string: String) -> String {
+        string.split(separator: "-").enumerated().map { index, word in
+            index > 0 ? word.capitalized : word.lowercased()
+        }.joined()
     }
 }

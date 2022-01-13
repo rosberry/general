@@ -24,9 +24,6 @@ public final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The output for the template.", completion: .directory)
     var output: String?
 
-    @Argument(help: "The additional variables for templates.", completion: .empty)
-    var variables: [Variable] = []
-
     // MARK: - Lifecycle
 
     public init() {
@@ -36,7 +33,7 @@ public final class Generate: ParsableCommand {
         let renderer = Renderer(name: name,
                                 template: template,
                                 path: path,
-                                variables: variables,
+                                variables: [],
                                 output: output,
                                 dependencies: Services)
         try renderer.render()

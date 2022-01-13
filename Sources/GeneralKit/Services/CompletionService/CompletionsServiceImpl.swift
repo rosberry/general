@@ -164,12 +164,6 @@ public extension CompletionKind {
         }
     }
 
-    static var empty: CompletionKind {
-        .custom { _ in
-            []
-        }
-    }
-
     static var installedPlugins: CompletionKind {
         .custom { _ in
             dependencies.completionsService.installedPlugins()

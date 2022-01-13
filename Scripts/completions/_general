@@ -67,7 +67,6 @@ _general_gen() {
         '(--template -t)'{--template,-t}'[The name of the template.]:template:{_custom_completion $_general_commandname ---completion gen -- --template $words}'
         '(--output -o)'{--output,-o}'[The output for the template.]:output:_files -/'
         '--target[The target to which add files.]:target:{_custom_completion $_general_commandname ---completion gen -- --target $words}'
-        ':variables:'
         '(-h --help)'{-h,--help}'[Print help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0

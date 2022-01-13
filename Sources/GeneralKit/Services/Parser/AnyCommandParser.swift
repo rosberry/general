@@ -13,12 +13,10 @@ public final class AnyCommandParser: Parser<CommandArguments> {
 
         public var long: String
         public var short: String?
-        var isRequired: Bool = false
 
-        init(long: String, short: String? = nil, isRequired: Bool = false) {
+        init(long: String, short: String? = nil) {
             self.long = long
             self.short = short
-            self.isRequired = isRequired
         }
 
         public override func parse(arguments: [String]) -> (String, [String])? {
@@ -95,8 +93,7 @@ public final class AnyCommandParser: Parser<CommandArguments> {
                 options: [String: AnyOptionParser] = [:],
                 arguments: [String: AnyArgumentParser] = [:],
                 subcommands: [String: AnyCommandParser] = [:],
-                isDefault: Bool = false,
-                isRequired: Bool = false) {
+                isDefault: Bool = false) {
         self.name = name
         self.optionParsers = options
         self.argumentParsers = arguments
@@ -140,19 +137,6 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             else {
                 return nil
             }
-        }
-
-        var missingRequiredOptions = false
-        optionParsers.forEach { key, parser in
-            guard parser.isRequired else {
-                return
-            }
-            if result.options[key] == nil {
-                missingRequiredOptions = true
-            }
-        }
-        guard missingRequiredOptions == false else {
-            return nil
         }
         return (result, arguments)
     }

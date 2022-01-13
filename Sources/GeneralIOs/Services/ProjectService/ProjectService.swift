@@ -27,10 +27,6 @@ public final class ProjectService {
         try Path.current.children().first { $0.extension == Constants.xcodeProjectPathExtension }
     }
 
-    static func findProject(in path: Path) throws -> Path? {
-        try path.children().first { $0.extension == Constants.xcodeProjectPathExtension }
-    }
-
     func createProject(projectName: String) throws {
         let xcodeprojPath = path + Path(projectName)
         xcodeproj = try XcodeProj(path: xcodeprojPath)
@@ -45,7 +41,6 @@ public final class ProjectService {
         // Folowing code fixes issue with absolute path linkinking.
         // Creating of relative urls based on project url becomes useless
         // due to XcodeProj internal issues.
-        let fullPath = filePath
         var filePath = filePath
         if filePath.string.contains(path.string) {
             var string = filePath.string.replacingOccurrences(of: path.string, with: "")
@@ -62,7 +57,7 @@ public final class ProjectService {
             throw Error.noGroup
         }
 
-        let file = try group.addFile(at: fullPath, sourceTree: .sourceRoot, sourceRoot: path)
+        let file = try group.addFile(at: filePath, sourceTree: .sourceRoot, sourceRoot: path)
         xcodeproj?.pbxproj.add(object: file)
         let targets = xcodeproj?.pbxproj.nativeTargets
         let target: PBXNativeTarget?

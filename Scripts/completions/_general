@@ -9,7 +9,8 @@ _general() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
         '(-): :->command'
         '(-)*:: :->arg'
     )
@@ -67,7 +68,8 @@ _general_gen() {
         '(--template -t)'{--template,-t}'[The name of the template.]:template:{_custom_completion $_general_commandname ---completion gen -- --template $words}'
         '(--output -o)'{--output,-o}'[The output for the template.]:output:_files -/'
         '--target[The target to which add files.]:target:{_custom_completion $_general_commandname ---completion gen -- --target $words}'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -80,7 +82,8 @@ _general_create() {
     args+=(
         '(--template -t)'{--template,-t}'[The name of the template.]:template:'
         '(--path -p)'{--path,-p}'[The path for the template.]:path:_files -/'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -91,7 +94,8 @@ _general_list() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -107,7 +111,8 @@ _general_setup() {
         '(--xcodeproj -x)'{--xcodeproj,-x}'[Configures name of .xcdoeproj file where files should be plased]:xcodeproj:'
         '(--target -t)'{--target,-t}'[Configures xcode project target where generated files should be placed]:target:'
         '(--company -c)'{--company,-c}'[Configures company name that will be placed in file headers]:company:'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -118,7 +123,8 @@ _general_config() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
         '(-): :->command'
         '(-)*:: :->arg'
     )
@@ -159,7 +165,8 @@ _general_config_print() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -170,7 +177,8 @@ _general_config_reset() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -183,7 +191,8 @@ _general_config_repo() {
     args+=(
         ':github-path:'
         '--as[Specifies short repo alias]:as:'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -196,7 +205,8 @@ _general_config_use() {
     args+=(
         '(--executable -e)'{--executable,-e}'[The executable instance for the command]:executable:{_custom_completion $_general_commandname ---completion config use -- --executable $words}'
         '--for[The name on the command]:for:'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -208,7 +218,8 @@ _general_upgrade() {
     local -a args
     args+=(
         ':version:{_custom_completion $_general_commandname ---completion upgrade -- version $words}'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -220,7 +231,7 @@ _general_help() {
     local -a args
     args+=(
         ':subcommands:'
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 
@@ -232,11 +243,46 @@ _custom_completion() {
     _describe '' completions
 }
 
+_general_bootstrap() {
+    integer ret=1
+    local -a args
+    args+=(
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
+        '(-): :->command'
+        '(-)*:: :->arg'
+    )
+    _arguments -w -s -S $args[@] && ret=0
+    case $state in
+        (command)
+            local subcommands
+            subcommands=(
+                'make:Generate project from plant uml definition'
+                'config:Allows read or modify reusable bootstrap config'
+            )
+            _describe "subcommand" subcommands
+            ;;
+        (arg)
+            case ${words[1]} in
+                (make)
+                    _general_bootstrap_make
+                    ;;
+                (config)
+                    _general_bootstrap_config
+                    ;;
+            esac
+            ;;
+    esac
+
+    return ret
+}
+
 _general_test() {
     integer ret=1
     local -a args
     args+=(
-        '(-h --help)'{-h,--help}'[Print help information.]'
+        '--version[Show the version.]'
+        '(-h --help)'{-h,--help}'[Show help information.]'
     )
     _arguments -w -s -S $args[@] && ret=0
 

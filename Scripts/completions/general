@@ -4,7 +4,7 @@ _general() {
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
     COMPREPLY=()
-    opts="gen create list setup config upgrade help -h --help"
+    opts="--version -h --help gen create list setup config upgrade help"
     if [[ $COMP_CWORD == "1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -43,7 +43,7 @@ _general() {
 }
 
 _general_gen() {
-    opts="--path -p --name -n --template -t --output -o --target -h --help"
+    opts="--path -p --name -n --template -t --output -o --target --version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -58,7 +58,7 @@ _general_gen() {
             return
         ;;
         --template|-t)
-            COMPREPLY=( $(compgen -W "$(general-ios ---completion gen -- --template "$COMP_WORDS")" -- "$cur") )
+            COMPREPLY=( $(compgen -W "$("${COMP_WORDS[0]}" ---completion gen -- --template "${COMP_WORDS[@]}")" -- "$cur") )
             return
         ;;
         --output|-o)
@@ -66,7 +66,7 @@ _general_gen() {
             return
         ;;
         --target)
-            COMPREPLY=( $(compgen -W "$(general-ios ---completion gen -- --target "$COMP_WORDS")" -- "$cur") )
+            COMPREPLY=( $(compgen -W "$("${COMP_WORDS[0]}" ---completion gen -- --target "${COMP_WORDS[@]}")" -- "$cur") )
             return
         ;;
     esac
@@ -74,7 +74,7 @@ _general_gen() {
 }
 
 _general_create() {
-    opts="--template -t --path -p -h --help"
+    opts="--template -t --path -p --version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -93,7 +93,7 @@ _general_create() {
 }
 
 _general_list() {
-    opts="-h --help"
+    opts="--version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -102,14 +102,14 @@ _general_list() {
 }
 
 _general_setup() {
-    opts="--repo -r --global -g --xcodeproj -x --target -t --company -c -h --help"
+    opts="--repo -r --global -g --xcodeproj -x --target -t --company -c --version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
     fi
     case $prev in
         --repo|-r)
-            COMPREPLY=( $(compgen -W "$(general-ios ---completion setup -- --repo "$COMP_WORDS")" -- "$cur") )
+            COMPREPLY=( $(compgen -W "$("${COMP_WORDS[0]}" ---completion setup -- --repo "${COMP_WORDS[@]}")" -- "$cur") )
             return
         ;;
         --global|-g)
@@ -133,7 +133,7 @@ _general_setup() {
 }
 
 _general_config() {
-    opts="print reset repo use -h --help"
+    opts="--version -h --help print reset repo use"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -160,7 +160,7 @@ _general_config() {
 }
 
 _general_config_print() {
-    opts="-h --help"
+    opts="--version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -169,7 +169,7 @@ _general_config_print() {
 }
 
 _general_config_reset() {
-    opts="-h --help"
+    opts="--version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -178,7 +178,7 @@ _general_config_reset() {
 }
 
 _general_config_repo() {
-    opts="--as -h --help"
+    opts="--as --version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -193,14 +193,14 @@ _general_config_repo() {
 }
 
 _general_config_use() {
-    opts="--executable -e --for -h --help"
+    opts="--executable -e --for --version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
     fi
     case $prev in
         --executable|-e)
-            COMPREPLY=( $(compgen -W "$(general ---completion config use -- --executable "$COMP_WORDS")" -- "$cur") )
+            COMPREPLY=( $(compgen -W "$("${COMP_WORDS[0]}" ---completion config use -- --executable "${COMP_WORDS[@]}")" -- "$cur") )
             return
         ;;
         --for)
@@ -212,8 +212,8 @@ _general_config_use() {
 }
 
 _general_upgrade() {
-    opts="-h --help"
-    opts="$opts $(general ---completion upgrade -- version "$COMP_WORDS")"
+    opts="--version -h --help"
+    opts="$opts $("${COMP_WORDS[0]}" ---completion upgrade -- version "${COMP_WORDS[@]}")"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -222,7 +222,7 @@ _general_upgrade() {
 }
 
 _general_help() {
-    opts="-h --help"
+    opts="--version"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return
@@ -230,8 +230,27 @@ _general_help() {
     COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
 }
 
+_general_bootstrap() {
+    opts="--version -h --help make config"
+    if [[ $COMP_CWORD == "$1" ]]; then
+        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        return
+    fi
+    case ${COMP_WORDS[$1]} in
+        (make)
+            _general_bootstrap_make $(($1+1))
+            return
+            ;;
+        (config)
+            _general_bootstrap_config $(($1+1))
+            return
+            ;;
+    esac
+    COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+}
+
 _general_test() {
-    opts="-h --help"
+    opts="--version -h --help"
     if [[ $COMP_CWORD == "$1" ]]; then
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return

@@ -10,7 +10,7 @@ public final class BootstrapServiceImpl: BootstrapService {
 
     private lazy var configPath: String = "\(Constants.generalHomePath)/.bootstrap"
 
-    typealias Dependencies = HasFileHelper & HasProjectServiceFactory
+    typealias Dependencies = HasFileHelper & HasProjectServiceFactory & HasShell
 
     private var dependencies: Dependencies
 
@@ -36,7 +36,20 @@ public final class BootstrapServiceImpl: BootstrapService {
     
 
     public func bootstrap(with config: BootstrapConfig) throws {
-        let bootsraper = UMLBootstraper(dependencies: dependencies)
-        try bootsraper.bootstrap(with: config)
+        if config.diagrams != nil {
+            let bootsraper = UMLBootstraper(dependencies: dependencies)
+            try bootsraper.bootstrap(with: config)
+        }
+        else {
+            try bootstrapProject(with: config)
+        }
+    }
+
+    private func bootstrapProject(with config: BootstrapConfig) throws {
+        var arguments = ["--no-input", config.template]
+        arguments.append(contentsOf: config.context.map { key, value in
+            "\(key)=\(value)"
+        })
+        try dependencies.shell(path: "/usr/local/bin/cookiecutter", arguments: arguments)
     }
 }

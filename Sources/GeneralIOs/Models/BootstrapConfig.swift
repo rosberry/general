@@ -8,5 +8,5 @@
 public struct BootstrapConfig {
     let context: [String: Any]
     let template: String
-    let diagrams: String
+    let diagrams: String?
 }

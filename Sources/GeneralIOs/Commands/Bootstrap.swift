@@ -43,6 +43,7 @@ final class Bootstrap: ParsableCommand {
             static let company: String = "company"
             static let firebase: String = "firebase"
             static let swiftgen: String = "swiftgen"
+            static let licenseplist: String = "licenseplist"
         }
 
         static let configuration: CommandConfiguration = .init(abstract: "Allows read or modify reusable bootstrap config",
@@ -69,6 +70,9 @@ final class Bootstrap: ParsableCommand {
         @Option(name: .shortAndLong, help: "Enable or disable firebase")
         var swiftgen: Bool?
 
+        @Option(name: .shortAndLong, help: "Enable or disable licenseplist")
+        var licenseplist: Bool?
+
         @Option(name: .shortAndLong, help: "Set additional variable value. Format name=value ")
         var variable: String?
 
@@ -89,6 +93,9 @@ final class Bootstrap: ParsableCommand {
             }
             if let swiftgen = self.swiftgen {
                 config[Config.Constants.swiftgen] = swiftgen
+            }
+            if let licenseplist = self.licenseplist {
+                config[Config.Constants.licenseplist] = licenseplist
             }
             if let variable = self.variable {
                 let components = variable.split(separator: "=").map { component in
@@ -135,7 +142,7 @@ final class Bootstrap: ParsableCommand {
         var name: String
 
         @Option(name: .shortAndLong, help: "The path to uml diagrams file")
-        var uml: String
+        var uml: String?
 
         @Option(name: .shortAndLong, help: "The path to the project template", completion: .directory)
         var template: String?
@@ -149,8 +156,11 @@ final class Bootstrap: ParsableCommand {
         @Option(name: .shortAndLong, help: "Enable or disable firebase")
         var firebase: Bool?
 
-        @Option(name: .shortAndLong, help: "Enable or disable firebase")
+        @Option(name: .shortAndLong, help: "Enable or disable swiftgen")
         var swiftgen: Bool?
+
+        @Option(name: .shortAndLong, help: "Enable or disable licenseplist")
+        var licenseplist: Bool?
 
     //    @Option(name: .shortAndLong, help: "Path to plant uml file", completion: .directory)
     //    var uml: String
@@ -167,11 +177,11 @@ final class Bootstrap: ParsableCommand {
         }
 
         func run() throws {
-            let config = try composeConfig()
+            let config = uml != nil ? try composeUMLConfig() : try composeProjectConfig()
             try dependencies.bootstrapService.bootstrap(with: config)
         }
 
-        private func composeConfig() throws -> BootstrapConfig {
+        private func composeUMLConfig() throws -> BootstrapConfig {
             var projectConfig = dependencies.bootstrapService.config
             guard let template = self.template ?? projectConfig[Config.Constants.template] as? String else {
                 throw Error.template
@@ -186,9 +196,11 @@ final class Bootstrap: ParsableCommand {
             if let swiftgen = self.swiftgen {
                 projectConfig[Config.Constants.swiftgen] = swiftgen
             }
+            if let licenseplist = self.licenseplist {
+                projectConfig[Config.Constants.licenseplist] = licenseplist
+            }
             projectConfig["name"] = name
             projectConfig["year"] = "\(Calendar.current.component(.year, from: Date()))"
-            projectConfig["licenseplist"] = true
             if let bundleId = self.bundleId {
                 projectConfig["bundle_identifier"] = bundleId
             } else if let company = self.company ?? projectConfig[Config.Constants.company] as? String {
@@ -199,6 +211,35 @@ final class Bootstrap: ParsableCommand {
             var context = [String: Any]()
             context["project"] = projectConfig
             return .init(context: context, template: template, diagrams: uml)
+        }
+
+        private func composeProjectConfig() throws -> BootstrapConfig {
+            var projectConfig = dependencies.bootstrapService.config
+            guard let template = self.template ?? projectConfig[Config.Constants.template] as? String else {
+                throw Error.template
+            }
+            projectConfig.removeValue(forKey: Config.Constants.template)
+            if let company = self.company ?? projectConfig[Config.Constants.company] as? String {
+                projectConfig["organization_name"] = company
+            }
+            if let firebase = self.firebase ?? projectConfig[Config.Constants.firebase] as? Bool {
+                projectConfig[Config.Constants.firebase] = firebase ? "Yes" : "No"
+            }
+            if let swiftgen = self.swiftgen ?? projectConfig[Config.Constants.swiftgen] as? Bool {
+                projectConfig[Config.Constants.swiftgen] = swiftgen ? "Yes" : "No"
+            }
+            if let licenseplist = self.licenseplist ?? projectConfig[Config.Constants.licenseplist] as? Bool {
+                projectConfig[Config.Constants.licenseplist] = licenseplist ? "Yes" : "No"
+            }
+            projectConfig["name"] = name
+            if let bundleId = self.bundleId {
+                projectConfig["bundle_identifier"] = bundleId
+            } else if let company = self.company ?? projectConfig[Config.Constants.company] as? String {
+                projectConfig["bundle_identifier"] = "com.\(company).\(name)".lowercased()
+            } else {
+                throw Error.bundleId
+            }
+            return .init(context: projectConfig, template: template, diagrams: nil)
         }
     }
 }

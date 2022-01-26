@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "bootstrap -n Sri-iOS -u Uml/sri.uml"
+            argument = "bootstrap -n Sri-iOS "
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>

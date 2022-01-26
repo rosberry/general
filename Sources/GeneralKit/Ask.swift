@@ -18,7 +18,7 @@ public func askBool(question: String) -> Bool {
 
 public func ask(_ question: String, default: String? = nil) -> String? {
     if let value = `default` {
-        print("\(question) \(green("(\(value))")):", terminator: " ")
+        print("\(question) \(green("(\(value))")):")
     }
     else {
         print("\(question):", terminator: " ")

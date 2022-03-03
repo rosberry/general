@@ -30,6 +30,9 @@ Temporary Items
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
+General.xcodeproj/
+General.xcodeproj/**/*
+
 ## Build generated
 build/
 DerivedData/

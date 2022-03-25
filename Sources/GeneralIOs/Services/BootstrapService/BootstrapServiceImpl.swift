@@ -33,13 +33,27 @@ public final class BootstrapServiceImpl: BootstrapService {
     init(dependencies: Dependencies) {
         self.dependencies = dependencies
     }
-    
+
 
     public func bootstrap(with config: BootstrapConfig) throws {
-        let bootsraper = UMLBootstraper(dependencies: dependencies)
-        try bootsraper.bootstrap(with: config)
+        if config.diagrams != nil {
+            let bootsraper = UMLBootstraper(dependencies: dependencies)
+            try bootsraper.bootstrap(with: config)
+        }
+        else {
+            try bootstrapProject(with: config)
+        }
+
         try depo(with: config)
         swiftgen(with: config)
+    }
+
+    private func bootstrapProject(with config: BootstrapConfig) throws {
+        var arguments = ["--no-input", config.template]
+        arguments.append(contentsOf: config.context.map { key, value in
+            "\(key)=\(value)"
+        })
+        try dependencies.shell(path: "/usr/local/bin/cookiecutter", arguments: arguments)
     }
 
     private func depo(with config: BootstrapConfig) throws {

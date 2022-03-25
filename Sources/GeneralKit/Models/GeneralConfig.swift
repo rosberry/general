@@ -6,17 +6,14 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
     public var version: String
     public var templatesRepos: [String: String]
     public var overrides: [String: String]
-    public var overridePluginInput: Bool
 
     public init(version: String,
                 templatesRepos: [String: String] = [:],
                 pluginRepos: [String: String] = [:],
-                overrides: [String: String] = [:],
-                overridePluginInput: Bool = false) {
+                overrides: [String: String] = [:]) {
         self.version = version
         self.templatesRepos = templatesRepos
         self.overrides = overrides
-        self.overridePluginInput = overridePluginInput
     }
 
     public func addingUnique<Value: Hashable>(_ value: Value, by keyPath: KeyPath<GeneralConfig, [Value]>) -> [Value] {
@@ -28,7 +25,6 @@ public struct GeneralConfig: Codable, CustomStringConvertible {
                version: \(green(version))
                templates repos: \(green(templatesReposDescription))
                overrides: \(overssidesDescription)
-               overridePluginInput: \(overridePluginInput)
                """
     }
 

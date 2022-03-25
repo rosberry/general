@@ -19,4 +19,8 @@ final class General: ParsableCommand {
                                    Upgrade.self],
                      defaultSubcommand: Generate.self)
     }
+
+    public static func completionScript(for shell: CompletionShell) -> String {
+        return "Hello world"
+    }
 }

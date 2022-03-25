@@ -58,9 +58,6 @@ public final class Generate: ParsableCommand {
     @Option(name: .long, help: "The target to which add files.", completion: .targets)
     var target: String?
 
-    @Argument(help: "The additional variables for templates.")
-    var variables: [GeneralKit.Variable] = []
-
     // MARK: - Lifecycle
 
     public init() {
@@ -70,7 +67,7 @@ public final class Generate: ParsableCommand {
         let renderer = Renderer(name: name,
                                 template: template,
                                 path: path,
-                                variables: variables,
+                                variables: [],
                                 output: output,
                                 dependencies: Services)
         if let xcodeSpec = generalSpec?.xcode {

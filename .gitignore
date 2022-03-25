@@ -36,6 +36,7 @@ General.xcodeproj/**/*
 ## Build generated
 build/
 DerivedData/
+Scripts/completions/
 
 ## Various settings
 *.pbxuser
@@ -70,6 +71,9 @@ xcuserdata/
 
 Carthage/Checkouts
 Carthage/Build
+
+General.xcodeproj/
+General.xcodeproj/**/*
 
 # fastlane
 #

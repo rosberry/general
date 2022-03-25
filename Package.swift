@@ -16,12 +16,13 @@ let package = Package(
     ],
     dependencies: [
         //with bumped PathKit version
+        .package(url: "https://github.com/kylef/PathKit", .branch("master")),
         .package(url: "https://github.com/rosberry/StencilSwiftKit.git", .branch("stable")),
         .package(url: "https://github.com/apple/swift-argument-parser.git", .upToNextMajor(from: "0.1.0")),
         .package(url: "https://github.com/jpsim/Yams.git", .upToNextMajor(from: "4.0.6")),
         .package(url: "https://github.com/weichsel/ZIPFoundation.git", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/tuist/XcodeProj.git", .upToNextMajor(from: "7.0.0")),
-        .package(url: "https://github.com/rosberry/umaler.git", .branch("architecture-parser")),
+        .package(url: "https://github.com/rosberry/umaler.git", .branch("master")),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

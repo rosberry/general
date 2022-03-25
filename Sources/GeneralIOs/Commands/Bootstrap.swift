@@ -239,7 +239,7 @@ final class Bootstrap: ParsableCommand {
             } else {
                 throw Error.bundleId
             }
-            return .init(context: projectConfig, template: template, diagrams: nil)
+            return .init(name: name, context: projectConfig, template: template, diagrams: nil)
         }
     }
 }

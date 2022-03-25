@@ -198,7 +198,7 @@ final class Bootstrap: ParsableCommand {
             }
             var context = [String: Any]()
             context["project"] = projectConfig
-            return .init(context: context, template: template, diagrams: uml)
+            return .init(name: name, context: context, template: template, diagrams: uml)
         }
     }
 }

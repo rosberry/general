@@ -10,7 +10,7 @@ public final class BootstrapServiceImpl: BootstrapService {
 
     private lazy var configPath: String = "\(Constants.generalHomePath)/.bootstrap"
 
-    typealias Dependencies = HasFileHelper & HasProjectServiceFactory
+    typealias Dependencies = HasFileHelper & HasProjectServiceFactory & HasShell
 
     private var dependencies: Dependencies
 
@@ -38,5 +38,36 @@ public final class BootstrapServiceImpl: BootstrapService {
     public func bootstrap(with config: BootstrapConfig) throws {
         let bootsraper = UMLBootstraper(dependencies: dependencies)
         try bootsraper.bootstrap(with: config)
+        try depo(with: config)
+        swiftgen(with: config)
+    }
+
+    private func depo(with config: BootstrapConfig) throws {
+        guard isInstalled(tool: "depo"),
+              isExists(path: "\(config.name)/Depofile") else {
+            return
+        }
+        let shell = dependencies.shell
+        try shell(loud: "(cd \(config.name) && depo install)")
+    }
+
+    private func swiftgen(with config: BootstrapConfig) {
+        guard isInstalled(tool: "swiftgen") else {
+            return
+        }
+        let shell = dependencies.shell
+        _ = try? shell(loud: "(cd \(config.name) && swiftgen)")
+    }
+
+    private func isExists(path: String) -> Bool{
+        return dependencies.fileHelper.fileManager.fileExists(atPath: path)
+    }
+
+    private func isInstalled(tool: String) -> Bool {
+        guard let path = try? dependencies.shell(silent: "command -v \(tool)"),
+              path.isEmpty == false else {
+            return false
+        }
+        return true
     }
 }

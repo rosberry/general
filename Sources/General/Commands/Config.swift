@@ -131,7 +131,7 @@ final class Config: ParsableCommand {
 
     static var configuration: CommandConfiguration {
         return .init(abstract: "Provides an access to general config",
-                     subcommands: [Print.self, Reset.self, Repo.self, Use.self],
+                     subcommands: [Print.self, Reset.self, Repo.self, Use.self, OverridePluginInput.self],
                      defaultSubcommand: Print.self)
     }
 }

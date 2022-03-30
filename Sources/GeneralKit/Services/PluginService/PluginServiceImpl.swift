@@ -125,7 +125,7 @@ final class PluginServiceImpl: PluginService {
 
     private func run(plugin: String) throws {
         let shell = Services.shell
-        try shell(loud: "\(Constants.pluginsPath)/\(plugin) \(CommandLine.arguments[1...].joined(separator: " "))")
+        try shell(path: "\(Constants.pluginsPath)/\(plugin)", arguments: Array(CommandLine.arguments[1...]))
     }
 
     private func buildRunConfig(command: ParsableCommand.Type) throws -> RunConfig {

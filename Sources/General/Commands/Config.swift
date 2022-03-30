@@ -109,6 +109,26 @@ final class Config: ParsableCommand {
         }
     }
 
+    private class OverridePluginInput: ParsableCommand {
+        static let configuration: CommandConfiguration = .init(abstract: "Enable force redirect plugin input to general")
+
+        @Argument(help: .init(stringLiteral: "Enable or disable plugin input to general"))
+        var overridePluginInput: Bool
+
+        required init() {
+            //
+        }
+
+        func run() throws {
+            try updateConfig { config in
+                var config = config
+                config.overridePluginInput = overridePluginInput
+                return config
+            }
+            print(green("Plugin input redirect is \(overridePluginInput ? "enabled" : "disabled")"))
+        }
+    }
+
     static var configuration: CommandConfiguration {
         return .init(abstract: "Provides an access to general config",
                      subcommands: [Print.self, Reset.self, Repo.self, Use.self],

@@ -21,7 +21,7 @@ public func ask(_ question: String, default: String? = nil) -> String? {
         print("\(question) \(green("(\(value))")):")
     }
     else {
-        print("\(question):", terminator: " ")
+        print("\(question):")
     }
     guard let value = readLine(),
         value.isEmpty == false else {
@@ -38,7 +38,7 @@ public func askChoice<Value: CustomStringConvertible>(_ question: String, values
     values.enumerated().forEach { number, value in
         print("\(number + 1): \(value.description)")
     }
-    print("0: cancel\n> ", terminator: " ")
+    print("0: cancel\n> ")
     guard let answer = readLine(),
         let number = Int(answer) else {
         print("Invalid value entered")

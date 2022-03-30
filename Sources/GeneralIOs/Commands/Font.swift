@@ -123,7 +123,7 @@ public final class Font: ParsableCommand {
 
         try result.write(toFile: extensionFontPath, atomically: true, encoding: .utf8)
         sleep(1)
-        print("✨ Success completion fonts integration in project... ✨")
+        print("✨ \(green("Success")) Completion integration fonts... ✨")
         try projectService.addFile(targetName: targetName, filePath: Path(extensionFontPath))
         try projectService.write()
     }
@@ -149,7 +149,7 @@ public final class Font: ParsableCommand {
                 if fileHelper.fileManager.fileExists(atPath: destination.path) == false {
                     try fileHelper.fileManager.copyItem(at: newFont.url, to: destination)
                     sleep(1)
-                    print("🎉 Add font: \(newFont.url.lastPathComponent) in Project success... 🎉")
+                    print("🎉\(green("Success")) Added font: \(newFont.url.lastPathComponent) ... 🎉")
                     try projectService.addFile(targetName: target, filePath: Path(destination.relativePath))
                 }
             }

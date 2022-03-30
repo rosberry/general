@@ -100,8 +100,8 @@ public final class Font: ParsableCommand {
         try xmlDoc.xml.write(toFile: infoPlistPath.path, atomically: true, encoding: .utf8)
 
         let env = Environment(loader: FileSystemLoader(paths: [
-            "/Users/evgenijsvarckopf/Projects/general-templates/.templates/rsb_fonts",
-            "/Users/evgenijsvarckopf/Projects/general-templates/.templates/common"
+            "./.templates/rsb_fonts",
+            "./.templates/common"
         ]))
 
         env.extensions.forEach { ext in
@@ -122,8 +122,8 @@ public final class Font: ParsableCommand {
                                          context: ["fonts": fontName])
 
         try result.write(toFile: extensionFontPath, atomically: true, encoding: .utf8)
-        print("Waiting add file in directly project")
         sleep(1)
+        print("✨ Success completion fonts integration in project... ✨")
         try projectService.addFile(targetName: targetName, filePath: Path(extensionFontPath))
         try projectService.write()
     }
@@ -148,8 +148,8 @@ public final class Font: ParsableCommand {
                 let destination = URL(fileURLWithPath: fontsFolderPath + "/" + newFont.url.lastPathComponent)
                 if fileHelper.fileManager.fileExists(atPath: destination.path) == false {
                     try fileHelper.fileManager.copyItem(at: newFont.url, to: destination)
-                    print("Waiting add file in directly project")
                     sleep(1)
+                    print("🎉 Add font: \(newFont.url.lastPathComponent) in Project success... 🎉")
                     try projectService.addFile(targetName: target, filePath: Path(destination.relativePath))
                 }
             }

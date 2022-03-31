@@ -14,8 +14,50 @@ import PathKit
 
 public final class Font: ParsableCommand {
 
-    private enum FontsError: Error {
-        case notFoundTarget
+    private enum Constant {
+        static let fontsFolderPath = "./Resources/Fonts"
+        static let extensionFolderPath = "./Classes/Core/Extensions"
+        static var extensionFontPath = "./Classes/Core/Extensions/UIFonts+App.swift"
+        static let fontsTemplatePath = "./.templates/rsb_fonts"
+        static let commonTemplatePath = "./.templates/common"
+        static let commandTemplatePath = "./.templates"
+        static let fontValue = "UIAppFonts"
+        static let fontTemplateName = "UIFonts+App.stencil"
+        static let notFoundTemplate = #"""
+                                      Is not found folder templates in directory.
+                                      Please, call command `general setup -r rosberry/general-templates\ ios`
+                                      """#
+    }
+
+    private enum Error: Swift.Error, LocalizedError {
+        case notFoundFonts(String)
+        case notFoundTarget(String)
+        case notFoundInfoPlist(String)
+        case invalidData
+        case notFoundTemplate
+        case somethingGoingWrong(String, String)
+
+        public var errorDescription: String? {
+            switch self {
+            case let .notFoundFonts(path):
+                return red("Is not found fonts in path \(path). Please check correctly path.")
+            case let .notFoundTarget(targetName):
+                return red("Is not found target - \(targetName)")
+            case let .notFoundInfoPlist(path):
+                return red("Is not found info plist by path \(path)")
+            case .invalidData:
+                return red("Data is not valid. Please check correctly Info.plist")
+            case .notFoundTemplate:
+                return red(Constant.notFoundTemplate)
+            case .somethingGoingWrong(let title, let subtitle):
+                return red("""
+                          Something going wrong...
+                          I try it \(title) ...
+                          But I can't perform because \(subtitle).
+                          Please check and try again.
+                          """)
+            }
+        }
     }
 
     typealias Dependencies = HasFileHelper &
@@ -56,30 +98,37 @@ public final class Font: ParsableCommand {
         let fonts = fonts(in: URL(fileURLWithPath: path))
 
         guard fonts.isEmpty == false else {
-            return
+            throw Error.notFoundFonts(path)
         }
 
         let targetName = target ?? unwrappedProjectName
 
+        guard targetName != "" else {
+            throw Error.notFoundTarget(targetName)
+        }
+
         let infoPlistPath = URL(fileURLWithPath: "./\(unwrappedProjectName)/Info.plist")
-        let fontsFolderPath = "./Resources/Fonts"
-        let extensionFolderPath = "./Classes/Core/Extensions"
-        let extensionFontPath = extensionFolderPath + "/UIFonts+App.swift"
 
-        if fileHelper.fileManager.fileExists(atPath: fontsFolderPath) == false {
-            try fileHelper.createDirectory(at: fontsFolderPath)
+        if fileHelper.fileManager.fileExists(atPath: Constant.fontsFolderPath) == false {
+            try fileHelper.createDirectory(at: Constant.fontsFolderPath)
         }
 
-        if fileHelper.fileManager.fileExists(atPath: extensionFolderPath) == false {
-            try fileHelper.createDirectory(at: extensionFolderPath)
+        if fileHelper.fileManager.fileExists(atPath: Constant.extensionFolderPath) == false {
+            try fileHelper.createDirectory(at: Constant.extensionFolderPath)
         }
 
-        let data = try Data(contentsOf: infoPlistPath)
-        let xmlDoc = try AEXMLDocument(xml: data)
+        guard let data = try? Data(contentsOf: infoPlistPath) else {
+            throw Error.notFoundInfoPlist(infoPlistPath.path)
+        }
+
+        guard let xmlDoc = try? AEXMLDocument(xml: data) else {
+            throw Error.invalidData
+        }
+
         let plsit = xmlDoc.root["dict"]
 
         let index = plsit.children.firstIndex { e in
-            e.value == "UIAppFonts"
+            e.value == Constant.fontValue
         }
 
         let appFonts: AEXMLElement
@@ -87,21 +136,24 @@ public final class Font: ParsableCommand {
             appFonts = plsit.children[i + 1];
         }
         else {
-            plsit.addChild(.init(name: "key", value: "UIAppFonts"))
+            plsit.addChild(.init(name: "key", value: Constant.fontValue))
             appFonts = .init(name: "array")
             plsit.addChild(appFonts)
         }
 
         try addFontsInInfoPlistAndFolderFonts(with: fonts,
                                               appFonts: appFonts,
-                                              target: targetName,
-                                              fontsFolderPath: fontsFolderPath)
+                                              target: targetName)
 
         try xmlDoc.xml.write(toFile: infoPlistPath.path, atomically: true, encoding: .utf8)
 
+        guard fileHelper.fileManager.fileExists(atPath: Constant.commandTemplatePath) else {
+            throw Error.notFoundTemplate
+        }
+
         let env = Environment(loader: FileSystemLoader(paths: [
-            "./.templates/rsb_fonts",
-            "./.templates/common"
+            Path(Constant.fontsTemplatePath),
+            Path(Constant.commonTemplatePath)
         ]))
 
         env.extensions.forEach { ext in
@@ -118,14 +170,35 @@ public final class Font: ParsableCommand {
             font.value?.filter { !".ttf.otf".contains($0) }
         }
 
-        let result = try env.renderTemplate(name: "UIFonts+App.stencil",
-                                         context: ["fonts": fontName])
+        guard let result = try? env.renderTemplate(name: Constant.fontTemplateName,
+                                                   context: ["fonts": fontName]) else {
+            throw Error.somethingGoingWrong("generate ", "check font template in ./templates")
+        }
 
-        try result.write(toFile: extensionFontPath, atomically: true, encoding: .utf8)
+        do {
+            try result.write(toFile: Constant.extensionFontPath, atomically: true, encoding: .utf8)
+        }
+        catch {
+            throw Error.somethingGoingWrong("write extension font", error.localizedDescription)
+        }
+
+        // Same thing
         sleep(1)
-        print("✨ \(green("Successfully")) completed added fonts... ✨")
-        try projectService.addFile(targetName: targetName, filePath: Path(extensionFontPath))
-        try projectService.write()
+
+        do {
+            try projectService.addFile(targetName: targetName, filePath: Path(Constant.extensionFontPath))
+        }
+        catch {
+           throw Error.somethingGoingWrong("add file in target", error.localizedDescription)
+        }
+
+        do {
+            try projectService.write()
+            print("✨ \(green("Successfully")) completed added fonts... ✨")
+        }
+        catch {
+           throw Error.somethingGoingWrong("save changes", error.localizedDescription)
+        }
     }
 
     public init() {
@@ -133,8 +206,7 @@ public final class Font: ParsableCommand {
 
     private func addFontsInInfoPlistAndFolderFonts(with fonts: [FileInfo],
                                                    appFonts: AEXMLElement,
-                                                   target: String,
-                                                   fontsFolderPath: String) throws {
+                                                   target: String) throws {
         for newFont in fonts {
             var isContains: Bool = false
             for appFont in appFonts.children {
@@ -145,12 +217,26 @@ public final class Font: ParsableCommand {
             }
             if isContains == false {
                 appFonts.addChild(.init(name: "string", value: newFont.url.lastPathComponent))
-                let destination = URL(fileURLWithPath: fontsFolderPath + "/" + newFont.url.lastPathComponent)
+                let destination = URL(fileURLWithPath: Constant.fontsFolderPath + "/" + newFont.url.lastPathComponent)
                 if fileHelper.fileManager.fileExists(atPath: destination.path) == false {
-                    try fileHelper.fileManager.copyItem(at: newFont.url, to: destination)
+                    do {
+                        try fileHelper.fileManager.copyItem(at: newFont.url, to: destination)
+                    }
+                    catch {
+                        throw Error.somethingGoingWrong("copy item", error.localizedDescription)
+                    }
+
+                    // Here setup sleep 1 second when copy item in directory after install target for file.
+                    // if sleep delete when target is not install for file because cannot execute asynchronously.
                     sleep(1)
-                    print("🎉 \(green("Added font:")) \(newFont.url.lastPathComponent) ... 🎉")
-                    try projectService.addFile(targetName: target, filePath: Path(destination.relativePath))
+
+                    do {
+                        try projectService.addFile(targetName: target, filePath: Path(destination.relativePath))
+                        print("🎉 \(green("Added font:")) \(newFont.url.lastPathComponent) ... 🎉")
+                    }
+                    catch {
+                        throw Error.somethingGoingWrong("add target", error.localizedDescription)
+                    }
                 }
             }
         }

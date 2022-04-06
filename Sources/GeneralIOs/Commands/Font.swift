@@ -61,13 +61,22 @@ public final class Font: ParsableCommand {
     }
 
     typealias Dependencies = HasFileHelper &
-                             HasProjectServiceFactory
+                             HasProjectServiceFactory &
+                             HasSpecFactory
     private lazy var fileHelper = dependencies.fileHelper
     public static let configuration: CommandConfiguration = .init(abstract: "Add fonts in project.")
     private lazy var projectService: ProjectService = {
         let service = dependencies.projectServiceFactory.makeProjectService(path: "./")
         try? service.createProject(projectName: "\(unwrappedProjectName).xcodeproj")
         return service
+    }()
+
+    private lazy var specFactory: SpecFactory = dependencies.specFactory
+
+    private lazy var generalSpec: GeneralSpec? = {
+        let pathURL = URL(fileURLWithPath: directoryPath, isDirectory: true)
+        let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)
+        return try? specFactory.makeSpec(url: specURL)
     }()
 
     private lazy var unwrappedProjectName: String = {
@@ -91,6 +100,9 @@ public final class Font: ParsableCommand {
 
     @Option(name: .long, help: "The target to which add files.", completion: .targets)
     var target: String?
+
+    @Option(name: .shortAndLong, completion: .directory, help: "The path for the project.")
+    var directoryPath: String = FileManager.default.currentDirectoryPath
 
     // MARK: - Lifecycle
 
@@ -170,8 +182,13 @@ public final class Font: ParsableCommand {
             URL(fileURLWithPath: font.value ?? "").deletingPathExtension().lastPathComponent
         }
 
+        let company = generalSpec?.xcode.company ?? ask("Please enter license company") ?? ""
+        let year = Calendar.current.component(.year, from: .init())
+
         guard let result = try? env.renderTemplate(name: Constant.fontTemplateName,
-                                                   context: ["fonts": fontName]) else {
+                                                   context: ["fonts": fontName,
+                                                             "year": year,
+                                                             "company": company]) else {
             throw Error.somethingGoingWrong("generate ", "check font template in ./templates")
         }
 

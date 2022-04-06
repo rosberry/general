@@ -16,8 +16,8 @@ public final class Font: ParsableCommand {
 
     private enum Constant {
         static let fontsFolderPath = "./Resources/Fonts"
-        static let extensionFolderPath = "./Classes/Core/Extensions"
-        static var extensionFontPath = "./Classes/Core/Extensions/UIFonts+App.swift"
+        static let extensionFolderPath = "./Classes/Presentation/Extensions"
+        static var extensionFontPath = "./Classes/Presentation/Extensions/UIFonts+App.swift"
         static let fontsTemplatePath = "./.templates/rsb_fonts"
         static let commonTemplatePath = "./.templates/common"
         static let commandTemplatePath = "./.templates"
@@ -167,7 +167,7 @@ public final class Font: ParsableCommand {
         }
 
         let fontName = appFonts.children.compactMap { font in
-            font.value?.filter { !".ttf.otf".contains($0) }
+            URL(fileURLWithPath: font.value ?? "").deletingPathExtension().lastPathComponent
         }
 
         guard let result = try? env.renderTemplate(name: Constant.fontTemplateName,
@@ -186,7 +186,7 @@ public final class Font: ParsableCommand {
         sleep(1)
 
         do {
-            try projectService.addFile(targetName: targetName, filePath: Path(Constant.extensionFontPath))
+            try projectService.addFile(targetName: targetName, filePath: Path(Constant.extensionFontPath), sourceTree: .group)
         }
         catch {
            throw Error.somethingGoingWrong("add file in target", error.localizedDescription)
@@ -208,14 +208,7 @@ public final class Font: ParsableCommand {
                                                    appFonts: AEXMLElement,
                                                    target: String) throws {
         for newFont in fonts {
-            var isContains: Bool = false
-            for appFont in appFonts.children {
-                if appFont.value == newFont.url.lastPathComponent {
-                    isContains = true
-                    break
-                }
-            }
-            if isContains == false {
+            if appFonts.children.contains(where: { $0.value == newFont.url.lastPathComponent }) == false {
                 appFonts.addChild(.init(name: "string", value: newFont.url.lastPathComponent))
                 let destination = URL(fileURLWithPath: Constant.fontsFolderPath + "/" + newFont.url.lastPathComponent)
                 if fileHelper.fileManager.fileExists(atPath: destination.path) == false {
@@ -231,7 +224,10 @@ public final class Font: ParsableCommand {
                     sleep(1)
 
                     do {
-                        try projectService.addFile(targetName: target, filePath: Path(destination.relativePath))
+                        try projectService.addFile(targetName: target,
+                                                   filePath: Path(destination.relativePath),
+                                                   sourceTree: .group,
+                                                   isResource: true)
                         print("🎉 \(green("Added font:")) \(newFont.url.lastPathComponent) ... 🎉")
                     }
                     catch {
@@ -251,8 +247,8 @@ public final class Font: ParsableCommand {
                 return fonts(in: file.url)
             }
 
-            let ext = file.url.pathExtension
-            switch ext {
+            let pathExtenstion = file.url.pathExtension
+            switch pathExtenstion {
             case "otf", "ttf":
                 return [file]
             default:

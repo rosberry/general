@@ -104,7 +104,7 @@ public final class FontService {
         }
 
         guard let fontSpec = generalSpec?.font else {
-            return // TODo
+            throw Error.notFoundTemplate
         }
 
         try createGroupIfNeeded(fontSpec)

@@ -6,9 +6,11 @@ import GeneralKit
 
 struct GeneralSpec: Codable {
     public var xcode: XcodeSpec
+    public var font: FontSpec
     public var outputs: [Output]
 
-    public init(xcode: XcodeSpec, outputs: [Output] = []) {
+    public init(xcode: XcodeSpec, font: FontSpec, outputs: [Output] = []) {
+        self.font = font
         self.xcode = xcode
         self.outputs = outputs
     }

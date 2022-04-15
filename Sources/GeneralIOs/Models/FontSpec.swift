@@ -11,7 +11,7 @@ public class FontSpec: Codable, CustomStringConvertible {
     public var commandTemplatePath: String
     public var fontsFolderPath: String
     public var fontsTemplatePath: String
-    public var fontValue: String
+    public var infoFontName: String
     public var fontTemplateName: String
 
     public init(extensionFolderPath: String,
@@ -20,7 +20,7 @@ public class FontSpec: Codable, CustomStringConvertible {
                 commandTemplatePath: String,
                 fontsFolderPath: String,
                 fontsTemplatePath: String,
-                fontValue: String,
+                infoFontName: String,
                 fontTemplateName: String,
                 notFoundTemplate: String) {
         self.extensionFolderPath = extensionFolderPath
@@ -29,7 +29,7 @@ public class FontSpec: Codable, CustomStringConvertible {
         self.commandTemplatePath = commandTemplatePath
         self.fontsFolderPath = fontsFolderPath
         self.fontsTemplatePath = fontsTemplatePath
-        self.fontValue = fontValue
+        self.infoFontName = infoFontName
         self.fontTemplateName = fontTemplateName
     }
 }

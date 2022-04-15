@@ -11,13 +11,6 @@ import PathKit
 
 public final class FontService {
 
-    private enum Constant {
-        static let notFoundTemplate = #"""
-                                      Is not found folder templates in directory.
-                                      Please, call command `general setup -r rosberry/general-templates\ ios`
-                                      """#
-    }
-
     private enum Error: Swift.Error, LocalizedError {
         case notFoundFonts(String)
         case notFoundTarget(String)
@@ -37,7 +30,10 @@ public final class FontService {
             case .invalidData:
                 return red("Data is not valid. Please check correctly Info.plist")
             case .notFoundTemplate:
-                return red(Constant.notFoundTemplate)
+                return red(#"""
+                           Is not found folder templates in directory.
+                           Please, call command `general setup -r rosberry/general-templates\ ios`
+                           """#)
             case .somethingGoingWrong(let title, let subtitle):
                 return red("""
                           Something going wrong...
@@ -200,7 +196,7 @@ public final class FontService {
         let plsit = xmlDoc.root["dict"]
 
         let index = plsit.children.firstIndex { e in
-            e.value == fontSpec.fontValue
+            e.value == fontSpec.infoFontName
         }
 
         let appFonts: AEXMLElement
@@ -208,7 +204,7 @@ public final class FontService {
             appFonts = plsit.children[i + 1];
         }
         else {
-            plsit.addChild(.init(name: "key", value: fontSpec.fontValue))
+            plsit.addChild(.init(name: "key", value: fontSpec.infoFontName))
             appFonts = .init(name: "array")
             plsit.addChild(appFonts)
         }

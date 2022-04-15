@@ -4,8 +4,12 @@
 
 import GeneralKit
 
-extension ServiceFactory: HasProjectServiceFactory {
+extension ServiceFactory: HasProjectServiceFactory, HasFontServiceFactory {
     public var projectServiceFactory: ProjectServiceFactory {
+        .init()
+    }
+
+    public var fontServiceFactory: FontServiceFactory {
         .init()
     }
 }

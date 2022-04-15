@@ -33,7 +33,10 @@ public final class ProjectService {
         self.xcodeprojPath = xcodeprojPath
     }
 
-    func addFile(targetName: String?, filePath: Path) throws {
+    func addFile(targetName: String?,
+                 filePath: Path,
+                 sourceTree: PBXSourceTree = .sourceRoot,
+                 isResource: Bool = false) throws {
         guard let project = xcodeproj?.pbxproj.projects.first else {
             throw Error.noProject(path: path.string)
         }
@@ -57,7 +60,12 @@ public final class ProjectService {
             throw Error.noGroup
         }
 
-        let file = try group.addFile(at: filePath, sourceTree: .sourceRoot, sourceRoot: path)
+        let file = try group.addFile(at: filePath, sourceTree: sourceTree, sourceRoot: path)
+
+        if isResource {
+            let _ = try xcodeproj?.pbxproj.resourcesBuildPhases.first?.add(file: file)
+        }
+
         xcodeproj?.pbxproj.add(object: file)
         let targets = xcodeproj?.pbxproj.nativeTargets
         let target: PBXNativeTarget?

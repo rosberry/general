@@ -72,6 +72,12 @@ public class VariablesTemplate: Template {
                     add(dynamic: "forloop")
                     add(dynamic: components[1])
                     add(variable: components[3])
+                case "only":
+                    guard components.count >= 5 else {
+                        return
+                    }
+                    add(dynamic: components[2])
+                    add(variable: components[4])
                 case "using":
                     guard components.count >= 4 else {
                         return
@@ -81,6 +87,9 @@ public class VariablesTemplate: Template {
                     ifDepth += 1
                 case "endif":
                     ifDepth -= 1
+                case "first":
+                    add(dynamic: components[1])
+                    add(variable: components[3])
                 default:
                     return
                 }

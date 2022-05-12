@@ -191,7 +191,7 @@ final class Bootstrap: ParsableCommand {
                 projectConfig[Config.Constants.company] = company
             }
             if let firebase = self.firebase {
-                projectConfig[Config.Constants.company] = firebase
+                projectConfig[Config.Constants.firebase] = firebase
             }
             if let swiftgen = self.swiftgen {
                 projectConfig[Config.Constants.swiftgen] = swiftgen

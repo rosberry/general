@@ -60,7 +60,7 @@
         "repositoryURL": "https://github.com/rosberry/StencilSwiftKit.git",
         "state": {
           "branch": "stable",
-          "revision": "2e289f24626ce6bc75e515fd41a52db0b139097d",
+          "revision": "17d5fb6c67a7a391b36f1154c80c429ac3653ec4",
           "version": null
         }
       },
@@ -96,7 +96,7 @@
         "repositoryURL": "https://github.com/rosberry/umaler.git",
         "state": {
           "branch": "master",
-          "revision": "4f23ff786739c292b2303250f35015e4d17df739",
+          "revision": "7a713e838978f7cdee6b40eae3a8efd89cf055d0",
           "version": null
         }
       },

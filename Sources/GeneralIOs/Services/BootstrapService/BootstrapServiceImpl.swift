@@ -44,8 +44,8 @@ public final class BootstrapServiceImpl: BootstrapService {
             try bootstrapProject(with: config)
         }
 
-        try depo(with: config)
         swiftgen(with: config)
+        //try depo(with: config)
     }
 
     private func bootstrapProject(with config: BootstrapConfig) throws {

@@ -4,12 +4,12 @@
 
 import GeneralKit
 
-extension ServiceFactory: HasProjectServiceFactory, HasBootstrapService {
+extension ServiceFactory: HasProjectServiceFactory, HasFontServiceFactory {
     public var projectServiceFactory: ProjectServiceFactory {
         .init()
     }
 
-    public var bootstrapService: BootstrapService {
-        BootstrapServiceImpl(dependencies: self)
+    public var fontServiceFactory: FontServiceFactory {
+        .init()
     }
 }

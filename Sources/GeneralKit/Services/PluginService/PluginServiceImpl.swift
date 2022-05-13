@@ -7,6 +7,10 @@ import Foundation
 
 final class PluginServiceImpl: PluginService {
 
+    typealias Dependencies = HasFileHelper & HasHelpParser & HasCompletionsService & HasShell
+
+    private let dependencies: Dependencies
+
     enum Error: Swift.Error, LocalizedError {
         case brokenPlugin(String)
 
@@ -18,14 +22,29 @@ final class PluginServiceImpl: PluginService {
         }
     }
 
+    init(dependencies: Dependencies) {
+        self.dependencies = dependencies
+    }
+
     public func main(command: ParsableCommand.Type) throws {
         let runConfig = try buildRunConfig(command: command)
+        let completionService = dependencies.completionsService
         if let plugin = definePlugin(commands: mapCommands(runConfig: runConfig),
                                      runConfig: runConfig),
            plugin != (command.configuration.commandName ?? String(describing: command).lowercased()) {
             try run(plugin: plugin)
         }
-        else {
+        else if let shell = completionService.defineCompletionShell() {
+            var plugins: [String: String] = [:]
+            let _: [(String, String)] = try mapPlugins { path, name in
+                let script = try dependencies.shell(silent: path + name + " \(dependencies.completionsService.generateOptionName) \(shell.rawValue)")
+                plugins[name] = script
+                return (name, script)
+            }
+            let config = CompletionConfig(shell: shell, command: command, plugins: plugins, overrides: runConfig.overrides)
+            let script = completionService.overrideCompletionScript(config: config)
+            print(script)
+        } else {
             command.main()
         }
     }
@@ -64,9 +83,18 @@ final class PluginServiceImpl: PluginService {
     }
 
     private func loadPlugins() throws -> [AnyCommandParser] {
-        let fileHelper = Services.fileHelper
-        let parser: HelpParser = Services.helpParser
-        guard let pluginFiles = try? fileHelper.contentsOfDirectory(at: Constants.pluginsPath) else {
+        try mapPlugins { path, name in
+            if let plugin = try? dependencies.helpParser.parse(path: path, command: name) {
+                return plugin
+            }
+            else {
+                throw Error.brokenPlugin(path + name)
+            }
+        }
+    }
+
+    private func mapPlugins<Value>(_ handler: (String, String) throws -> Value) throws -> [Value] {
+        guard let pluginFiles = try? dependencies.fileHelper.contentsOfDirectory(at: Constants.pluginsPath) else {
             return []
         }
         return try pluginFiles.map { file in
@@ -76,12 +104,8 @@ final class PluginServiceImpl: PluginService {
             if path.last != "/" {
                 path += "/"
             }
-            if let plugin = try? parser.parse(path: path, command: name) {
-                return plugin
-            }
-            else {
-                throw Error.brokenPlugin(file.url.path)
-            }
+
+            return try handler(path, name)
         }
     }
 

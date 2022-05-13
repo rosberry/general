@@ -9,15 +9,14 @@ public final class AnyCommandParser: Parser<CommandArguments> {
     public final class AnyOptionParser: Parser<String>, Codable {
 
         static let noValueOptions: [String] = ["version", "help"]
+        static let optionalValueOptions: [String] = ["generate-completion-script"]
 
         public var long: String
         public var short: String?
-        var isRequired: Bool = false
 
-        init(long: String, short: String? = nil, isRequired: Bool = false) {
+        init(long: String, short: String? = nil) {
             self.long = long
             self.short = short
-            self.isRequired = isRequired
         }
 
         public override func parse(arguments: [String]) -> (String, [String])? {
@@ -42,6 +41,10 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             var value: String = ""
             var arguments = arguments
             if AnyOptionParser.noValueOptions.contains(long) {
+                let slice = arguments.dropFirst()
+                arguments = Array(slice)
+            }
+            else if arguments.count == 1 && AnyOptionParser.optionalValueOptions.contains(long) {
                 let slice = arguments.dropFirst()
                 arguments = Array(slice)
             }
@@ -90,13 +93,13 @@ public final class AnyCommandParser: Parser<CommandArguments> {
                 options: [String: AnyOptionParser] = [:],
                 arguments: [String: AnyArgumentParser] = [:],
                 subcommands: [String: AnyCommandParser] = [:],
-                isDefault: Bool = false,
-                isRequired: Bool = false) {
+                isDefault: Bool = false) {
         self.name = name
         self.optionParsers = options
         self.argumentParsers = arguments
         self.subcommandParsers = subcommands
         self.isDefault = isDefault
+        self.optionParsers["generate-completion-script"] = AnyOptionParser(long: "generate-completion-script")
     }
 
     public override func parse(arguments: [String]) -> (CommandArguments, [String])? {
@@ -134,19 +137,6 @@ public final class AnyCommandParser: Parser<CommandArguments> {
             else {
                 return nil
             }
-        }
-
-        var missingRequiredOptions = false
-        optionParsers.forEach { key, parser in
-            guard parser.isRequired else {
-                return
-            }
-            if result.options[key] == nil {
-                missingRequiredOptions = true
-            }
-        }
-        guard missingRequiredOptions == false else {
-            return nil
         }
         return (result, arguments)
     }

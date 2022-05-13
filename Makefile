@@ -19,11 +19,12 @@ completions: $(binary)
 	./$(binary) --generate-completion-script bash > $(completions_folder)/general
 	./$(binary) --generate-completion-script fish > $(completions_folder)/general.fish
 
-install: build
+install: build completions
 	mkdir -p $(bindir)
 	mkdir -p $(pluginsdir)
 	cp -f $(release_binary) $(bindir)/$(binary)
 	cp -f $(release_ios_binary) $(pluginsdir)/$(ios_binary)
+	cp -f $(completions_folder)/_general $(zsh_completions_folder)
 
 build:
 	swift build -c release --disable-sandbox

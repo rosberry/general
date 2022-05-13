@@ -7,9 +7,11 @@ import ArgumentParser
 
 public final class CompletionsServiceImpl: CompletionsService {
 
-    public typealias Dependencies = HasFileHelper & HasConfigFactory
+    public typealias Dependencies = HasFileHelper & HasConfigFactory & HasCompletionScriptParser
 
     private let dependencies: Dependencies
+
+    public let generateOptionName: String = "--generate-completion-script"
 
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
@@ -41,6 +43,114 @@ public final class CompletionsServiceImpl: CompletionsService {
 
     public func versions() -> [String] {
         return ["master", "0.3", "0.3.2", "0.3.3"]
+    }
+
+    public func defineCompletionShell() -> CompletionShell? {
+        var arguments = CommandLine.arguments.dropFirst()
+        let option = generateOptionName
+        guard arguments.contains(option) else {
+            return nil
+        }
+        arguments.removeAll { argument in
+            argument == option
+        }
+        switch arguments.first {
+        case "bash":
+            return .bash
+        case "fish":
+            return .fish
+        default:
+            return .zsh
+        }
+    }
+
+    public func overrideCompletionScript(config: CompletionConfig) -> String {
+        guard let script = parseMainScript(config: config),
+              let pluginsScripts = parsePluginsScripts(config: config) else {
+            return config.command.completionScript(for: config.shell)
+        }
+        overrideMainScriptIfNeeded(script: script, pluginsScripts: pluginsScripts, config: config)
+        return script.description
+    }
+
+    private func parseMainScript(config: CompletionConfig) -> CompletionScript? {
+        let scriptString = config.command.completionScript(for: config.shell)
+        return parse(script: scriptString, config: config)
+    }
+
+    private func parsePluginsScripts(config: CompletionConfig) -> [String: CompletionScript]? {
+        var plugins = [String: CompletionScript]()
+        config.plugins.forEach { key, scriptString in
+            plugins[key] = dependencies.completionScriptParser.parse(script: scriptString, shell: config.shell)
+        }
+        guard plugins.isEmpty == false else {
+            return nil
+        }
+        return plugins
+    }
+
+    private func parse(script: String, config: CompletionConfig) -> CompletionScript? {
+        dependencies.completionScriptParser.parse(script: script, shell: config.shell)
+    }
+
+    private func overrideMainScriptIfNeeded(script: CompletionScript,
+                                            pluginsScripts: [String: CompletionScript],
+                                            config: CompletionConfig) {
+        pluginsScripts.forEach { name, pluginScript in
+            overrideMainScriptIfNeeded(script: script, pluginName: name, pluginScript: pluginScript, config: config)
+        }
+    }
+
+    private func overrideMainScriptIfNeeded(script: CompletionScript,
+                                            pluginName: String,
+                                            pluginScript: CompletionScript,
+                                            config: CompletionConfig) {
+        let scriptCaseNames = mapCaseNames(script: script)
+        let pluginCaseNames = mapCaseNames(script: pluginScript)
+
+        func findMainCaseIndex(of subcommand: String) -> Int? {
+            scriptCaseNames.firstIndex { name, subcommands in
+                guard subcommands.count == 1,
+                      let mainSubcommand = subcommands.first else {
+                    return false
+                }
+                return subcommand == mainSubcommand
+            }
+        }
+
+        pluginCaseNames.enumerated().forEach { index, caseName in
+            let pluginName = caseName.0
+            let subcommands = caseName.1
+            let pluginCase = pluginScript.cases[index]
+
+            guard subcommands.count == 1,
+                  let subcommand = subcommands.first,
+                  let pluginCaseContent = dependencies.completionScriptParser.overridePluginConent(pluginCase.1, script: script, pluginScript: pluginScript)  else {
+                return
+            }
+            if let index = findMainCaseIndex(of: subcommand) {
+                if isOverriden(subcommand: subcommand, pluginName: pluginName, config: config) {
+                    let mainCaseName = script.cases[index].0
+                    script.cases[index] = (mainCaseName, pluginCaseContent)
+                }
+            }
+            else if let name = dependencies.completionScriptParser.makeCaseName(name: subcommand, script: script) {
+                script.cases.append((name, pluginCaseContent))
+            }
+        }
+    }
+
+    private func isOverriden(subcommand: String, pluginName: String, config: CompletionConfig) -> Bool {
+        config.overrides.contains { overridenCommand, overridenPluginName in
+            overridenCommand.lowercased() == subcommand.lowercased() &&
+                overridenPluginName.lowercased() == pluginName.lowercased()
+        }
+    }
+
+    private func mapCaseNames(script: CompletionScript) -> [(String, [String])] {
+        script.cases.compactMap { name, _ in
+            dependencies.completionScriptParser.parseCaseName(name: name, shell: script.shell)
+        }
     }
 }
 

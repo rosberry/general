@@ -140,9 +140,7 @@ public final class HelpParserImpl: HelpParser {
         var subcommands: [String: AnyCommandParser] = [:]
 
         context.options.forEach { helpOption in
-            let isRequired = context.usage.contains("\(helpOption.long)") &&
-                             !context.usage.contains("[--\(helpOption.long) <\(helpOption.long)>]")
-            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short, isRequired: isRequired)
+            options[helpOption.long] = .init(long: helpOption.long, short: helpOption.short)
         }
 
         context.arguments.forEach { helpArgument in

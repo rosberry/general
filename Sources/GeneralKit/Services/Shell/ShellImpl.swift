@@ -5,6 +5,7 @@ import Foundation
 
 public final class ShellImpl: Shell {
 
+
     public struct Error: Swift.Error {
         public let terminationStatus: Int32
         public let errorData: Data?

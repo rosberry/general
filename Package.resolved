@@ -78,7 +78,7 @@
         "repositoryURL": "https://github.com/rosberry/SwiftParsec",
         "state": {
           "branch": "master",
-          "revision": "f5a110baa081b48334878939ccf9b3add71da805",
+          "revision": "2725b7e9580988be124d86e507921f88a0e5bb3a",
           "version": null
         }
       },
@@ -114,8 +114,8 @@
         "repositoryURL": "https://github.com/jpsim/Yams.git",
         "state": {
           "branch": null,
-          "revision": "6652aa7b793d3c8a075db0614acb575fcaecf457",
-          "version": "0.7.0"
+          "revision": "9ff1cc9327586db4e0c8f46f064b6a82ec1566fa",
+          "version": "4.0.6"
         }
       },
       {

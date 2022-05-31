@@ -43,6 +43,7 @@ public final class ShellImpl: Shell {
         } else {
             process.launch()
         }
+        process.waitUntilExit()
         let statusCode = process.terminationStatus
         if statusCode == 0 {
             return statusCode

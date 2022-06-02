@@ -11,7 +11,7 @@ import PathKit
 
 public final class FontService {
 
-    private enum Error: Swift.Error, LocalizedError {
+    enum Error: Swift.Error, LocalizedError {
         case notFoundFonts(String)
         case notFoundTarget(String)
         case notFoundInfoPlist(String)

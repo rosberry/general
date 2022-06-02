@@ -10,8 +10,7 @@ public protocol HasFontServiceFactory {
 }
 
 public class FontServiceFactory {
-    func makeFontService( directoryPath: String) -> FontService {
+    func makeFontService(directoryPath: String) -> FontService {
         return .init(directoryPath: directoryPath)
     }
 }
-

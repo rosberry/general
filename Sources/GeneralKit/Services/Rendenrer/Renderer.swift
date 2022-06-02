@@ -83,6 +83,59 @@ public final class Renderer {
         }
     }
 
+    public func modify(_ templateSpec: TemplateSpec, environment: Environment) throws {
+        try modify(templateSpec: templateSpec, environment: environment)
+    }
+
+    public func modify(templateSpec: TemplateSpec, environment: Environment) throws {
+        guard let path = templateSpec.marked else {
+            return
+        }
+        let fileURL = URL(fileURLWithPath: path)
+
+        guard var line = try? String(contentsOf: fileURL) else {
+            throw Error.notFoundServices
+        }
+        var parts: [String] = []
+        var searchStart = line.startIndex
+
+        while searchStart != nil {
+            guard let start = line.range(of: Constant.marked)?.lowerBound,
+                  let endRange = line.range(of: Constant.endMarked) else {
+                break
+            }
+
+            let nsRange = NSRange(endRange, in: line)
+
+            guard let end = line.range(of: Constant.endMarked, range: Range(nsRange, in: line))?.upperBound else {
+                break
+            }
+
+            let first = line[line.startIndex...start]
+            let template = line[start...end]
+
+            var rendered = removeMarkedFrom(template: template)
+
+            if first.range(of: Constant.hasMarked)?.lowerBound == nil {
+                rendered = rendered.filter { !Constant.and.contains($0) }.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+
+            if rendered.contains(Constant.lazy) {
+                rendered = Constant.newLineAndWhitespace + removeMarkedFrom(template: template)
+            }
+
+            guard let renderedTemplate = try? environment.renderTemplate(string: rendered, context: ["name": name]) else {
+                throw Error.notCorrectlyTemplate
+            }
+
+            parts.append(contentsOf: [String(first), renderedTemplate, String(template), Constant.newLine])
+            line = String(line[end...]).trimmingCharacters(in: .newlines)
+            searchStart = line.startIndex
+        }
+        parts.append(line)
+        try parts.joined().write(toFile: fileURL.path, atomically: true, encoding: .utf8)
+    }
+
     private func removeMarkedFrom(template: String.SubSequence) -> String {
         guard let index = template.firstIndex(of: ":") else {
             return String(template)

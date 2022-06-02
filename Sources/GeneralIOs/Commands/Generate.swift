@@ -24,6 +24,11 @@ public final class Generate: ParsableCommand {
         }
     }
 
+    private enum Key {
+        static let serviceMark = "serviceMark"
+        static let serviceMarkName = "serviceMarkName"
+    }
+
     typealias Dependencies = HasSpecFactory & HasProjectServiceFactory
 
     public static let configuration: CommandConfiguration = .init(commandName: "gen", abstract: "Generates modules from templates.")
@@ -64,16 +69,26 @@ public final class Generate: ParsableCommand {
     }
 
     public func run() throws {
-        let renderer = Renderer(name: name,
-                                template: template,
-                                path: path,
-                                variables: [],
-                                output: output,
-                                dependencies: Services)
         if let xcodeSpec = generalSpec?.xcode {
-            guard let projectName = xcodeSpec.name ?? askProject() else {
+            guard let projectName = xcodeSpec.name ?? askProject(),
+                  let company = xcodeSpec.company ?? askCompany() else {
                 throw Error.projectName
             }
+
+            var marked: [String: String]?
+            if let servicesSpec = generalSpec?.services {
+                marked = [Key.serviceMarkName: servicesSpec.serviceMarkName,
+                          Key.serviceMark: servicesSpec.serviceMark]
+
+            }
+            let renderer = Renderer(name: name,
+                                    company: company,
+                                    marked: marked,
+                                    template: template,
+                                    path: path,
+                                    variables: [],
+                                    output: output,
+                                    dependencies: Services)
             try projectService.createProject(projectName: projectName)
             let target = self.target ?? xcodeSpec.target
             try renderer.render { fileURL in
@@ -82,6 +97,12 @@ public final class Generate: ParsableCommand {
             try self.projectService.write()
         }
         else {
+            let renderer = Renderer(name: name,
+                                    template: template,
+                                    path: path,
+                                    variables: [],
+                                    output: output,
+                                    dependencies: Services)
             try renderer.render()
         }
     }

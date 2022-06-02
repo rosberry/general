@@ -102,6 +102,7 @@ public final class Renderer {
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
         try add(templateSpec, environment: environment, completion: completion)
+        try modify(templateSpec, environment: environment)
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
 

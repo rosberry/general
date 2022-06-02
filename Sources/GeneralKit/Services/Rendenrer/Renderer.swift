@@ -27,6 +27,16 @@ public final class Renderer {
         }
     }
 
+    private enum Constant {
+        static let lazy = "lazy"
+        static let newLine = "\n"
+        static let newLineAndWhitespace = "\n    "
+        static let marked = " /*mark:"
+        static let hasMarked = "= Has"
+        static let endMarked = "*/"
+        static let and = "&"
+    }
+
     private class VariablesTemplate: Template {
         var variables: [String]
         required init(templateString: String, environment: Environment? = nil, name: String? = nil) {

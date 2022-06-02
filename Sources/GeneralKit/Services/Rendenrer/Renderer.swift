@@ -132,7 +132,9 @@ public final class Renderer {
             print(yellow("File already exists: \(fileURL.path)"))
             return nil
         }
-        try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+        if !fileManager.fileExists(atPath: outputURL.path) {
+            try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+        }
         try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
         return fileURL
     }

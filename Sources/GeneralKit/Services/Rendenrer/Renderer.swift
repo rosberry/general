@@ -83,6 +83,19 @@ public final class Renderer {
         }
     }
 
+    private func removeMarkedFrom(template: String.SubSequence) -> String {
+        guard let index = template.firstIndex(of: ":") else {
+            return String(template)
+        }
+        var line = template.suffix(from: index)
+        line.removeFirst()
+        var newLine = String(line)
+        newLine = String(line).trimmingCharacters(in: .newlines)
+        newLine.removeLast()
+        newLine.removeLast()
+        return newLine.trimmingCharacters(in: .whitespaces)
+    }
+
     public func render(_ file: File, templateSpec: TemplateSpec, environment: Environment) throws -> URL? {
         askRequiredVariables(file, environment: environment)
         let rendered = try environment.renderTemplate(name: file.template, context: context).trimmingCharacters(in: .whitespacesAndNewlines)

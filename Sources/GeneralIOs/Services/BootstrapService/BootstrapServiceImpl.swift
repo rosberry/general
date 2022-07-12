@@ -43,9 +43,9 @@ public final class BootstrapServiceImpl: BootstrapService {
         else {
             try bootstrapProject(with: config)
         }
-
-        swiftgen(with: config)
-        //try depo(with: config)
+        config.shell.forEach { command in
+            try? shell(command: command, path: config.name)
+        }
     }
 
     private func bootstrapProject(with config: BootstrapConfig) throws {
@@ -56,21 +56,18 @@ public final class BootstrapServiceImpl: BootstrapService {
         try dependencies.shell(path: "/usr/local/bin/cookiecutter", arguments: arguments)
     }
 
-    private func depo(with config: BootstrapConfig) throws {
-        guard isInstalled(tool: "depo"),
-              isExists(path: "\(config.name)/Depofile") else {
+    private func shell(command: BoostrapShellCommand, path: String) throws {
+        let files = command.missingFiles
+        let name = command.name
+        let arguments = command.arguments
+        let hasAllFiles = files.reduce(true) { result, file in
+            result && isExists(path: "\(path)/\(file)")
+        }
+        guard isInstalled(tool: name) && hasAllFiles else {
             return
         }
         let shell = dependencies.shell
-        try shell(loud: "(cd \(config.name) && depo install)")
-    }
-
-    private func swiftgen(with config: BootstrapConfig) {
-        guard isInstalled(tool: "swiftgen") else {
-            return
-        }
-        let shell = dependencies.shell
-        _ = try? shell(loud: "(cd \(config.name) && swiftgen)")
+        try shell(loud: "(cd \(path) && \(name) \(arguments))")
     }
 
     private func isExists(path: String) -> Bool{

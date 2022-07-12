@@ -64,7 +64,10 @@ public final class ProjectService {
             throw Error.noGroup
         }
 
+        let currentPath = FileManager.default.currentDirectoryPath
+        FileManager.default.changeCurrentDirectoryPath(path.string)
         let file = try group.addFile(at: filePath, sourceTree: sourceTree, sourceRoot: path)
+        FileManager.default.changeCurrentDirectoryPath(currentPath)
 
         if isResource {
             let _ = try xcodeproj?.pbxproj.resourcesBuildPhases.first?.add(file: file)

@@ -12,16 +12,16 @@ public final class Renderer {
 
     public enum Error: Swift.Error & CustomStringConvertible {
         case noOutput(template: String)
-        case notFoundServices
-        case notCorrectlyTemplate
+        case notFound
+        case invalidTemplate
 
         public var description: String {
             switch self {
             case let .noOutput(template):
                 return "There is no output path for \(template) template. Please use --output option or add output to general.yml."
-            case .notFoundServices:
+            case .notFound:
                 return "In current project not found file at path ../Classes/BusinessLogic/Services/Services.swift. Please check that file is existe and try again"
-            case .notCorrectlyTemplate:
+            case .invalidTemplate:
                 return "Is not correctly template with marked key for Services.swift. Please remove his and generate again Services.swift. or fix marked yourself."
             }
         }
@@ -119,7 +119,7 @@ public final class Renderer {
         let fileURL = URL(fileURLWithPath: path)
 
         guard var line = try? String(contentsOf: fileURL) else {
-            throw Error.notFoundServices
+            throw Error.notFound
         }
         var parts: [String] = []
         var searchStart = line.startIndex
@@ -150,7 +150,7 @@ public final class Renderer {
             }
 
             guard let renderedTemplate = try? environment.renderTemplate(string: rendered, context: ["name": name]) else {
-                throw Error.notCorrectlyTemplate
+                throw Error.invalidTemplate
             }
 
             parts.append(contentsOf: [String(first), renderedTemplate, String(template), Constant.newLine])

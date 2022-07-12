@@ -70,8 +70,7 @@ public final class Generate: ParsableCommand {
 
     public func run() throws {
         if let xcodeSpec = generalSpec?.xcode {
-            guard let projectName = xcodeSpec.name ?? askProject(),
-                  let company = xcodeSpec.company ?? askCompany() else {
+            guard let projectName = xcodeSpec.name ?? askProject()else {
                 throw Error.projectName
             }
 
@@ -82,7 +81,6 @@ public final class Generate: ParsableCommand {
 
             }
             let renderer = Renderer(name: name,
-                                    company: company,
                                     marked: marked,
                                     template: template,
                                     path: path,

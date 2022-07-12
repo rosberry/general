@@ -53,7 +53,6 @@ public final class Renderer {
     let path: String
     let variables: [Variable]
     var marked: [String: String]?
-    var company: String?
     var output: String?
 
     private lazy var context: [String: Any] = {
@@ -68,16 +67,12 @@ public final class Renderer {
                 context[key] = value
             }
         }
-        if let company = company {
-            context["company"] = company
-        }
         return context
     }()
 
     private let dependencies: Dependencies
 
     public init(name: String,
-                company: String? = nil,
                 marked: [String: String]? = nil,
                 template: String,
                 path: String,
@@ -85,7 +80,6 @@ public final class Renderer {
                 output: String?,
                 dependencies: Dependencies) {
         self.name = name
-        self.company = company
         self.marked = marked
         self.template = template
         self.path = path

@@ -167,8 +167,7 @@ public final class Renderer {
         }
         var line = template.suffix(from: index)
         line.removeFirst()
-        var newLine = String(line)
-        newLine = String(line).trimmingCharacters(in: .newlines)
+        var newLine = String(line).trimmingCharacters(in: .newlines)
         newLine.removeLast()
         newLine.removeLast()
         return newLine.trimmingCharacters(in: .whitespaces)

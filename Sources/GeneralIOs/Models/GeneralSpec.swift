@@ -27,9 +27,11 @@ struct GeneralSpec: Codable {
 struct ServicesSpec: Codable, CustomStringConvertible {
     public let serviceMark: String
     public let serviceMarkName: String
+    public let serviceMarkHas: String
 
-    public init(serviceMark: String, serviceMarkName: String) {
+    public init(serviceMark: String, serviceMarkName: String, serviceMarkHas: String) {
         self.serviceMark = serviceMark
         self.serviceMarkName = serviceMarkName
+        self.serviceMarkHas = serviceMarkHas
     }
 }

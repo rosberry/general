@@ -28,11 +28,9 @@ public final class Renderer {
     }
 
     private enum Constant {
-        static let lazy = "lazy"
         static let newLine = "\n"
         static let newLineAndWhitespace = "\n    "
         static let marked = " /*mark:"
-        static let hasMarked = "= Has"
         static let endMarked = "*/"
         static let and = "&"
     }
@@ -141,11 +139,7 @@ public final class Renderer {
 
             var rendered = removeMarkedFrom(template: template)
 
-            if first.range(of: Constant.hasMarked)?.lowerBound == nil {
-                rendered = rendered.filter { !Constant.and.contains($0) }.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
 
-            if rendered.contains(Constant.lazy) {
                 rendered = Constant.newLineAndWhitespace + removeMarkedFrom(template: template)
             }
 

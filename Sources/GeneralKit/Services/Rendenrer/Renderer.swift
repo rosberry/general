@@ -121,6 +121,7 @@ public final class Renderer {
         }
         var parts: [String] = []
         var searchStart = line.startIndex
+        var isSecondIteration = false
 
         while searchStart != nil {
             guard let start = line.range(of: Constant.marked)?.lowerBound,
@@ -139,17 +140,22 @@ public final class Renderer {
 
             var rendered = removeMarkedFrom(template: template)
 
-
+            if isSecondIteration {
                 rendered = Constant.newLineAndWhitespace + removeMarkedFrom(template: template)
             }
 
-            guard let renderedTemplate = try? environment.renderTemplate(string: rendered, context: ["name": name]) else {
+            guard var renderedTemplate = try? environment.renderTemplate(string: rendered, context: context) else {
                 throw Error.invalidTemplate
+            }
+
+            if isSecondIteration == false && variables.first?.value.isEmpty == true {
+                renderedTemplate = Constant.and + Constant.newLineAndWhitespace + renderedTemplate
             }
 
             parts.append(contentsOf: [String(first), renderedTemplate, String(template), Constant.newLine])
             line = String(line[end...]).trimmingCharacters(in: .newlines)
             searchStart = line.startIndex
+            isSecondIteration = true
         }
         parts.append(line)
         try parts.joined().write(toFile: fileURL.path, atomically: true, encoding: .utf8)

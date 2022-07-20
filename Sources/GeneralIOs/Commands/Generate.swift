@@ -56,9 +56,6 @@ public final class Generate: ParsableCommand {
     @Option(name: .shortAndLong, help: "The name of the module.")
     var name: String
 
-    @Option(name: .long, help: "If you need create file Services then enter true, else ignoring because default nil.")
-    var new: Bool?
-
     @Option(name: .shortAndLong, help: "The name of the template.", completion: .templates)
     var template: String
 
@@ -74,7 +71,6 @@ public final class Generate: ParsableCommand {
     }
 
     public func run() throws {
-        let new = new != nil ? "\(new ?? false)" : ""
         if let xcodeSpec = generalSpec?.xcode {
             guard let projectName = xcodeSpec.name ?? askProject()else {
                 throw Error.projectName
@@ -91,7 +87,6 @@ public final class Generate: ParsableCommand {
                                     marked: marked,
                                     template: template,
                                     path: path,
-                                    variables: [.init(key: Key.isNewFile, value: new)],
                                     output: output,
                                     dependencies: Services)
             try projectService.createProject(projectName: projectName)
@@ -105,7 +100,6 @@ public final class Generate: ParsableCommand {
             let renderer = Renderer(name: name,
                                     template: template,
                                     path: path,
-                                    variables: [.init(key: Key.isNewFile, value: new)],
                                     output: output,
                                     dependencies: Services)
             try renderer.render()

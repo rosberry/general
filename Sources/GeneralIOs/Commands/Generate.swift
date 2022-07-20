@@ -29,6 +29,7 @@ public final class Generate: ParsableCommand {
         static let serviceMarkName = "serviceMarkName"
         static let serviceMarkHas = "serviceMarkHas"
         static let isNewFile = "isNewFile"
+        static let company = "company"
     }
 
     typealias Dependencies = HasSpecFactory & HasProjectServiceFactory
@@ -81,16 +82,15 @@ public final class Generate: ParsableCommand {
             }
 
             var marked: [String: String]?
-            let company = xcodeSpec.company ?? askCompanyName
             var isNewFile = ""
             if let servicesSpec = generalSpec?.services {
                 marked = [Key.serviceMarkName: servicesSpec.serviceMarkName,
                           Key.serviceMark: servicesSpec.serviceMark,
-                          Key.serviceMarkHas: servicesSpec.serviceMarkHas]
+                          Key.serviceMarkHas: servicesSpec.serviceMarkHas,
+                          Key.company: xcodeSpec.company ?? askCompanyName]
                 isNewFile = !FileManager.default.fileExists(atPath: servicesSpec.servicesPath) ? "\(true)" : ""
             }
             let renderer = Renderer(name: name,
-                                    company: company,
                                     marked: marked,
                                     template: template,
                                     path: path,
@@ -105,9 +105,7 @@ public final class Generate: ParsableCommand {
             try self.projectService.write()
         }
         else {
-            let company = askCompanyName
             let renderer = Renderer(name: name,
-                                    company: company,
                                     template: template,
                                     path: path,
                                     variables: [.init(key: Key.isNewFile, value: "")],

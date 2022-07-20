@@ -47,6 +47,7 @@ public final class Renderer {
     public typealias Dependencies = HasFileHelper & HasSpecFactory
 
     let name: String
+    let company: String
     let template: String
     let path: String
     let variables: [Variable]
@@ -56,7 +57,8 @@ public final class Renderer {
     private lazy var context: [String: Any] = {
         let year = Calendar.current.component(.year, from: .init())
         var context: [String: Any] = ["name": name,
-                                      "year": year]
+                                      "year": year,
+                                      "company": company]
         for variable in variables {
             context[variable.key] = variable.value
         }
@@ -71,6 +73,7 @@ public final class Renderer {
     private let dependencies: Dependencies
 
     public init(name: String,
+                company: String,
                 marked: [String: String]? = nil,
                 template: String,
                 path: String,
@@ -78,6 +81,7 @@ public final class Renderer {
                 output: String?,
                 dependencies: Dependencies) {
         self.name = name
+        self.company = company
         self.marked = marked
         self.template = template
         self.path = path

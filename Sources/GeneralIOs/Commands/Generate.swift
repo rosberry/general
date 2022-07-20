@@ -42,6 +42,10 @@ public final class Generate: ParsableCommand {
         Services
     }
 
+    private var askCompanyName: String {
+        ask("What your name company?", default: "") ?? ""
+    }
+
     private lazy var generalSpec: GeneralSpec? = {
         let pathURL = URL(fileURLWithPath: path, isDirectory: true)
         let specURL = URL(fileURLWithPath: Constants.generalSpecName, relativeTo: pathURL)
@@ -77,6 +81,7 @@ public final class Generate: ParsableCommand {
             }
 
             var marked: [String: String]?
+            let company = xcodeSpec.company ?? askCompanyName
             if let servicesSpec = generalSpec?.services {
                 marked = [Key.serviceMarkName: servicesSpec.serviceMarkName,
                           Key.serviceMark: servicesSpec.serviceMark,
@@ -84,6 +89,7 @@ public final class Generate: ParsableCommand {
 
             }
             let renderer = Renderer(name: name,
+                                    company: company,
                                     marked: marked,
                                     template: template,
                                     path: path,
@@ -98,6 +104,7 @@ public final class Generate: ParsableCommand {
         }
         else {
             let renderer = Renderer(name: name,
+                                    company: company,
                                     template: template,
                                     path: path,
                                     output: output,

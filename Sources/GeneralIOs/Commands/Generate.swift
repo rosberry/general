@@ -25,9 +25,6 @@ public final class Generate: ParsableCommand {
     }
 
     private enum Key {
-        static let serviceMark = "serviceMark"
-        static let serviceMarkName = "serviceMarkName"
-        static let serviceMarkHas = "serviceMarkHas"
         static let isNewFile = "isNewFile"
         static let company = "company"
     }
@@ -81,20 +78,14 @@ public final class Generate: ParsableCommand {
                 throw Error.projectName
             }
 
-            var marked: [String: String]?
-            var isNewFile = ""
-            if let servicesSpec = generalSpec?.services {
-                marked = [Key.serviceMarkName: servicesSpec.serviceMarkName,
-                          Key.serviceMark: servicesSpec.serviceMark,
-                          Key.serviceMarkHas: servicesSpec.serviceMarkHas,
-                          Key.company: xcodeSpec.company ?? askCompanyName]
-                isNewFile = !FileManager.default.fileExists(atPath: servicesSpec.servicesPath) ? "\(true)" : ""
-            }
+            var marked = generalSpec?.services.serviceMarks
+            marked?[Key.company] = xcodeSpec.company ?? askCompanyName
+            let isNewFile = !FileManager.default.fileExists(atPath: generalSpec?.services.servicesPath ?? "") ? "\(true)" : ""
             let renderer = Renderer(name: name,
                                     marked: marked,
                                     template: template,
                                     path: path,
-                                    variables: [.init(key: Key.isNewFile, value: "\(isNewFile)")],
+                                    variables: [.init(key: Key.isNewFile, value: isNewFile)],
                                     output: output,
                                     dependencies: Services)
             try projectService.createProject(projectName: projectName)

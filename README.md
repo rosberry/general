@@ -61,7 +61,7 @@ General stores config to simplify its usage.
     After that alias can be used instead repo in `general setup`.
 
 2. Set default plugin to command.
-    If there are more then one plugin that can handle command line input `general` will ask you to choose one. But it is possible setup plgun name that
+    If there are more then one plugin that can handle command line input `general` will ask you to choose one. But it is possible setup plugin name that
     was be used by default for this command. For example, general has preinstalled `GeneralIOs` plugin that has `gen` and `setup` commands. To always
     use ios plugin for command `gen` needs to perform
     
@@ -75,7 +75,7 @@ General stores config to simplify its usage.
     general config override-plugin-input true
     ```
     
-## Bootsrap
+## Bootstrap
 
 To use bootstrap you need a repo with templates. Refer to [this](https://github.com/rosberry/swift-project-template) for example.
 
@@ -115,7 +115,7 @@ Also it is possible to use the same templates location by default:
 general bootstrap config update --template <path to templates>
 ```
 
-And one more bootstrap feature - you can run additional shell commands after bootstrap. To specyfy them run
+And one more bootstrap feature - you can run additional shell commands after bootstrap. To specify them run
 ```bash
 general bootstrap config update shell --add <executable>
 ```

@@ -20,7 +20,7 @@ public final class Renderer {
             case let .noOutput(template):
                 return "There is no output path for \(template) template. Please use --output option or add output to general.yml."
             case .notFound:
-                return "In current project not found file at path ../Classes/BusinessLogic/Services/Services.swift. Please check that file is existe and try again"
+                return "File not found at path ../Classes/BusinessLogic/Services/Services.swift. Please make sure the file exists and try again."
             case .invalidTemplate:
                 return "Is not correctly template with marked key for Services.swift. Please remove his and generate again Services.swift. or fix marked yourself."
             }

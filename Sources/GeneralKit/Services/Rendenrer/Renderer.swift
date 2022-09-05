@@ -50,7 +50,7 @@ public final class Renderer {
     let template: String
     let path: String
     let variables: [Variable]
-    var marked: [String: String]?
+    var marks: [String: String]?
     var output: String?
 
     private lazy var context: [String: Any] = {
@@ -60,8 +60,8 @@ public final class Renderer {
         for variable in variables {
             context[variable.key] = variable.value
         }
-        if let marked = marked {
-            for (key, value) in marked {
+        if let marks = marks {
+            for (key, value) in marks {
                 context[key] = value
             }
         }
@@ -71,14 +71,14 @@ public final class Renderer {
     private let dependencies: Dependencies
 
     public init(name: String,
-                marked: [String: String]? = nil,
+                marks: [String: String]? = nil,
                 template: String,
                 path: String,
                 variables: [Variable],
                 output: String?,
                 dependencies: Dependencies) {
         self.name = name
-        self.marked = marked
+        self.marks = marks
         self.template = template
         self.path = path
         self.variables = variables
@@ -107,11 +107,7 @@ public final class Renderer {
     }
 
     public func modify(_ templateSpec: TemplateSpec, environment: Environment) throws {
-        try modify(templateSpec: templateSpec, environment: environment)
-    }
-
-    public func modify(templateSpec: TemplateSpec, environment: Environment) throws {
-        guard let path = templateSpec.marked else {
+        guard let path = templateSpec.mark else {
             return
         }
         let fileURL = URL(fileURLWithPath: path)

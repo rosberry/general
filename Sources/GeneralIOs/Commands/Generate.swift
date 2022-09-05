@@ -89,7 +89,7 @@ public final class Generate: ParsableCommand {
             marks[Key.company] = xcodeSpec.company ?? askCompanyName
             let isNewFile = FileManager.default.fileExists(atPath: generalSpec.services.servicesPath) ? "" : "\(true)"
             let renderer = Renderer(name: name,
-                                    marked: marked,
+                                    marks: marks,
                                     template: template,
                                     path: path,
                                     variables: [.init(key: Key.isNewFile, value: isNewFile)],

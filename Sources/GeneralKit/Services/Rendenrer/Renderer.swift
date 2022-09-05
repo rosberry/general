@@ -115,6 +115,7 @@ public final class Renderer {
         guard var line = try? String(contentsOf: fileURL) else {
             throw Error.notFound
         }
+
         var parts: [String] = []
         var searchStart = line.startIndex
         var isSecondIteration = false
@@ -235,7 +236,8 @@ public final class Renderer {
         if fileManager.fileExists(atPath: localPath + template) {
             return URL(fileURLWithPath: localPath)
         }
-        return fileManager.homeDirectoryForCurrentUser + folderName
+
+        return (FileManager.default.urls(for: .userDirectory, in: .userDomainMask).first ?? URL(fileURLWithPath: "")) + folderName
     }
 
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {

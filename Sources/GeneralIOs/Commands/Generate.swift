@@ -41,7 +41,7 @@ public final class Generate: ParsableCommand {
     }
 
     private var askCompanyName: String {
-        ask("What your name company?", default: "") ?? ""
+        ask("What is the name of your company?", default: "") ?? ""
     }
 
     private lazy var generalSpec: GeneralSpec? = {

@@ -77,7 +77,7 @@ public final class Generate: ParsableCommand {
 
     public func run() throws {
         if let xcodeSpec = generalSpec?.xcode {
-            guard let projectName = xcodeSpec.name ?? askProject()else {
+            guard let projectName = xcodeSpec.name ?? askProject() else {
                 throw Error.projectName
             }
 

@@ -81,12 +81,13 @@ public final class Generate: ParsableCommand {
                 throw Error.projectName
             }
 
-            var marked = generalSpec?.services.serviceMarks
-            marked?[Key.company] = xcodeSpec.company ?? askCompanyName
-            let isNewFile = !FileManager.default.fileExists(atPath: generalSpec?.services.servicesPath ?? "") ? "\(true)" : ""
             guard let generalSpec = generalSpec else {
                 throw Error.serviceMarks
             }
+
+            var marks = generalSpec.services.serviceMarks
+            marks[Key.company] = xcodeSpec.company ?? askCompanyName
+            let isNewFile = FileManager.default.fileExists(atPath: generalSpec.services.servicesPath) ? "" : "\(true)"
             let renderer = Renderer(name: name,
                                     marked: marked,
                                     template: template,

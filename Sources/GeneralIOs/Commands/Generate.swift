@@ -15,11 +15,14 @@ public final class Generate: ParsableCommand {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case projectName
+        case serviceMarks
 
         var description: String {
             switch self {
             case .projectName:
-                return "Project name was not specified"
+                return "Project name was not specified."
+            case .serviceMarks:
+                return "Marks is not found for service template."
             }
         }
     }
@@ -81,6 +84,9 @@ public final class Generate: ParsableCommand {
             var marked = generalSpec?.services.serviceMarks
             marked?[Key.company] = xcodeSpec.company ?? askCompanyName
             let isNewFile = !FileManager.default.fileExists(atPath: generalSpec?.services.servicesPath ?? "") ? "\(true)" : ""
+            guard let generalSpec = generalSpec else {
+                throw Error.serviceMarks
+            }
             let renderer = Renderer(name: name,
                                     marked: marked,
                                     template: template,

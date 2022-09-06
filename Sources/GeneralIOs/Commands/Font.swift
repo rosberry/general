@@ -1,9 +1,7 @@
 //
-//  Font.swift
-//  GeneralIOs
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
-//  Created by Evgeny Schwarzkopf on 29.03.2022.
-//
+
 
 import Foundation
 import ArgumentParser

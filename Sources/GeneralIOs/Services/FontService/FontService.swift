@@ -1,6 +1,7 @@
 //
-//  Created by Evgeny Schwarzkopf on 08.04.2022.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
+
 
 import Foundation
 import ArgumentParser

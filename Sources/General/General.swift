@@ -15,6 +15,7 @@ final class General: ParsableCommand {
                                    Create.self,
                                    List.self,
                                    Setup.self,
+                                   Shared.self,
                                    Config.self,
                                    Upgrade.self],
                      defaultSubcommand: Generate.self)

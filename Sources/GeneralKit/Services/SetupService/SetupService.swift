@@ -15,6 +15,8 @@ public protocol SetupService {
                customizationHandler: (([FileInfo]) throws -> Void)?) throws
 
     func setup(githubPath: String, shouldLoadGlobally: Bool) throws
+
+    func setupShared(githubPath: String) throws
 }
 
 public extension SetupService {

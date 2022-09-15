@@ -22,7 +22,8 @@ public final class Setup: ParsableCommand {
     public typealias Dependencies = HasSetupService
 
     public static let configuration: CommandConfiguration = .init(commandName: "setup",
-                                                                  abstract: "Provides your environment with templates")
+                                                                  abstract: "Provides your environment with templates",
+                                                                  subcommands: [Shared.self])
 
     private lazy var setupService: SetupService = dependencies.setupService
 
@@ -58,5 +59,43 @@ public final class Setup: ParsableCommand {
         }
         try setupService.setup(githubPath: githubPath,
                                shouldLoadGlobally: shouldLoadGlobally)
+    }
+}
+
+
+public final class Shared: ParsableCommand {
+
+    public final class Setup: ParsableCommand {
+
+        public static let configuration: CommandConfiguration = .init(commandName: "setup",
+                                                                      abstract: "Applies shared setup")
+
+        public typealias Dependencies = HasSetupService
+
+        @Option(name: [.customLong("repo"), .customShort("r")],
+                help: .init(stringLiteral: "GitHub repo with shared configuration"),
+                completion: .templatesRepos)
+        var githubPath: String
+
+        private var dependencies: Dependencies {
+            Services
+        }
+
+        // MARK: - Lifecycle
+
+        public init() {
+        }
+
+        public func run() throws {
+            try dependencies.setupService.setupShared(githubPath: githubPath)
+        }
+    }
+
+    public static let configuration: CommandConfiguration = .init(commandName: "shared",
+                                                                  abstract: "Applies shared setup",
+                                                                  subcommands: [Setup.self])
+    // MARK: - Lifecycle
+
+    public init() {
     }
 }

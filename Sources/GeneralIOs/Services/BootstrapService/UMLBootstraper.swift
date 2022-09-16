@@ -44,7 +44,7 @@ final class UMLBootstraper {
         case renderFailure
     }
 
-    var context: [String: Any] = [:]
+    private lazy var context: Context = .init(dictionary: [:], environment: environment)
     private lazy var environment: Environment = {
         let environment = Environment(loader: nil, extensions: [], templateClass: VariablesTemplate.self)
         environment.extensions.forEach { ext in
@@ -78,34 +78,33 @@ final class UMLBootstraper {
     }
 
     public func bootstrap(with config: BootstrapConfig) throws {
-        initContext(with: config)
-        guard let template = try createProjectFiles(template: config.template, destination: ".") else {
-            return
-        }
-        guard let diagramsPath = config.diagrams else {
-            throw Error.noDiagrams
-        }
-        let diagrams = try parseDiagrams(path: diagramsPath)
-        guard let architecture = try parseArchitecture(
-                diagrams: diagrams,
-                template: template,
-                methodsExcepts: [
-                    "success",
-                    "failure",
-                    "finish"
-                ]) else {
-            throw Error.architecture(diagramsPath)
-        }
-        // First try generate basic implementation and compose specific context
-        try bootstrap(item: architecture, destination: ".")
-        // Second try regenerate specific files implementations using modified context
-        try bootstrap(item: architecture, destination: ".")
-        try dependencies.fileHelper.removeFile(at: .init(fileURLWithPath: "./.boot"))
-        try projectService.write()
-    }
+        try context.push(dictionary: config.context) {
 
-    private func initContext(with config: BootstrapConfig) {
-        context = config.context
+            guard let template = try createProjectFiles(template: config.template, destination: ".") else {
+                return
+            }
+            guard let diagramsPath = config.diagrams else {
+                throw Error.noDiagrams
+            }
+            let diagrams = try parseDiagrams(path: diagramsPath)
+            guard let architecture = try parseArchitecture(
+                    diagrams: diagrams,
+                    template: template,
+                    methodsExcepts: [
+                        "success",
+                        "failure",
+                        "finish"
+                    ]) else {
+                throw Error.architecture(diagramsPath)
+            }
+
+            // First try generate basic implementation and compose specific context
+            try bootstrap(item: architecture, destination: ".")
+            // Second try regenerate specific files implementations using modified context
+            try bootstrap(item: architecture, destination: ".")
+            try dependencies.fileHelper.removeFile(at: .init(fileURLWithPath: "./.boot"))
+            try projectService.write()
+        }
     }
 
     private func createProjectFiles(template: String, destination: String) throws -> (ArchitectureTemplateItem?) {
@@ -207,7 +206,7 @@ final class UMLBootstraper {
         guard unresolvedVariables.isEmpty else {
             return .unresolvedFile
         }
-        guard let content = try? template.render(context) else {
+        guard let content = try? template.render(context.flatten()) else {
             return .renderFailure
         }
         return .resolvedFile(fileName, content)
@@ -224,7 +223,7 @@ final class UMLBootstraper {
         guard unresolvedVariables.isEmpty else {
             return .unresolved(tokenize(string: string, variables: unresolvedVariables, template: template))
         }
-        guard let value = try? template.render(context) else {
+        guard let value = try? template.render(context.flatten()) else {
             return .renderFailure
         }
         return .resolved(value)
@@ -254,7 +253,7 @@ final class UMLBootstraper {
             if let name = unresolved(match: match) {
                 tokens.append(.variable(name))
             }
-            else if let name = try? VariablesTemplate(templateString: match, environment: environment).render(context) {
+            else if let name = try? VariablesTemplate(templateString: match, environment: environment).render(context.flatten()) {
                 tokens.append(.concrete(name))
             } else {
                 tokens.append(.any)
@@ -275,7 +274,7 @@ final class UMLBootstraper {
     }
 
     private func hasValue(for variable: String) -> Bool {
-        hasValue(for: variable.split(separator: ".").map({ String($0) }), in: context)
+        hasValue(for: variable.split(separator: ".").map({ String($0) }), in: context.flatten())
     }
 
     private func hasValue(for components: [String], in dictionary: [String: Any]) -> Bool {
@@ -358,7 +357,6 @@ final class UMLBootstraper {
         }
 
         let fileName = fileNameBase(from: template)
-        let variables = resolveContext(pattern: fileName, using: folder.name)
 
         func renderFiles() throws {
             try folder.items.forEach { item in
@@ -370,11 +368,11 @@ final class UMLBootstraper {
             }
         }
 
-        try renderFiles()
-
-        variables.forEach { name in
-            context = clean(context: context, name: name) ?? context
+        let subContext = resolveContext(pattern: fileName, using: folder.name)
+        try context.push(dictionary: subContext) {
+            try renderFiles()
         }
+
         return .resolvedDirectory(folder.name)
     }
 
@@ -397,8 +395,11 @@ final class UMLBootstraper {
         }
         context[object.name] = ["methods": methods]
         let fileName = fileNameBase(from: template)
-        resolveContext(pattern: fileName, using: object.name)
-        let resolve = self.resolve(template)
+        let subContext = resolveContext(pattern: fileName, using: object.name)
+        var resolve: Resolve = .renderFailure
+        context.push(dictionary: subContext) {
+            resolve = self.resolve(template)
+        }
         switch resolve {
         case let .resolvedFile(name, content):
             try addFile(name: name, destination: destination, content: content)
@@ -450,15 +451,15 @@ final class UMLBootstraper {
         return isSuccess
     }
 
-    @discardableResult
-    private func resolveContext(pattern: String, using resolved: String) -> [String] {
-        let (isSuccess, values) = parseMatch(pattern: pattern, using: resolved) { name, value in
-            self.context = self.update(context: self.context, name: name, value: value) ?? self.context
+    private func resolveContext(pattern: String, using resolved: String) -> [String: Any] {
+        var context = [String: Any]()
+        let (isSuccess, _) = parseMatch(pattern: pattern, using: resolved) { name, value in
+            context = self.update(context: context, name: name, value: value) ?? context
         }
         guard isSuccess else {
-            return []
+            return [:]
         }
-        return values
+        return context
     }
 
     private func parseMatch(pattern: String, using resolved: String, parseHandler: ((String, String) -> Void)?) -> (Bool, [String]) {
@@ -555,7 +556,7 @@ final class UMLBootstraper {
 
     private func bootPath(destination: String) -> String {
         let path: String
-        if let prefix = [".//", "./", "."].first { destination.contains($0) } {
+        if let prefix = [".//", "./", "."].first(where: { destination.contains($0) }) {
             var destination = destination
             destination.removeFirst(prefix.count)
             if destination.isEmpty {

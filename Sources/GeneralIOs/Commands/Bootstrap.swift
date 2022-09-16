@@ -21,6 +21,7 @@ final class Bootstrap: ParsableCommand {
         case template
         case bundleId
         case github
+        case shellEmpty
 
         var description: String {
             switch self {
@@ -32,6 +33,8 @@ final class Bootstrap: ParsableCommand {
                        "You also can specify company in reusable config using `bootsrap config update --company`"
             case .github:
                 return "Templates repo was not specified"
+            case .shellEmpty:
+                return "--add or --remove option should be specified"
             }
         }
     }
@@ -44,6 +47,10 @@ final class Bootstrap: ParsableCommand {
             static let firebase: String = "firebase"
             static let swiftgen: String = "swiftgen"
             static let licenseplist: String = "licenseplist"
+            static let shell: String = "shell"
+            static let commandName: String = "name"
+            static let arguments: String = "arguments"
+            static let missingFiles: String = "missing_files"
         }
 
         static let configuration: CommandConfiguration = .init(abstract: "Allows read or modify reusable bootstrap config",
@@ -53,10 +60,62 @@ final class Bootstrap: ParsableCommand {
 
     }
 
+    final class Shell: ParsableCommand {
+        public typealias Dependencies = HasBootstrapService
+        static let configuration: CommandConfiguration = .init(commandName: "shell", abstract: "Allows to modify reusable bootstrap config shell commands")
+
+        @Option(name: .shortAndLong, help: "Shell command to remove")
+        var remove: String?
+
+        @Option(name: .shortAndLong, help: "Shell command to add")
+        var add: String?
+
+        var dependencies: Dependencies {
+            Services
+        }
+
+        func run() throws {
+            guard remove != nil || add != nil else {
+                throw Error.shellEmpty
+            }
+            var files = Make.parseShellCommands(config: dependencies.bootstrapService.config)
+            if let name = remove {
+                files.removeAll { command in
+                    command.name == name
+                }
+            }
+
+            func askMany(question: String) -> [String] {
+                print(question)
+                var result = [String]()
+                while true {
+                    guard let value = readLine(), value.isEmpty == false else {
+                        return result
+                    }
+                    result.append(value)
+                }
+                return result
+            }
+
+            if let name = add {
+                let arguments = askMany(question: "Type required arguments or enter empty string to finish").joined(separator: " ")
+                let missingFiles = askMany(question: "Type missing files in bootstrapped project or enter empty string to finish")
+                files.append(.init(name: name, arguments: arguments, missingFiles: missingFiles))
+            }
+            dependencies.bootstrapService.config[Config.Constants.shell] = files.map { command -> [String: Any] in
+                [
+                    Config.Constants.commandName: command.name,
+                    Config.Constants.arguments: command.arguments,
+                    Config.Constants.missingFiles: command.missingFiles
+                ]
+            }
+        }
+    }
+
     final class UpdateConfig: ParsableCommand {
 
         public typealias Dependencies = HasBootstrapService
-        static let configuration: CommandConfiguration = .init(commandName: "update", abstract: "Allows to modify reusable bootstrap config")
+        static let configuration: CommandConfiguration = .init(commandName: "update", abstract: "Allows to modify reusable bootstrap config", subcommands: [Shell.self])
 
         @Option(name: .shortAndLong, help: "The path to the project template", completion: .directory)
         var template: String?
@@ -210,7 +269,8 @@ final class Bootstrap: ParsableCommand {
             }
             var context = [String: Any]()
             context["project"] = projectConfig
-            return .init(name: name, context: context, template: template, diagrams: uml)
+            let shell = Make.parseShellCommands(config: projectConfig)
+            return .init(name: name, context: context, template: template, diagrams: uml, shell: shell)
         }
 
         private func composeProjectConfig() throws -> BootstrapConfig {
@@ -239,7 +299,24 @@ final class Bootstrap: ParsableCommand {
             } else {
                 throw Error.bundleId
             }
-            return .init(name: name, context: projectConfig, template: template, diagrams: nil)
+            let shell = Make.parseShellCommands(config: projectConfig)
+            return .init(name: name, context: projectConfig, template: template, diagrams: nil, shell: shell)
+        }
+
+        static func parseShellCommands(config: [String: Any]) -> [BoostrapShellCommand] {
+            guard let commands = config[Config.Constants.shell] as? [Any] else {
+                return []
+            }
+            return commands.compactMap { object in
+                guard let dictionary = object as? [String: Any],
+                      let name = dictionary[Config.Constants.commandName] as? String else {
+                    return nil
+                }
+                let arguments = dictionary[Config.Constants.arguments] as? String
+                let files = dictionary[Config.Constants.missingFiles] as? [String]
+
+                return .init(name: name, arguments: arguments ?? "", missingFiles: files ?? [])
+            }
         }
     }
 }

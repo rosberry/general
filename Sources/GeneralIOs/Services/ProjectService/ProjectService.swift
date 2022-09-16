@@ -64,7 +64,14 @@ public final class ProjectService {
             throw Error.noGroup
         }
 
+        guard exists(file: filePath, group: group) == false else {
+            return
+        }
+
+        let currentPath = FileManager.default.currentDirectoryPath
+        FileManager.default.changeCurrentDirectoryPath(path.string)
         let file = try group.addFile(at: filePath, sourceTree: sourceTree, sourceRoot: path)
+        FileManager.default.changeCurrentDirectoryPath(currentPath)
 
         if isResource {
             let _ = try xcodeproj?.pbxproj.resourcesBuildPhases.first?.add(file: file)
@@ -102,6 +109,12 @@ public final class ProjectService {
             return
         }
         try xcodeproj?.write(path: xcodeprojPath)
+    }
+
+    private func exists(file: Path, group: PBXGroup) -> Bool {
+        return group.children.contains { element in
+            element.path == file.string
+        }
     }
 
     // MARK: - Private

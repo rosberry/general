@@ -6,7 +6,7 @@ import Foundation
 
 public final class SetupServiceImpl: SetupService {
 
-    public typealias Dependencies = HasFileHelper & HasGithubService & HasConfigFactory
+    public typealias Dependencies = HasFileHelper & HasGithubService & HasConfigFactory & HasShell
 
     private let dependencies: Dependencies
 
@@ -16,14 +16,23 @@ public final class SetupServiceImpl: SetupService {
 
     public func setup(githubPath: String, shouldLoadGlobally: Bool, customizationHandler: (([FileInfo]) throws -> Void)?) throws {
         let destination = getTemplatesDestination(shouldLoadGlobally: shouldLoadGlobally)
-        let files = try downloadFiles(from: githubPath, destination: destination)
+        let files = try downloadTemplateFiles(from: githubPath, destination: destination)
         try customizationHandler?(files)
         displayResult(files)
     }
 
+    public func setupShared(githubPath: String) throws {
+        let destination = URL(fileURLWithPath: Constants.generalHomePath)
+        try downloadSetupFiles(from: githubPath, destination: destination)
+        let path = dependencies.fileHelper.fileManager.currentDirectoryPath
+        dependencies.fileHelper.fileManager.changeCurrentDirectoryPath(destination.path)
+        try dependencies.shell(path: "/usr/bin/make", arguments: [])
+        dependencies.fileHelper.fileManager.changeCurrentDirectoryPath(path)
+    }
+
     // MARK: - Private
 
-    private func downloadFiles(from path: String, destination: URL) throws -> [FileInfo] {
+    private func downloadTemplateFiles(from path: String, destination: URL) throws -> [FileInfo] {
         var path = path
         if let linkedPath = dependencies.configFactory.shared?.templatesRepos[path] {
             path = linkedPath
@@ -37,6 +46,31 @@ public final class SetupServiceImpl: SetupService {
             downloadedFiles.append(contentsOf: try updatedTemplates(with: files))
         }
         return downloadedFiles
+    }
+
+    @discardableResult
+    private func downloadSetupFiles(from path: String, destination: URL) throws -> [FileInfo] {
+        print("Loading setup files from \(path)...")
+        var downloadedFiles = [FileInfo]()
+        try dependencies.githubService.downloadFiles(at: path) { [weak self] files in
+            guard let makeFile = self?.findMakeFile(files: files) else {
+                return
+            }
+            let destinationFileUrl = destination.appendingPathComponent(makeFile.url.lastPathComponent)
+            let destinationFile = try dependencies.fileHelper.fileInfo(with: destinationFileUrl)
+            if destinationFile.isExists {
+                try dependencies.fileHelper.removeFile(at: destinationFile.url)
+            }
+            try dependencies.fileHelper.moveFile(at: makeFile.url, to: destinationFileUrl)
+            downloadedFiles.append(destinationFile)
+        }
+        return downloadedFiles
+    }
+
+    private func findMakeFile(files: [FileInfo]) -> FileInfo? {
+        files.first { fileInfo in
+            fileInfo.url.lastPathComponent.lowercased() == "makefile"
+        }
     }
 
     private func updatedSpec(with files: [FileInfo]) throws -> FileInfo? {

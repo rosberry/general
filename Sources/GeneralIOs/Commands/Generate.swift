@@ -15,13 +15,21 @@ public final class Generate: ParsableCommand {
 
     enum Error: Swift.Error, CustomStringConvertible {
         case projectName
+        case serviceMarks
 
         var description: String {
             switch self {
             case .projectName:
-                return "Project name was not specified"
+                return "Project name was not specified."
+            case .serviceMarks:
+                return "Marks is not found for service template."
             }
         }
+    }
+
+    private enum Key {
+        static let isNewFile = "isNewFile"
+        static let company = "company"
     }
 
     typealias Dependencies = HasSpecFactory & HasProjectServiceFactory
@@ -33,6 +41,10 @@ public final class Generate: ParsableCommand {
 
     private var dependencies: Dependencies {
         Services
+    }
+
+    private var askCompanyName: String {
+        ask("What is the name of your company?", default: "") ?? ""
     }
 
     private lazy var generalSpec: GeneralSpec? = {
@@ -64,16 +76,25 @@ public final class Generate: ParsableCommand {
     }
 
     public func run() throws {
-        let renderer = Renderer(name: name,
-                                template: template,
-                                path: path,
-                                variables: [],
-                                output: output,
-                                dependencies: Services)
         if let xcodeSpec = generalSpec?.xcode {
             guard let projectName = xcodeSpec.name ?? askProject() else {
                 throw Error.projectName
             }
+
+            guard let generalSpec = generalSpec else {
+                throw Error.serviceMarks
+            }
+
+            var marks = generalSpec.services.serviceMarks
+            marks[Key.company] = xcodeSpec.company ?? askCompanyName
+            let isNewFile = FileManager.default.fileExists(atPath: generalSpec.services.servicesPath) ? "" : "\(true)"
+            let renderer = Renderer(name: name,
+                                    marks: marks,
+                                    template: template,
+                                    path: path,
+                                    variables: [.init(key: Key.isNewFile, value: isNewFile)],
+                                    output: output,
+                                    dependencies: Services)
             try projectService.createProject(projectName: projectName)
             let target = self.target ?? xcodeSpec.target
             try renderer.render { fileURL in
@@ -82,6 +103,12 @@ public final class Generate: ParsableCommand {
             try self.projectService.write()
         }
         else {
+            let renderer = Renderer(name: name,
+                                    template: template,
+                                    path: path,
+                                    variables: [.init(key: Key.isNewFile, value: "")],
+                                    output: output,
+                                    dependencies: Services)
             try renderer.render()
         }
     }

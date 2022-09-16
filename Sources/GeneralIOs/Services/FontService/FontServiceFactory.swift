@@ -1,6 +1,7 @@
 //
-//  Created by Evgeny Schwarzkopf on 08.04.2022.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
+
 
 import Foundation
 import PathKit
@@ -10,8 +11,7 @@ public protocol HasFontServiceFactory {
 }
 
 public class FontServiceFactory {
-    func makeFontService( directoryPath: String) -> FontService {
+    func makeFontService(directoryPath: String) -> FontService {
         return .init(directoryPath: directoryPath)
     }
 }
-

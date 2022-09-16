@@ -12,13 +12,27 @@ public final class Renderer {
 
     public enum Error: Swift.Error & CustomStringConvertible {
         case noOutput(template: String)
+        case notFound
+        case invalidTemplate
 
         public var description: String {
             switch self {
             case let .noOutput(template):
                 return "There is no output path for \(template) template. Please use --output option or add output to general.yml."
+            case .notFound:
+                return "File not found at path ../Classes/BusinessLogic/Services/Services.swift. Please make sure the file exists and try again."
+            case .invalidTemplate:
+                return "Is not correctly template with marked key for Services.swift. Please remove his and generate again Services.swift. or fix marked yourself."
             }
         }
+    }
+
+    private enum Constant {
+        static let newLine = "\n"
+        static let newLineAndWhitespace = "\n    "
+        static let marked = " /*mark:"
+        static let endMarked = "*/"
+        static let and = "&"
     }
 
     private class VariablesTemplate: Template {
@@ -36,6 +50,7 @@ public final class Renderer {
     let template: String
     let path: String
     let variables: [Variable]
+    var marks: [String: String]?
     var output: String?
 
     private lazy var context: [String: Any] = {
@@ -45,18 +60,25 @@ public final class Renderer {
         for variable in variables {
             context[variable.key] = variable.value
         }
+        if let marks = marks {
+            for (key, value) in marks {
+                context[key] = value
+            }
+        }
         return context
     }()
 
     private let dependencies: Dependencies
 
     public init(name: String,
+                marks: [String: String]? = nil,
                 template: String,
                 path: String,
                 variables: [Variable],
                 output: String?,
                 dependencies: Dependencies) {
         self.name = name
+        self.marks = marks
         self.template = template
         self.path = path
         self.variables = variables
@@ -72,6 +94,7 @@ public final class Renderer {
 
         let environment = try makeEnvironment(templatesURL: templatesURL, templateURL: templateURL)
         try add(templateSpec, environment: environment, completion: completion)
+        try modify(templateSpec, environment: environment)
         print("🎉 \(template) template with \(name) name was successfully generated.")
     }
 
@@ -81,6 +104,70 @@ public final class Renderer {
                 try completion?(fileURL)
             }
         }
+    }
+
+    public func modify(_ templateSpec: TemplateSpec, environment: Environment) throws {
+        guard let path = templateSpec.mark else {
+            return
+        }
+        let fileURL = URL(fileURLWithPath: path)
+
+        guard var line = try? String(contentsOf: fileURL) else {
+            throw Error.notFound
+        }
+
+        var parts: [String] = []
+        var searchStart = line.startIndex
+        var isSecondIteration = false
+
+        while searchStart != nil {
+            guard let start = line.range(of: Constant.marked)?.lowerBound,
+                  let endRange = line.range(of: Constant.endMarked) else {
+                break
+            }
+
+            let nsRange = NSRange(endRange, in: line)
+
+            guard let end = line.range(of: Constant.endMarked, range: Range(nsRange, in: line))?.upperBound else {
+                break
+            }
+
+            let first = line[line.startIndex...start]
+            let template = line[start...end]
+
+            var rendered = removeMarkedFrom(template: template)
+
+            if isSecondIteration {
+                rendered = Constant.newLineAndWhitespace + removeMarkedFrom(template: template)
+            }
+
+            guard var renderedTemplate = try? environment.renderTemplate(string: rendered, context: context) else {
+                throw Error.invalidTemplate
+            }
+
+            if isSecondIteration == false && variables.first?.value.isEmpty == true {
+                renderedTemplate = Constant.and + Constant.newLineAndWhitespace + renderedTemplate
+            }
+
+            parts.append(contentsOf: [String(first), renderedTemplate, String(template), Constant.newLine])
+            line = String(line[end...]).trimmingCharacters(in: .newlines)
+            searchStart = line.startIndex
+            isSecondIteration = true
+        }
+        parts.append(line)
+        try parts.joined().write(toFile: fileURL.path, atomically: true, encoding: .utf8)
+    }
+
+    private func removeMarkedFrom(template: String.SubSequence) -> String {
+        guard let index = template.firstIndex(of: ":") else {
+            return String(template)
+        }
+        var line = template.suffix(from: index)
+        line.removeFirst()
+        var newLine = String(line).trimmingCharacters(in: .newlines)
+        newLine.removeLast()
+        newLine.removeLast()
+        return newLine.trimmingCharacters(in: .whitespaces)
     }
 
     public func render(_ file: File, templateSpec: TemplateSpec, environment: Environment) throws -> URL? {
@@ -119,7 +206,9 @@ public final class Renderer {
             print(yellow("File already exists: \(fileURL.path)"))
             return nil
         }
-        try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+        if !fileManager.fileExists(atPath: outputURL.path) {
+            try fileManager.createDirectory(at: outputURL, withIntermediateDirectories: true, attributes: nil)
+        }
         try rendered.write(to: fileURL, atomically: true, encoding: .utf8)
         return fileURL
     }
@@ -147,7 +236,8 @@ public final class Renderer {
         if fileManager.fileExists(atPath: localPath + template) {
             return URL(fileURLWithPath: localPath)
         }
-        return fileManager.homeDirectoryForCurrentUser + folderName
+
+        return (FileManager.default.urls(for: .userDirectory, in: .userDomainMask).first ?? URL(fileURLWithPath: "")) + folderName
     }
 
     private func makeEnvironment(templatesURL: URL, templateURL: URL) throws -> Environment {

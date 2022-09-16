@@ -1,6 +1,7 @@
 //
-//  Created by Evgeny Schwarzkopf on 08.04.2022.
+//  Copyright © 2021 Rosberry. All rights reserved.
 //
+
 
 import Foundation
 import ArgumentParser
@@ -11,7 +12,7 @@ import PathKit
 
 public final class FontService {
 
-    private enum Error: Swift.Error, LocalizedError {
+    enum Error: Swift.Error, LocalizedError {
         case notFoundFonts(String)
         case notFoundTarget(String)
         case notFoundInfoPlist(String)

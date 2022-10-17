@@ -27,10 +27,10 @@ final class Bootstrap: ParsableCommand {
             switch self {
             case .template:
                 return "No template path was specified. Please use `--template` option or specify it in reusable config " +
-                       "with `bootsrap config update --template`"
+                       "with `bootstrap config update --template`"
             case .bundleId:
                 return "No bundle id was specified. Please use --bundle_id option or provide company name using --company. " +
-                       "You also can specify company in reusable config using `bootsrap config update --company`"
+                       "You also can specify company in reusable config using `bootstrap config update --company`"
             case .github:
                 return "Templates repo was not specified"
             case .shellEmpty:

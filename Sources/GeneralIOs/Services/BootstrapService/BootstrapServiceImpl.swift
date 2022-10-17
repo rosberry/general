@@ -37,8 +37,8 @@ public final class BootstrapServiceImpl: BootstrapService {
 
     public func bootstrap(with config: BootstrapConfig) throws {
         if config.diagrams != nil {
-            let bootsraper = UMLBootstraper(dependencies: dependencies)
-            try bootsraper.bootstrap(with: config)
+            let bootstraper = UMLBootstraper(dependencies: dependencies)
+            try bootstraper.bootstrap(with: config)
         }
         else {
             try bootstrapProject(with: config)
